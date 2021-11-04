@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 8869276222648195714}
   - component: {fileID: 8869276222648195725}
   m_Layer: 0
-  m_Name: Area Light
+  m_Name: FlashLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,13 +196,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8869276222648195715}
-  m_LocalRotation: {x: 0.09356268, y: -0, z: -0, w: 0.99561346}
-  m_LocalPosition: {x: 0, y: -0.417, z: -0.079}
+  m_LocalRotation: {x: 0.023783227, y: -0, z: -0, w: 0.9997172}
+  m_LocalPosition: {x: 0, y: -0.758, z: -0.094}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8869276221988068361}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 10.737, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 2.726, y: 0, z: 0}
 --- !u!108 &8869276222648195725
 Light:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 5
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 60
   m_InnerSpotAngle: 1
