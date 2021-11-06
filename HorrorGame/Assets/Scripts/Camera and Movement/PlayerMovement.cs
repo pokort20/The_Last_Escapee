@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 1.0f;
     Vector3 velocity;
     public Transform groundCollisionCheck;
-    public float groundCollisionCheckSphereRadius = 0.3f;
+    public float groundCollisionCheckSphereRadius = 0.2f;
     public LayerMask groundMask;
     bool isGrounded;
     // Start is called before the first frame update

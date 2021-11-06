@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class LookAround : MonoBehaviour
 {
-    float mouseSens = 800.0f;
-
     public Transform player;
+    public float mouseSens = 2.0f;
     float xRot = 0.0f;
     // Start is called before the first frame update
     void Start()
@@ -18,8 +17,8 @@ public class LookAround : MonoBehaviour
     void Update()
     {
         //get mouse input values
-        float mouseX = Input.GetAxis("Mouse X") * mouseSens * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSens * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSens;// * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSens;// * Time.deltaTime;
 
         xRot -= mouseY;
         xRot = Mathf.Clamp(xRot, -80.0f, 80.0f);
