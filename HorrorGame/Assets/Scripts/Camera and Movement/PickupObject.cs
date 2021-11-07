@@ -11,13 +11,16 @@ public class PickupObject : MonoBehaviour
     public float grabSpeedMultiplier;
 
     //other variables
+    float initGrabDistance;
     float grabDistance;
     float moveDistance;
     float holdingObjectDefaultDrag;
+    float holdingObjectDefaultAngularDrag;
     RaycastHit raycastHit;
     bool IsHoldingObject;
     GameObject holdingObject;
     Vector3 previousPosition;
+    Vector3 targetPosition;
     Vector3 moveForce;
 
     void Start()
@@ -25,56 +28,82 @@ public class PickupObject : MonoBehaviour
         Debug.Log("Started PickupObjects");
         IsHoldingObject = false;
         holdingObject = null;
-        grabDistance = 0.0f;
+        initGrabDistance = 0.0f;
     }
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("LMB Down");
-            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
-            {
-                Debug.Log("Fired raycast");
-                if (raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
-                {
-                    holdingObject = raycastHit.collider.gameObject;
-                    previousPosition = holdingObject.transform.position;
-                    holdingObject.GetComponent<Rigidbody>().useGravity = false;
-                    holdingObjectDefaultDrag = holdingObject.GetComponent<Rigidbody>().drag;
-                    //holdingObject.GetComponent<Rigidbody>().isKinematic = true;
-                    grabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
-                    Debug.Log("Distance: " + grabDistance);
-                    Debug.Log("Direciton: " + FirstPersonCamera.transform.forward);
-                    Debug.Log("Found rigidbody object! Object:" + holdingObject.name);
-                    IsHoldingObject = true;
-                }
-            }
+            pickupObject();
         }
         if (IsHoldingObject)
         {
             if (Input.GetMouseButton(0))
             {
-                //update holding object's pos
-                //holdingObject.transform.position = holdingPosition.position;
-                //holdingObject.transform.position = FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position;
-                moveForce = (FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position) - previousPosition;
-                moveDistance = Vector3.Distance(FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position, previousPosition);
-                moveForce *= grabSpeedMultiplier * moveDistance;
-                Debug.Log("moveForce: " + moveForce);
-                holdingObject.GetComponent<Rigidbody>().AddForce(moveForce);
-                holdingObject.GetComponent<Rigidbody>().drag = 1/moveDistance;
-                previousPosition = holdingObject.transform.position;
+                moveObject();
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) || Vector3.Distance(holdingObject.transform.position, FirstPersonCamera.transform.position) > maxGrabDistance)
             {
-                //holdingObject.GetComponent<Rigidbody>().isKinematic = false;
-                holdingObject.GetComponent<Rigidbody>().useGravity = true;
-                holdingObject.GetComponent<Rigidbody>().drag = holdingObjectDefaultDrag;
-                IsHoldingObject = false;
-                holdingObject = null;
-                Debug.Log("Released object");
+                dropObject();
             }
             
         }
+    }
+    void LateUpdate()
+    {
+        if(IsHoldingObject && previousPosition != holdingObject.transform.position) Debug.Log("previous pos: " + previousPosition + " lateUpdatePreviousPos: " + holdingObject.transform.position);
+    }
+
+    private void pickupObject()
+    {
+        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+        {
+            if (raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
+            {
+                holdingObject = raycastHit.collider.gameObject;
+                previousPosition = holdingObject.transform.position;
+                holdingObject.GetComponent<Rigidbody>().useGravity = false;
+                holdingObjectDefaultDrag = holdingObject.GetComponent<Rigidbody>().drag;
+                holdingObjectDefaultAngularDrag = holdingObject.GetComponent<Rigidbody>().angularDrag;
+                initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                Debug.Log("Distance: " + initGrabDistance);
+                Debug.Log("Direciton: " + FirstPersonCamera.transform.forward);
+                Debug.Log("Found rigidbody object! Object:" + holdingObject.name);
+                IsHoldingObject = true;
+            }
+        }
+    }
+    private void moveObject()
+    {
+        //update holding object's pos
+        //old method, using set position
+        //holdingObject.transform.position = FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position;
+        targetPosition = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
+        moveForce = targetPosition - previousPosition;
+        moveDistance = Vector3.Distance(targetPosition, previousPosition);
+        moveForce *= grabSpeedMultiplier*grabSpeedMultiplier * moveDistance;
+        Debug.Log("moveForceNorm: " + Vector3.Magnitude(clampVecMagnitude(moveForce, 150.0f)) + "moveForce: " + clampVecMagnitude(moveForce, 150.0f) + " moveDistance: " + moveDistance);
+        holdingObject.GetComponent<Rigidbody>().AddForce(clampVecMagnitude(moveForce, 150.0f));
+        holdingObject.GetComponent<Rigidbody>().drag = 1 / (moveDistance * moveDistance);
+        holdingObject.GetComponent<Rigidbody>().angularDrag = 1 / moveDistance;
+        previousPosition = holdingObject.transform.position;
+    }
+    private void dropObject()
+    {
+        //holdingObject.GetComponent<Rigidbody>().isKinematic = false;
+        holdingObject.GetComponent<Rigidbody>().useGravity = true;
+        holdingObject.GetComponent<Rigidbody>().drag = holdingObjectDefaultDrag;
+        holdingObject.GetComponent<Rigidbody>().angularDrag = holdingObjectDefaultAngularDrag;
+        IsHoldingObject = false;
+        holdingObject = null;
+        Debug.Log("Released object");
+    }
+    private Vector3 clampVecMagnitude(Vector3 value, float clampValue)
+    {
+        if (Vector3.Magnitude(value) > clampValue)
+        {
+            return Vector3.Normalize(value) * clampValue;
+        }
+        return value;
     }
 }

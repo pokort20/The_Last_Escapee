@@ -566,7 +566,7 @@ MonoBehaviour:
   holdingPosition: {fileID: 5028159568648651124}
   FirstPersonCamera: {fileID: 3476730348035874806}
   maxGrabDistance: 2.8
-  grabSpeedMultiplier: 10
+  grabSpeedMultiplier: 7
 --- !u!1 &8908599253633156168
 GameObject:
   m_ObjectHideFlags: 0
