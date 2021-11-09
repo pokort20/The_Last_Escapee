@@ -7,8 +7,10 @@ public class PickupObject : MonoBehaviour
     //values set in inspector
     public Transform holdingPosition;
     public Camera FirstPersonCamera;
+    public float forceAmount = 9.81f;
     public float maxGrabDistance;
     public float grabSpeedMultiplier;
+    public float toCenterParam;
 
     //other variables
     float initGrabDistance;
@@ -21,7 +23,7 @@ public class PickupObject : MonoBehaviour
     GameObject holdingObject;
     Vector3 previousPosition;
     Vector3 targetPosition;
-    Vector3 moveForce;
+    Vector3 moveDirection;
 
     void Start()
     {
@@ -49,10 +51,6 @@ public class PickupObject : MonoBehaviour
             
         }
     }
-    void LateUpdate()
-    {
-        if(IsHoldingObject && previousPosition != holdingObject.transform.position) Debug.Log("previous pos: " + previousPosition + " lateUpdatePreviousPos: " + holdingObject.transform.position);
-    }
 
     private void pickupObject()
     {
@@ -70,6 +68,8 @@ public class PickupObject : MonoBehaviour
                 Debug.Log("Direciton: " + FirstPersonCamera.transform.forward);
                 Debug.Log("Found rigidbody object! Object:" + holdingObject.name);
                 IsHoldingObject = true;
+
+                targetPosition = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
             }
         }
     }
@@ -79,14 +79,31 @@ public class PickupObject : MonoBehaviour
         //old method, using set position
         //holdingObject.transform.position = FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position;
         targetPosition = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
-        moveForce = targetPosition - previousPosition;
+
+        moveDirection = targetPosition - previousPosition; //!
         moveDistance = Vector3.Distance(targetPosition, previousPosition);
-        moveForce *= grabSpeedMultiplier*grabSpeedMultiplier * moveDistance;
-        Debug.Log("moveForceNorm: " + Vector3.Magnitude(clampVecMagnitude(moveForce, 150.0f)) + "moveForce: " + clampVecMagnitude(moveForce, 150.0f) + " moveDistance: " + moveDistance);
-        holdingObject.GetComponent<Rigidbody>().AddForce(clampVecMagnitude(moveForce, 150.0f));
+        Debug.Log("move distance: " + moveDistance + ", maxGrabDistance: " + maxGrabDistance);
+        if(moveDistance < maxGrabDistance)
+        {
+            Vector3 appliedForce = moveDirection * forceAmount * Time.deltaTime;
+            Debug.Log("Applying force with magnitude: " + appliedForce.magnitude + ", force direction: " + appliedForce);
+            holdingObject.GetComponent<Rigidbody>().drag = 1 / (moveDistance * moveDistance);
+            holdingObject.GetComponent<Rigidbody>().angularDrag = 1 / moveDistance;
+            holdingObject.GetComponent<Rigidbody>().AddForce(appliedForce);
+        }
+        previousPosition = holdingObject.transform.position;
+        /*
+        moveDistance = Vector3.Distance(targetPosition, previousPosition);
+        targetPosition -= FirstPersonCamera.transform.position;
+        targetPosition *= toCenterParam * moveDistance;
+        moveDirection = targetPosition - previousPosition;
+        moveDirection *= grabSpeedMultiplier * moveDistance;
+        Debug.Log("vec magnitude: " + Vector3.Magnitude(clampVecMagnitude(moveDirection, 150.0f)) + " moveForce: " + clampVecMagnitude(moveDirection, 150.0f) + "velocity magnitude: " + Vector3.Magnitude(holdingObject.GetComponent<Rigidbody>().velocity)  + " moveDistance: " + moveDistance);
+        holdingObject.GetComponent<Rigidbody>().AddForce(clampVecMagnitude(moveDirection, 150.0f) - holdingObject.GetComponent<Rigidbody>().velocity * 15.0f);
         holdingObject.GetComponent<Rigidbody>().drag = 1 / (moveDistance * moveDistance);
         holdingObject.GetComponent<Rigidbody>().angularDrag = 1 / moveDistance;
         previousPosition = holdingObject.transform.position;
+        */
     }
     private void dropObject()
     {
@@ -94,6 +111,7 @@ public class PickupObject : MonoBehaviour
         holdingObject.GetComponent<Rigidbody>().useGravity = true;
         holdingObject.GetComponent<Rigidbody>().drag = holdingObjectDefaultDrag;
         holdingObject.GetComponent<Rigidbody>().angularDrag = holdingObjectDefaultAngularDrag;
+
         IsHoldingObject = false;
         holdingObject = null;
         Debug.Log("Released object");

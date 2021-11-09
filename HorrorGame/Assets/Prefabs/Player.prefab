@@ -565,8 +565,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holdingPosition: {fileID: 5028159568648651124}
   FirstPersonCamera: {fileID: 3476730348035874806}
+  forceAmount: 1500
   maxGrabDistance: 2.8
-  grabSpeedMultiplier: 7
+  grabSpeedMultiplier: 49
+  toCenterParam: 0.1
 --- !u!1 &8908599253633156168
 GameObject:
   m_ObjectHideFlags: 0
