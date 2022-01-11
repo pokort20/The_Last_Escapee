@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Flashlight : MonoBehaviour
 {
-    bool flashlightEnabled = true;
+    bool flashlightEnabled;
     public Light flashlight;
+    private void Start()
+    {
+        flashlightEnabled = true;
+        flashlight.enabled = flashlightEnabled;
+    }
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            flashlight.enabled = flashlightEnabled;
+            Debug.Log("Enabled / disabled flashlight");
             flashlightEnabled = !flashlightEnabled;
-
+            flashlight.enabled = flashlightEnabled;
         }
     }
 }
