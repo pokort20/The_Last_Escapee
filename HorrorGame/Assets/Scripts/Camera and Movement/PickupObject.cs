@@ -24,16 +24,19 @@ public class PickupObject : MonoBehaviour
     Vector3 previousPosition;
     Vector3 targetPosition;
     Vector3 moveDirection;
+    LayerMask layerMask;
 
     void Start()
     {
         Debug.Log("Started PickupObjects");
+        layerMask = LayerMask.GetMask("Moveable");
         IsHoldingObject = false;
         holdingObject = null;
         initGrabDistance = 0.0f;
     }
     void Update()
     {
+        //Debug.Log("Is Holding Object: " + IsHoldingObject.ToString());
         if (Input.GetMouseButtonDown(0))
         {
             pickupObject();
@@ -48,14 +51,17 @@ public class PickupObject : MonoBehaviour
             {
                 dropObject();
             }
-            
+
         }
     }
 
     private void pickupObject()
     {
-        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance, layerMask))
         {
+            Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
+            Debug.Log("Distance: " + Vector3.Distance(FirstPersonCamera.transform.position, raycastHit.collider.gameObject.transform.position));
+
             if (raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
             {
                 holdingObject = raycastHit.collider.gameObject;

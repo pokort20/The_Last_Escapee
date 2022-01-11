@@ -14,10 +14,10 @@ TagManager:
   - Ground
   - FirstPersonCamera
   - Interactable
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Player
+  - Moveable
+  - NotWalkable
   - 
   - 
   - 

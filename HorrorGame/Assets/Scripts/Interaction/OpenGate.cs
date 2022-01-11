@@ -50,7 +50,7 @@ public class OpenGate : Interactable
             percentageMoved = elapsedTime / movementDuration;
             Gate.transform.position = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0, 1, percentageMoved));
             Debug.Log("Rotation: " + Mathf.SmoothStep(startRot, targetRot, percentageMoved));
-            transform.RotateAround(transform.position, transform.forward, Mathf.SmoothStep(0, 3, percentageMoved));
+            transform.RotateAround(transform.position, transform.forward, targetRot / movementDuration * Time.deltaTime);
             //transform.rotation = Quaternion.AngleAxis(Mathf.Lerp(startRot, targetRot, percentageMoved), Vector3.forward);
             //transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Lerp(startRot, targetRot, percentageMoved));
             Debug.Log("precentage finished: " + percentageMoved);
