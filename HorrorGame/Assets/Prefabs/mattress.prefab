@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6369281408413430391}
   - component: {fileID: 5739184684762171761}
   - component: {fileID: 5739184684762171760}
+  - component: {fileID: 5976924108411344955}
   m_Layer: 11
   m_Name: mattress
   m_TagString: Untagged
@@ -112,3 +113,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.018588109, y: 0.010557579, z: 0.0014460152}
   m_Center: {x: 0, y: -0.000003978609, z: 0.000049345625}
+--- !u!208 &5976924108411344955
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4856225933584290722}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.009000001, y: 0.0050000004, z: 0.001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
