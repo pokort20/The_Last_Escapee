@@ -1,0 +1,1 @@
+Celkova velikost zkomprimovaneho projektu hry se vsemi texturami dosahuje 650MB. Maxmialni velikost pro upload souboru v BRUTE je ocividne jen 350MB. Projekt tedy zatim nahravam na uloziste domluvene s vedoucim prace a kontaktuji ho emailem, ve kterm mu sdelim tuto skutecnost.
