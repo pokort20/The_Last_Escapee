@@ -12,9 +12,11 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMult = 0.75f;
     public float crouchHeight = 1.0f;
     public float standardHeight = 1.7f;
+
     private bool isSprinting;
     private bool isCrouching;
     private bool wasCrouching;
+    private Vector3 moveVec;
     Vector3 velocity;
     public Transform groundCollisionCheck;
     public float groundCollisionCheckSphereRadius = 0.2f;
@@ -44,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = transform.right * horizontal + transform.forward * vertical;
+        moveVec = transform.right * horizontal + transform.forward * vertical;
         if(playerState != playerStates.UNCROUCHING)
         {
             FindPlayerState();
@@ -53,12 +55,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 bottomSphere = new Vector3(playerController.transform.position.x, playerController.transform.position.y - 0.5f, playerController.transform.position.z);
             Vector3 topSphere = new Vector3(playerController.transform.position.x, playerController.transform.position.y + 0.5f, playerController.transform.position.z);
-            /*
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            GameObject sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.position = bottomSphere;
-            sphere1.transform.position = topSphere;
-            */
+
             LayerMask mask =~ LayerMask.GetMask("Player");
             if (Physics.CapsuleCast(bottomSphere, topSphere, 2.0f, playerController.transform.forward, mask)) 
             {
@@ -74,12 +71,12 @@ public class PlayerMovement : MonoBehaviour
         {
             case playerStates.NORMAL:
                 //Debug.Log("Normal state");
-                playerController.Move(movement * movementSpeed * Time.deltaTime);
+                moveVec *= movementSpeed;
                 playerController.height = standardHeight;
                 break;
             case playerStates.CROUCHING:
                 //Debug.Log("Crouching state");
-                playerController.Move(movement * movementSpeed * crouchMult * Time.deltaTime);
+                moveVec *= movementSpeed * crouchMult;
                 playerController.height = crouchHeight;
                 break;
             case playerStates.UNCROUCHING:
@@ -87,13 +84,14 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case playerStates.SPRINTING:
                 //Debug.Log("Sprinting state");
-                playerController.Move(movement * movementSpeed * sprintMult * Time.deltaTime);
+                moveVec *= movementSpeed * sprintMult;
                 playerController.height = standardHeight;
                 break;
             default:
                 //Debug.Log("Default");
                 break;
         }
+        playerController.Move(moveVec * Time.deltaTime);
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -122,5 +120,9 @@ public class PlayerMovement : MonoBehaviour
         {
             playerState = playerStates.NORMAL;
         }
+    }
+    public Vector3 getPlayerMoveVec()
+    {
+        return moveVec;
     }
 }

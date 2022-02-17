@@ -11,6 +11,7 @@ public class EnemyChase : MonoBehaviour
     public GameObject patrolPoints;
     public float enemyFOV;
     public float agentSpeed;
+    public float hearingRange;
 
     private enum enemyStates : int
     {
@@ -54,7 +55,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void patrol()
     {
-        if(isPlayerVisible(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -83,7 +84,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void chase()
     {
-        if (isPlayerVisible(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
         {
             //Still can see player
             agent.SetDestination(player.position);
@@ -107,7 +108,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void explore()
     {
-        if (isPlayerVisible(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted while exploring area, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -171,6 +172,18 @@ public class EnemyChase : MonoBehaviour
                 //enemyState = enemyStates.CHASING;
                 return true;
             }
+        }
+        return false;
+    }
+    private bool isPlayerHearable(Vector3 agentPos, Vector3 playerPos)
+    {
+        float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
+        float noiseRange = moveVecMag * 0.75f;
+        //Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
+        if (Vector3.Distance(agentPos, playerPos) < hearingRange + noiseRange)
+        {
+            Debug.Log("Enemy hears player!");
+            return true;
         }
         return false;
     }

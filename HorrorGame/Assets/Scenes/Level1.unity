@@ -2025,6 +2025,7 @@ MonoBehaviour:
   patrolPoints: {fileID: 1117470946}
   enemyFOV: 120
   agentSpeed: 2
+  hearingRange: 1
 --- !u!1001 &387425085
 PrefabInstance:
   m_ObjectHideFlags: 0
