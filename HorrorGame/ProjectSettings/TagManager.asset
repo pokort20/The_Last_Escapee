@@ -18,7 +18,7 @@ TagManager:
   - Player
   - Moveable
   - NotWalkable
-  - 
+  - Walls
   - 
   - 
   - 

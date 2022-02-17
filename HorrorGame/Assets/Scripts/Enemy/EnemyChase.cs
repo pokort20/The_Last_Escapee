@@ -166,7 +166,7 @@ public class EnemyChase : MonoBehaviour
             //Debug.Log("IsPlayerVisible RaycastHit: " + raycastHit.collider.gameObject.name);
             //Debug.Log("AgentPos: " + eyePos + ", PlayerPos: " + playerPos);
             //Debug.Log("Distance: " + Vector3.Distance(eyePos, raycastHit.collider.gameObject.transform.position));
-            if (raycastHit.collider.gameObject.layer == 10 && angle < enemyFOV/2)
+            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player") && angle < enemyFOV/2)
             {
                 //Debug.Log("Enemy sees player!");
                 //enemyState = enemyStates.CHASING;
@@ -178,10 +178,28 @@ public class EnemyChase : MonoBehaviour
     private bool isPlayerHearable(Vector3 agentPos, Vector3 playerPos)
     {
         float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
-        float noiseRange = moveVecMag * 0.75f;
-        //Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
-        if (Vector3.Distance(agentPos, playerPos) < hearingRange + noiseRange)
+        float noiseRange = moveVecMag * 0.5f;
+        float dist = Vector3.Distance(agentPos, playerPos);
+        RaycastHit raycastHit;
+        Vector3 earPos = agentPos;
+        earPos.y += 1.2f;
+        int layerMask = LayerMask.NameToLayer("Walls");
+
+        Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
+        if (dist < hearingRange + noiseRange)
         {
+            if (Physics.Raycast(agentPos, playerPos - agentPos, out raycastHit, hearingRange + noiseRange, layerMask))
+            {
+                Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
+                //Debug.Log("Wall between enemy and player in hearing range");
+                if(2*dist < hearingRange + noiseRange)
+                {
+                    Debug.Log("Hears through wall");
+                    return true;
+                }
+                Debug.Log("Hears, but behind wall");
+                return false;
+            }
             Debug.Log("Enemy hears player!");
             return true;
         }
