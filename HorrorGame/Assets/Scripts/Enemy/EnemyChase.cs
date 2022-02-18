@@ -185,22 +185,22 @@ public class EnemyChase : MonoBehaviour
         earPos.y += 1.2f;
         int layerMask = LayerMask.NameToLayer("Walls");
 
-        Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
+        //Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
         if (dist < hearingRange + noiseRange)
         {
             if (Physics.Raycast(agentPos, playerPos - agentPos, out raycastHit, hearingRange + noiseRange, layerMask))
             {
-                Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
+                //Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
                 //Debug.Log("Wall between enemy and player in hearing range");
                 if(2*dist < hearingRange + noiseRange)
                 {
-                    Debug.Log("Hears through wall");
+                    //Debug.Log("Hears through wall");
                     return true;
                 }
-                Debug.Log("Hears, but behind wall");
+                //Debug.Log("Hears, but behind wall");
                 return false;
             }
-            Debug.Log("Enemy hears player!");
+            //Debug.Log("Enemy hears player!");
             return true;
         }
         return false;

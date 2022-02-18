@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,12 +27,24 @@ public class Inventory : MonoBehaviour
         printInventoryItems();
         return true;
     }
+    public int hasItem(Type type)
+    {
+        int retval = 0;
+        foreach(Item item in items)
+        {
+            if(item.GetType() == type)
+            {
+                retval++;
+            }
+        }
+        return retval;
+    }
     private void printInventoryItems()
     {
         Debug.Log("INVENTORY:");
         foreach(Item item in items)
         {
-            Debug.Log("   " + item.ToString());
+            Debug.Log("           " + item.ToString());
         }
     }
 }

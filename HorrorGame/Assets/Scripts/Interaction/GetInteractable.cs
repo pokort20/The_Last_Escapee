@@ -12,12 +12,11 @@ public class GetInteractable : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxInteractionDistance))
         {
-            if (raycastHit.collider.gameObject.layer == 8)
+            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
                 interactingObject = raycastHit.collider.gameObject;
                 //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());

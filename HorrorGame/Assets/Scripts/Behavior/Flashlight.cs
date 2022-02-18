@@ -6,15 +6,17 @@ public class Flashlight : MonoBehaviour
 {
     bool flashlightEnabled;
     public Light flashlight;
+    Inventory inventory;
     private void Start()
     {
-        flashlightEnabled = true;
+        flashlightEnabled = false;
         flashlight.enabled = flashlightEnabled;
+        inventory = GetComponentInParent<Inventory>();
     }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && inventory.hasItem(typeof(FlashlightItem)) > 0)
         {
             Debug.Log("Enabled / disabled flashlight");
             flashlightEnabled = !flashlightEnabled;
