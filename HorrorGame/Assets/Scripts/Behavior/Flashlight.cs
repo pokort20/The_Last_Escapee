@@ -15,7 +15,7 @@ public class Flashlight : MonoBehaviour
     {
         flashlightEnabled = false;
         flashlight.enabled = flashlightEnabled;
-        inventory = GetComponentInParent<Inventory>();
+        inventory = Inventory.instance;
         batteryLevel = 60.0f;
         intensityRangeMin = 0.2f;
         intensityRangeMax = 1.0f;

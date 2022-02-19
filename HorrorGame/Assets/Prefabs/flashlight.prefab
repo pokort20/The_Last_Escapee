@@ -104,12 +104,12 @@ GameObject:
   - component: {fileID: 5534140207740975879}
   - component: {fileID: 8890928820238185634}
   - component: {fileID: 6667047007645106280}
+  - component: {fileID: 2359690492491687291}
   - component: {fileID: 8055128366789942360}
   - component: {fileID: 1381778478933012829}
-  - component: {fileID: 5000612535161988461}
   m_Layer: 14
   m_Name: flashlight
-  m_TagString: Untagged
+  m_TagString: Flashlight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +178,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8055128366789942360
+--- !u!65 &2359690492491687291
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,6 +191,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.0008320503, y: 0.0023846491, z: 0.00083205}
   m_Center: {x: -2.910383e-11, y: -0.00018366266, z: 5.820765e-11}
+--- !u!65 &8055128366789942360
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5154061490322088381}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.004322977, y: 0.0055593513, z: 0.0016560607}
+  m_Center: {x: -0.00011008754, y: -0.0009624097, z: 0.00041200547}
 --- !u!54 &1381778478933012829
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -207,15 +220,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5000612535161988461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5154061490322088381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd8d2190ed5e3924fa60a9a0d01341b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

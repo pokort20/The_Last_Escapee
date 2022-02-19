@@ -5,7 +5,19 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory instance;
+    void Awake()
+    {
+        Debug.Log("Started Inventory");
+        if(instance != null)
+        {
+            Debug.LogError("Multiple instances of invenotory!!!");
+            return;
+        }
+        instance = this;
+    }
     private List<Item> items;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,11 +27,11 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    public void addToInventory(Item item)
+    public void addToInventory(string itemName)
     {
-        items.Add(item);
+        items.Add(createItemObject(itemName));
         printInventoryItems();
     }
     public bool removeFromInventory(Item item)
@@ -46,5 +58,20 @@ public class Inventory : MonoBehaviour
         {
             Debug.Log("           " + item.ToString());
         }
+    }
+    private Item createItemObject(string itemName)
+    {
+        Item retItem;
+        switch(itemName)
+        {
+            case "Flashlight":
+                retItem = new FlashlightItem();
+                break;
+            default:
+                Debug.LogWarning("Crated default item!");
+                retItem = new Item();
+                break;
+        }
+        return retItem;
     }
 }
