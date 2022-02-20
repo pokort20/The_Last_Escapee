@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3476730347174286337}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GroundCollisionCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3476730347842506554}
   - component: {fileID: 3476730347842506553}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: FlashLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 3476730348035874801}
   - component: {fileID: 3476730348035874802}
   - component: {fileID: 3476730348035874803}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: FirstPersonCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -345,8 +345,7 @@ GameObject:
   - component: {fileID: 3476730348041160313}
   - component: {fileID: 3476730348041160319}
   - component: {fileID: 3476730348041160312}
-  - component: {fileID: 8501441199316292929}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: visual_representation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,22 +415,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &8501441199316292929
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3476730348041160314}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &3476730348906112950
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +432,7 @@ GameObject:
   - component: {fileID: 8124124245931059825}
   - component: {fileID: 2219363454910824175}
   - component: {fileID: 7485517181845992503}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirstPersonCamera: {fileID: 3476730348035874806}
-  maxInteractionDistance: 0.75
+  maxInteractionDistance: 1
 --- !u!114 &7485517181845992503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,7 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirstPersonCamera: {fileID: 3476730348035874806}
-  maxPickupDistance: 0.75
+  maxPickupDistance: 1
 --- !u!1 &8908599253633156168
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5028159568648651124}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: holdingPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
