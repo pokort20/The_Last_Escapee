@@ -16,13 +16,20 @@ public class LookAround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //get mouse input values
-        float mouseX = Input.GetAxis("Mouse X") * mouseSens;// * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSens;// * Time.deltaTime;
+        if(Time.timeScale == 1.0f)
+        {
+            //if (Cursor.lockState != CursorLockMode.Locked)
+            //{
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //}
+            //get mouse input values
+            float mouseX = Input.GetAxis("Mouse X") * mouseSens;// * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSens;// * Time.deltaTime;
 
-        xRot -= mouseY;
-        xRot = Mathf.Clamp(xRot, -80.0f, 80.0f);
-        transform.localRotation = Quaternion.Euler(xRot, 0.0f, 0.0f);
-        player.Rotate(Vector3.up * mouseX);
+            xRot -= mouseY;
+            xRot = Mathf.Clamp(xRot, -80.0f, 80.0f);
+            transform.localRotation = Quaternion.Euler(xRot, 0.0f, 0.0f);
+            player.Rotate(Vector3.up * mouseX);
+        }
     }
 }

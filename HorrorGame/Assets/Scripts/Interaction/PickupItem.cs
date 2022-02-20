@@ -9,9 +9,10 @@ public class PickupItem : MonoBehaviour
 
     RaycastHit raycastHit;
     GameObject itemObject;
+    Inventory inventory;
     void Start()
     {
-
+        inventory = Inventory.instance;
     }
 
     // Update is called once per frame
@@ -27,11 +28,11 @@ public class PickupItem : MonoBehaviour
                 //Debug.Log("Coliding with item" + itemObject.tag);
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Inventory inventory = Inventory.instance;
-                    inventory.addToInventory(itemObject.tag);
-                    Debug.Log("Picked up " + itemObject.tag + " and added it to inventory!");
-                    Destroy(itemObject);
-
+                    if (inventory.addToInventory(itemObject.GetComponent<Item>()))
+                    {
+                        Debug.Log("Picked up " + itemObject.tag + " and added it to inventory!");
+                        itemObject.SetActive(false);
+                    }
                 }
             }
         }

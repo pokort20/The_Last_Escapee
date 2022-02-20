@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 2359690492491687291}
   - component: {fileID: 8055128366789942360}
   - component: {fileID: 1381778478933012829}
+  - component: {fileID: 1474984778705890762}
   m_Layer: 14
   m_Name: flashlight
   m_TagString: Flashlight
@@ -220,3 +221,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1474984778705890762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5154061490322088381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd8d2190ed5e3924fa60a9a0d01341b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Flashlight
+  icon: {fileID: 21300000, guid: fe0da5f943191c84493415b0091c6967, type: 3}

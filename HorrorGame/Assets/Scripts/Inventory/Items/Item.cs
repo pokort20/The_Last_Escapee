@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item
+public class Item : MonoBehaviour
 {
-    public string itemName { get; set; }
-    public Sprite icon { get; set; }
+    public string itemName;
+    public Sprite icon;
+    public virtual void UseItem()
+    {
+
+    }
 }
