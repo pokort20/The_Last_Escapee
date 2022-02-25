@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController playerController;
-    public float movementSpeed = 10.0f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 1.0f;
-    public float sprintMult = 1.5f;
-    public float crouchMult = 0.75f;
-    public float crouchHeight = 1.0f;
-    public float standardHeight = 1.7f;
+    private float movementSpeed;
+    public float gravity;
+    public float jumpHeight;
+    public float sprintMult;
+    public float crouchMult;
+    public float crouchHeight;
+    public float standardHeight;
 
     private bool isSprinting;
     private bool isCrouching;
@@ -33,7 +33,14 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        movementSpeed = GameManager.instance.movementSpeed;
+        gravity = -9.81f;
+        jumpHeight = 1.0f;
+        sprintMult = 1.5f;
+        crouchMult = 0.75f;
+        crouchHeight = 1.0f;
+        standardHeight = 1.7f;
+
     }
 
     // Update is called once per frame

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class FlashlightItem : Item
 {
-    void Start()
+    void Awake()
     {
-        
+        oneTimeUse = false;
     }
     // Update is called once per frame
     void Update()

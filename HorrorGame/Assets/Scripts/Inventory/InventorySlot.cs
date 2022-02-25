@@ -22,12 +22,22 @@ public class InventorySlot : MonoBehaviour
         item = null;
         image.sprite = null;
         image.enabled = false;
-        //useButton.interactable = false;
+        useButton.interactable = false;
     }
     public void OnUseButton()
     {
         Debug.Log("Clicked useButton");
         item.UseItem();
+        if(item.oneTimeUse)
+        {
+            Inventory.instance.removeFromInventory(item);
+            ClearInventorySlot();
+        }
+    }
+    private void Awake()
+    {
+        Debug.Log("Inventory slot " + this.ToString() + " started");
+        useButton.interactable = false;
     }
     // Start is called before the first frame update
     void Start()

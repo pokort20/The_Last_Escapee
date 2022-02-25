@@ -34,7 +34,7 @@ public class InventoryUI :MonoBehaviour
         Debug.Log("Updating inventory UI!");
         for(int i = 0; i < itemSlots.Length; ++i)
         {
-            Debug.Log("Item slot: " + i);
+            //Debug.Log("Item slot: " + i);
             if(i < inventory.items.Count)
             {
                 itemSlots[i].FillInventorySlot(inventory.items[i]);
