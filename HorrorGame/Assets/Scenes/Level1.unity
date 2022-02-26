@@ -10811,7 +10811,7 @@ MonoBehaviour:
   _movementSpeed: 4
   _health: 49
   _batterLevel: 60
-  _stamina: 20
+  _maxStamina: 15
 --- !u!1001 &1685214846
 PrefabInstance:
   m_ObjectHideFlags: 0

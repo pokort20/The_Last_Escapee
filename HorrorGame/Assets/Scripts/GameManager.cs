@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public float _movementSpeed;
     public float _health;
     public float _batterLevel;
-    public float _stamina;
+    public float _maxStamina;
     void Awake()
     {
         Debug.Log("Started GameManager");
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         movementSpeed = _movementSpeed;
         health = _health;
         batteryLevel = _batterLevel;
-        stamina = _stamina;
+        stamina = _maxStamina;
     }
 
     public float health { get; set; }

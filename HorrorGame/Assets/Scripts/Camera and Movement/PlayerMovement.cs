@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
         crouchMult = 0.75f;
         crouchHeight = 1.0f;
         standardHeight = 1.7f;
+        isCrouching = false;
+        isSprinting = false;
 
     }
 
@@ -74,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
                 playerState = playerStates.NORMAL;
             }
         }
+        isCrouching = false;
+        isSprinting = false;
         switch (playerState)
         {
             case playerStates.NORMAL:
@@ -85,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log("Crouching state");
                 moveVec *= movementSpeed * crouchMult;
                 playerController.height = crouchHeight;
+                isCrouching = true;
                 break;
             case playerStates.UNCROUCHING:
                 //Debug.Log("Uncrouching state");
@@ -93,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log("Sprinting state");
                 moveVec *= movementSpeed * sprintMult;
                 playerController.height = standardHeight;
+                isSprinting = true;
                 break;
             default:
                 //Debug.Log("Default");
@@ -108,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         playerController.Move(velocity * Time.deltaTime);
+        updateStamina();
     }
     private void FindPlayerState()
     {
@@ -119,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerState = playerStates.UNCROUCHING;
         }
-        else if (Input.GetKey(KeyCode.LeftShift))
+        else if (Input.GetKey(KeyCode.LeftShift) && canSprint())
         {
             playerState = playerStates.SPRINTING;
         }
@@ -131,5 +138,45 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 getPlayerMoveVec()
     {
         return moveVec;
+    }
+    private bool canSprint()
+    {
+        if(isSprinting && GameManager.instance.stamina > 0.0f)
+        {
+            return true;
+        }
+        else if(GameManager.instance.stamina > 5.0f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private void updateStamina()
+    {
+        if(playerState == playerStates.SPRINTING)
+        {
+            GameManager.instance.stamina -= 1.0f * Time.deltaTime;
+        }
+        else if(playerState == playerStates.CROUCHING || playerState == playerStates.UNCROUCHING)
+        {
+            GameManager.instance.stamina += 0.7f * Time.deltaTime;
+        }
+        else
+        {
+            GameManager.instance.stamina += 0.6f * Time.deltaTime;
+        }
+
+        if(GameManager.instance.stamina > GameManager.instance._maxStamina)
+        {
+            GameManager.instance.stamina = GameManager.instance._maxStamina;
+        }
+        if(GameManager.instance.stamina < 0.0f)
+        {
+            GameManager.instance.stamina = 0.0f;
+        }
+        Debug.Log("Stamina: " + GameManager.instance.stamina);
     }
 }
