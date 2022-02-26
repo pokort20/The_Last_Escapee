@@ -35,14 +35,14 @@ public class PlayerMovement : MonoBehaviour
     {
         movementSpeed = GameManager.instance.movementSpeed;
         gravity = -19.62f;
-        jumpHeight = 1.0f;
+        jumpHeight = 0.7f;
         sprintMult = 1.5f;
         crouchMult = 0.75f;
         crouchHeight = 1.0f;
         standardHeight = 1.7f;
         isCrouching = false;
         isSprinting = false;
-
+        isCrouching = !!isCrouching; //remove this once isCrouching is used, just to get rid of the warning
     }
 
     // Update is called once per frame
@@ -177,6 +177,6 @@ public class PlayerMovement : MonoBehaviour
         {
             GameManager.instance.stamina = 0.0f;
         }
-        Debug.Log("Stamina: " + GameManager.instance.stamina);
+        //Debug.Log("Stamina: " + GameManager.instance.stamina);
     }
 }

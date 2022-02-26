@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class InventorySlot : MonoBehaviour
 {
     public Image image;
     public Item item;
     public Button useButton;
+    public TMP_Text textObject;
 
     public void FillInventorySlot(Item newItem)
     {
@@ -16,6 +18,7 @@ public class InventorySlot : MonoBehaviour
         image.sprite = item.icon;
         image.enabled = true;
         useButton.interactable = true;
+        textObject.text = item.itemName;
     }
     public void ClearInventorySlot()
     {
@@ -23,6 +26,7 @@ public class InventorySlot : MonoBehaviour
         image.sprite = null;
         image.enabled = false;
         useButton.interactable = false;
+        textObject.text = "";
     }
     public void OnUseButton()
     {

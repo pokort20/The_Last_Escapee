@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Flashlight : MonoBehaviour
 {
-    bool flashlightEnabled;
     public Light flashlight;
     Inventory inventory;
     float intensityRangeMin;
@@ -12,8 +11,8 @@ public class Flashlight : MonoBehaviour
     float decayThreshold;
     private void Start()
     {
-        flashlightEnabled = false;
-        flashlight.enabled = flashlightEnabled;
+        GameManager.instance.flashlightEnabled = false;
+        flashlight.enabled = GameManager.instance.flashlightEnabled;
         inventory = Inventory.instance;
         intensityRangeMin = 0.2f;
         intensityRangeMax = 1.0f;
@@ -26,7 +25,7 @@ public class Flashlight : MonoBehaviour
         {
             switchFlaslight();
         }
-        if (flashlightEnabled)
+        if (GameManager.instance.flashlightEnabled)
         {
             if(GameManager.instance.batteryLevel <= 0.0f)
             {
@@ -42,8 +41,8 @@ public class Flashlight : MonoBehaviour
     private void switchFlaslight()
     {
         Debug.Log("Enabled / disabled flashlight");
-        flashlightEnabled = !flashlightEnabled;
-        flashlight.enabled = flashlightEnabled;
+        GameManager.instance.flashlightEnabled = !GameManager.instance.flashlightEnabled;
+        flashlight.enabled = GameManager.instance.flashlightEnabled;
     }
     private void updateLightIntensity()
     {

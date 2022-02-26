@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public float _health;
     public float _batterLevel;
     public float _maxStamina;
+    public bool _flashlightEnabled;
     void Awake()
     {
         Debug.Log("Started GameManager");
@@ -23,12 +24,14 @@ public class GameManager : MonoBehaviour
         health = _health;
         batteryLevel = _batterLevel;
         stamina = _maxStamina;
+        flashlightEnabled = _flashlightEnabled;
     }
 
     public float health { get; set; }
     public float movementSpeed { get; set; }
     public float batteryLevel { get; set; }
     public float stamina { get; set; }
+    public bool flashlightEnabled { get; set; }
 
 
     void Start()
