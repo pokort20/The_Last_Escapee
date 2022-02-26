@@ -7,7 +7,6 @@ public class Flashlight : MonoBehaviour
     bool flashlightEnabled;
     public Light flashlight;
     Inventory inventory;
-    float batteryLevel;
     float intensityRangeMin;
     float intensityRangeMax;
     float decayThreshold;
@@ -16,30 +15,29 @@ public class Flashlight : MonoBehaviour
         flashlightEnabled = false;
         flashlight.enabled = flashlightEnabled;
         inventory = Inventory.instance;
-        batteryLevel = 60.0f;
         intensityRangeMin = 0.2f;
         intensityRangeMax = 1.0f;
-        decayThreshold = 0.66f*batteryLevel;
+        decayThreshold = 0.66f * GameManager.instance.batteryLevel;
     }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && inventory.hasItem(typeof(FlashlightItem)) > 0 && batteryLevel > 0.0f)
+        if (Input.GetKeyDown(KeyCode.F) && inventory.hasItem(typeof(FlashlightItem)) > 0 && GameManager.instance.batteryLevel > 0.0f)
         {
             switchFlaslight();
         }
         if (flashlightEnabled)
         {
-            if(batteryLevel <= 0.0f)
+            if(GameManager.instance.batteryLevel <= 0.0f)
             {
-                batteryLevel = 0.0f;
+                GameManager.instance.batteryLevel = 0.0f;
                 switchFlaslight();
                 return;
             }
-            batteryLevel -= 1.0f * Time.deltaTime;
+            GameManager.instance.batteryLevel -= 1.0f * Time.deltaTime;
             updateLightIntensity();
         }
-        //Debug.Log("Battery level: " + batteryLevel);
+        //Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
     }
     private void switchFlaslight()
     {
@@ -49,15 +47,15 @@ public class Flashlight : MonoBehaviour
     }
     private void updateLightIntensity()
     {
-        if(batteryLevel > decayThreshold)
+        if(GameManager.instance.batteryLevel > decayThreshold)
         {
             flashlight.intensity = 1.0f;
         }
-        if(batteryLevel < decayThreshold)
+        if(GameManager.instance.batteryLevel < decayThreshold)
         {
 
-            flashlight.intensity = intensityRangeMin + ((intensityRangeMax-intensityRangeMin)/decayThreshold * batteryLevel);
-            if (batteryLevel < 0.5f * decayThreshold)
+            flashlight.intensity = intensityRangeMin + ((intensityRangeMax-intensityRangeMin)/decayThreshold * GameManager.instance.batteryLevel);
+            if (GameManager.instance.batteryLevel < 0.5f * decayThreshold)
             {
                 float ran = Random.Range(0.0f, 100.0f);
                 if (ran > 97.0f)

@@ -11,7 +11,7 @@ public class InventorySlot : MonoBehaviour
 
     public void FillInventorySlot(Item newItem)
     {
-        Debug.Log("Filled inventory slot");
+        Debug.Log("Filled inventory slot " + name + " with " + newItem.name);
         item = newItem;
         image.sprite = item.icon;
         image.enabled = true;
@@ -28,15 +28,15 @@ public class InventorySlot : MonoBehaviour
     {
         Debug.Log("Clicked useButton");
         item.UseItem();
+        //Item temp = item;
         if(item.oneTimeUse)
         {
             Inventory.instance.removeFromInventory(item);
-            ClearInventorySlot();
         }
     }
     private void Awake()
     {
-        Debug.Log("Inventory slot " + this.ToString() + " started");
+        Debug.Log("Inventory slot " + ToString() + " started");
         useButton.interactable = false;
     }
     // Start is called before the first frame update

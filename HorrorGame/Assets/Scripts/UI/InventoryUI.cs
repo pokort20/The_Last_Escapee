@@ -32,6 +32,8 @@ public class InventoryUI :MonoBehaviour
     public void updateInventoryUI()
     {
         Debug.Log("Updating inventory UI!");
+        Debug.Log("Items.length: " + itemSlots.Length);
+        Debug.Log("Inventory.items.count: " + inventory.items.Count);
         for(int i = 0; i < itemSlots.Length; ++i)
         {
             //Debug.Log("Item slot: " + i);

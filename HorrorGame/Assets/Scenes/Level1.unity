@@ -10223,7 +10223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1573296871
 Transform:
   m_ObjectHideFlags: 0
@@ -10810,6 +10810,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 4
   _health: 49
+  _batterLevel: 60
+  _stamina: 20
 --- !u!1001 &1685214846
 PrefabInstance:
   m_ObjectHideFlags: 0

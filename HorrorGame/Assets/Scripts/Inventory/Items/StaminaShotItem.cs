@@ -2,24 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BatteryItem : Item
+public class StaminaShotItem : Item
 {
+    // Start is called before the first frame update
     void Awake()
     {
-        itemName = "Batteries";
+        itemName = "Stamina shot";
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public override void UseItem()
     {
-        Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
-        Debug.Log("Used battery!");
-        GameManager.instance.batteryLevel += 60.0f;
-        Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
+        Debug.Log("Used Stamina shot!");
     }
     public override string ToString()
     {

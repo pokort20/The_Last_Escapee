@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class MedkitItem : Item
 {
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
-
+        itemName = "Medkit";
     }
 
     // Update is called once per frame

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public float _movementSpeed;
     public float _health;
+    public float _batterLevel;
+    public float _stamina;
     void Awake()
     {
         Debug.Log("Started GameManager");
@@ -16,19 +18,24 @@ public class GameManager : MonoBehaviour
             return;
         }
         instance = this;
+
         movementSpeed = _movementSpeed;
         health = _health;
+        batteryLevel = _batterLevel;
+        stamina = _stamina;
     }
 
     public float health { get; set; }
     public float movementSpeed { get; set; }
-    // Start is called before the first frame update
+    public float batteryLevel { get; set; }
+    public float stamina { get; set; }
+
+
     void Start()
     {
         printGameVariables();
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -38,6 +45,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("GAME VARIABLES");
         Debug.Log("            Health: " + health);
         Debug.Log("            Movement speed: " + movementSpeed);
+        Debug.Log("            batteryLevel: " + batteryLevel);
+        Debug.Log("            stamina: " + stamina);
     }
 
 }

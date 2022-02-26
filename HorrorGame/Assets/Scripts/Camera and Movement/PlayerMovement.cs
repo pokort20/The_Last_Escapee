@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         movementSpeed = GameManager.instance.movementSpeed;
-        gravity = -9.81f;
+        gravity = -19.62f;
         jumpHeight = 1.0f;
         sprintMult = 1.5f;
         crouchMult = 0.75f;
