@@ -12,7 +12,14 @@ public class MedkitItem : Item
     // Update is called once per frame
     void Update()
     {
-        
+        //if (GameManager.instance.health < GameManager.instance._maxHealth / 2)
+        //{
+        //    isUseable = true;
+        //}
+        //else
+        //{
+        //    isUseable = false;
+        //}
     }
     public override void UseItem()
     {

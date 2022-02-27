@@ -6,8 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public float _movementSpeed;
-    public float _health;
+    public float _maxHealth;
     public float _batterLevel;
+    public float _maxBatteryLevel;
     public float _maxStamina;
     public bool _flashlightEnabled;
     void Awake()
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         movementSpeed = _movementSpeed;
-        health = _health;
+        health = _maxHealth*0.5f;
         batteryLevel = _batterLevel;
         stamina = _maxStamina;
         flashlightEnabled = _flashlightEnabled;

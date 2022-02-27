@@ -7,7 +7,7 @@ public class FlashlightItem : Item
 {
     void Awake()
     {
-        oneTimeUse = false;
+        isUseable = false;
         itemName = "Flashlight";
     }
     // Update is called once per frame

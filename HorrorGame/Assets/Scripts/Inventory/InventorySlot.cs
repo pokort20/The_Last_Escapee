@@ -17,7 +17,7 @@ public class InventorySlot : MonoBehaviour
         item = newItem;
         image.sprite = item.icon;
         image.enabled = true;
-        useButton.interactable = true;
+        //useButton.interactable = true;
         textObject.text = item.itemName;
     }
     public void ClearInventorySlot()
@@ -33,7 +33,7 @@ public class InventorySlot : MonoBehaviour
         Debug.Log("Clicked useButton");
         item.UseItem();
         //Item temp = item;
-        if(item.oneTimeUse)
+        if(item.isUseable)
         {
             Inventory.instance.removeFromInventory(item);
         }
@@ -52,6 +52,38 @@ public class InventorySlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(item != null && useButton != null)
+        {
+            if(item.GetType() != typeof(BatteryItem) && item.GetType() != typeof(MedkitItem) && item.GetType() != typeof(FlashlightItem))
+            {
+                item.isUseable = true;
+            }
+            else
+            {
+                if (item.GetType() == typeof(BatteryItem) && GameManager.instance.batteryLevel < GameManager.instance._maxBatteryLevel / 2)
+                {
+                    item.isUseable = true;
+                }
+                else if(item.GetType() == typeof(MedkitItem) && GameManager.instance.health < GameManager.instance._maxHealth)
+                {
+                    item.isUseable = true;
+                }
+                else
+                {
+                    item.isUseable = false;
+                }
+            }
+
+
+
+            if(item.isUseable)
+            {
+                useButton.interactable = true;
+            }
+            else
+            {
+                useButton.interactable = false;
+            }
+        }
     }
 }

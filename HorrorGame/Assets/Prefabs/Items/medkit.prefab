@@ -96,8 +96,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.005302243, y: 0.0049715457, z: 0.0012731671}
-  m_Center: {x: 0.00003824949, y: -0.000040031522, z: 1.1067242e-19}
+  m_Size: {x: 0.0071352194, y: 0.007164576, z: 0.0038079107}
+  m_Center: {x: 0.00027204512, y: -0.00011284888, z: 0.00023892522}
 --- !u!65 &978765688740745259
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -141,3 +141,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Medkit
   icon: {fileID: 21300000, guid: e13e307052dbef241a91079b4f9ba99c, type: 3}
+  oneTimeUse: 1

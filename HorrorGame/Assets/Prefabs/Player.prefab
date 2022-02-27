@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b881b58df1c17d54ab9ce2a5529a63bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fpslimit: 60
+  fpslimit: 100
 --- !u!114 &3476730348906112949
 MonoBehaviour:
   m_ObjectHideFlags: 0

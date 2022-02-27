@@ -6,7 +6,7 @@ public class Item : MonoBehaviour
 {
     public string itemName;
     public Sprite icon;
-    public bool oneTimeUse = true;
+    public bool isUseable = true;
 
     public virtual void UseItem()
     {

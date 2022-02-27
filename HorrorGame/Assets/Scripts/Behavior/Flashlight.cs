@@ -16,7 +16,7 @@ public class Flashlight : MonoBehaviour
         inventory = Inventory.instance;
         intensityRangeMin = 0.2f;
         intensityRangeMax = 1.0f;
-        decayThreshold = 0.66f * GameManager.instance.batteryLevel;
+        decayThreshold = 0.5f * GameManager.instance._maxBatteryLevel;
     }
     // Update is called once per frame
     void Update()
