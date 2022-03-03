@@ -153,6 +153,7 @@ public class EnemyChase : MonoBehaviour
     }
     private bool isPlayerVisible(Vector3 agentPos, Vector3 playerPos)
     {
+        getPlayerVisibility(agentPos, playerPos);
         RaycastHit raycastHit;
         float visibilityDistance = 10.0f;
         
@@ -204,5 +205,51 @@ public class EnemyChase : MonoBehaviour
             return true;
         }
         return false;
+    }
+    private float getPlayerVisibility(Vector3 agentPos, Vector3 playerPos)
+    {
+        bool debugRays = true;
+        RaycastHit raycastHit;
+        Debug.Log("-----------------------------------------------------------");
+        foreach (Light light in Resources.FindObjectsOfTypeAll(typeof(Light)))
+        {
+            //Debug.Log("Light: " + light.name);
+            if (light.isActiveAndEnabled && Vector3.Distance(light.transform.position, playerPos) < light.range)
+            {
+                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.red);
+                //Debug.Log("Light: " + light.name + " isActiveAndEnabled and player is in range");
+                if (light.type == LightType.Point)
+                {
+                    
+                    if (Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, light.range))
+                    {
+                        if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            //Point Light shines on player
+                            if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
+                            float intensity = 1.0f / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f);
+                            Debug.Log("Point light: " + light.name + " shines on player with intensity: " + intensity);
+
+                        }
+                    }
+                }
+                else if(light.type == LightType.Spot)
+                {
+                    if (Vector3.Angle(light.transform.forward, playerPos - light.transform.position) < light.spotAngle * 0.5f)
+                    {
+                        if(Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, light.range))
+                        {
+                            if(raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                            {
+                                //Spot light shines on player
+                                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
+                                Debug.Log("SpotLight " + light.ToString() + ", up: " + light.transform.up);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return 0.0f;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1154528247905534975}
   - component: {fileID: 1154528247905534968}
   m_Layer: 0
-  m_Name: SpotLight
+  m_Name: fluorescentLampSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1154528247905534969}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.0004, y: 0.00027999998, z: -0.00015700102}
   m_LocalScale: {x: 0.009999998, y: 0.01, z: 0.010000001}
   m_Children: []
   m_Father: {fileID: 1154528248733593534}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &1154528247905534968
 Light:
   m_ObjectHideFlags: 0
@@ -42,9 +42,9 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.99215686, g: 1, b: 0.8901961, a: 1}
-  m_Intensity: 0.75
-  m_Range: 40
+  m_Color: {r: 0.9647059, g: 1, b: 0.98039216, a: 1}
+  m_Intensity: 1.5
+  m_Range: 8
   m_SpotAngle: 160
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -55,7 +55,7 @@ Light:
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.25
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -214,7 +214,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1154528248509996436}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 1.35, y: 2.4743, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
@@ -224,7 +224,7 @@ Transform:
   - {fileID: 1154528247905534975}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &1154528248509996442
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 1154528249460014601}
   - component: {fileID: 1154528249460014600}
   m_Layer: 0
-  m_Name: PointLight
+  m_Name: fluorescentLampPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,15 +316,15 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.9907008, g: 1, b: 0.8915094, a: 1}
+  m_Color: {r: 0.9647059, g: 1, b: 0.98039216, a: 1}
   m_Intensity: 1
-  m_Range: 2.3
+  m_Range: 4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
+    m_Type: 1
+    m_Resolution: 1
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
