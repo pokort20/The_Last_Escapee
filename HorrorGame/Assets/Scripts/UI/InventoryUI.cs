@@ -48,6 +48,7 @@ public class InventoryUI :MonoBehaviour
             flashlightImage.enabled = true;
             batteryLevelImage.enabled = true;
             fillAmount = GameManager.instance.batteryLevel / GameManager.instance._maxBatteryLevel;
+            Debug.Log("batteryLevel: " + GameManager.instance.batteryLevel + " maxBatteryLevel: " + GameManager.instance._maxBatteryLevel + " fill amount: " + fillAmount);
             if (fillAmount > 1.0f)
             {
                 fillAmount = 1.0f;
