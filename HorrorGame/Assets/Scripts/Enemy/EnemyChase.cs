@@ -155,7 +155,7 @@ public class EnemyChase : MonoBehaviour
     {
         RaycastHit raycastHit;
         float visibilityDistance = remap(0.0f, 1.5f, 2.0f, 15.0f, getPlayerVisibility(playerPos));
-        //Debug.Log("visibility distance: " + visibilityDistance);
+        Debug.Log("visibility distance: " + visibilityDistance);
         
         Vector3 eyePos = agentPos;
         eyePos.y += 1.2f;
@@ -231,9 +231,9 @@ public class EnemyChase : MonoBehaviour
                             //Point Light shines on player
                             if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
 
-                            intensity = Mathf.Clamp(1.0f / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
-                            //Debug.Log("Point light: " + light.ToString() + " shines on player, intensity: " + intensity);
-                            playerIlluminationIntensity += Mathf.Sqrt(intensity);
+                            intensity = Mathf.Clamp(light.range * light.intensity / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
+                            Debug.Log("Point light: " + light.ToString() + " shines on player, distance: " + Vector3.Distance(light.transform.position, playerPos) + ", intensity: " + intensity);
+                            playerIlluminationIntensity += intensity;
                         }
                     }
                 }
@@ -248,16 +248,16 @@ public class EnemyChase : MonoBehaviour
                                 //Spot light shines on player
 
                                 if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
-                                intensity = Mathf.Clamp(1.0f / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
+                                intensity = Mathf.Clamp(light.range * light.intensity / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
                                 //Debug.Log("SpotLight " + light.ToString() + " shines on player, intensity: " + intensity);
-                                playerIlluminationIntensity += Mathf.Sqrt(intensity);
+                                playerIlluminationIntensity += intensity;
                             }
                         }
                     }
                 }
             }
         }
-        //Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
+        Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
         return playerIlluminationIntensity;
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)

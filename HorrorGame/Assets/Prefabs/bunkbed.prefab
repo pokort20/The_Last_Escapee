@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 7259537011587951015}
   - component: {fileID: 7259537011587951014}
   - component: {fileID: 925467538417244353}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: mattress_bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7259537013247544354}
   - component: {fileID: 7259537013247544365}
   - component: {fileID: 1959003344619632542}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: mattress_top
   m_TagString: Untagged
   m_Icon: {fileID: 0}

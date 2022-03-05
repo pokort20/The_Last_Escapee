@@ -8,7 +8,7 @@ public class SwitchLamp : Interactable
 
     // Start is called before the first frame update
     bool isEnabled;
-    void Start()
+    void Update()
     {
         isEnabled = lampParent.transform.GetChild(0).transform.GetChild(0).gameObject.activeInHierarchy;
     }
@@ -18,10 +18,10 @@ public class SwitchLamp : Interactable
         isEnabled = !isEnabled;
         foreach (Transform FluorescentLamp in lampParent.transform)
         {
-            FluorescentLamp.GetChild(0).gameObject.SetActive(isEnabled);
-            FluorescentLamp.GetChild(1).gameObject.SetActive(isEnabled);
-            FluorescentLamp.GetChild(2).gameObject.SetActive(isEnabled);
-            FluorescentLamp.GetChild(3).gameObject.SetActive(isEnabled);
+            for(int i = 0; i < FluorescentLamp.childCount; ++i)
+            {
+                FluorescentLamp.GetChild(i).gameObject.SetActive(isEnabled);
+            }
         }
     }
 }
