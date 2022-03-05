@@ -34,12 +34,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wall1_str3m_door_bump
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP _PARALLAXMAP
+  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
+  m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT _DISPLACEMENT_LOCK_TILING_SCALE _MASKMAP
+    _METALLICSPECGLOSSMAP _NORMALMAP _NORMALMAP_TANGENT_SPACE _PARALLAXMAP _PIXEL_DISPLACEMENT
+    _PIXEL_DISPLACEMENT_LOCK_OBJECT_SCALE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2225
   stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
@@ -55,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 1131ddacf55d6de47a08f5de8ae81845, type: 3}
+        m_Texture: {fileID: 2800000, guid: acd91a98e6718454f87fe3a941b894bd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -115,11 +117,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 1131ddacf55d6de47a08f5de8ae81845, type: 3}
+        m_Texture: {fileID: 2800000, guid: acd91a98e6718454f87fe3a941b894bd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: aaa71f4afff2f824c9aa5af2883d8b87, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0d7f63f467da3a44ba9e1fd21b177c17, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -127,7 +129,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 13b20ea2f594dd9458603be667fcc348, type: 3}
+        m_Texture: {fileID: 2800000, guid: c440bfe3775b29f4b973f82a43ceaf8e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -250,7 +252,7 @@ Material:
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 0
     - _MaterialID: 1
-    - _Metallic: 1
+    - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
     - _Mode: 0
@@ -270,7 +272,7 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 1
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0

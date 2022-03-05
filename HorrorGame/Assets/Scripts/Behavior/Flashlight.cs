@@ -34,7 +34,7 @@ public class Flashlight : MonoBehaviour
                 return;
             }
             GameManager.instance.batteryLevel -= 1.0f * Time.deltaTime;
-            updateLightIntensity();
+            //updateLightIntensity();
         }
         //Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
     }

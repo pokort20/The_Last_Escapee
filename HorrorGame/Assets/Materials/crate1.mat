@@ -8,12 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: crate1
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP _PARALLAXMAP
+  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
+  m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT _DISPLACEMENT_LOCK_TILING_SCALE _MASKMAP
+    _NORMALMAP _NORMALMAP_TANGENT_SPACE _PIXEL_DISPLACEMENT _PIXEL_DISPLACEMENT_LOCK_OBJECT_SCALE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2225
   stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
@@ -29,7 +30,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: f811c00a44b721848974bf13160d0113, type: 3}
+        m_Texture: {fileID: 2800000, guid: d8ac6faf4a53bbb4ab60d500c593b132, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -89,11 +90,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f811c00a44b721848974bf13160d0113, type: 3}
+        m_Texture: {fileID: 2800000, guid: d8ac6faf4a53bbb4ab60d500c593b132, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: 2b95e18c861c7a8468debec00c176000, type: 3}
+        m_Texture: {fileID: 2800000, guid: d9622744b6a1e8c4090c22e79f062c37, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -101,7 +102,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 01b792bce511fe140b50111aa5198c77, type: 3}
+        m_Texture: {fileID: 2800000, guid: bf303450806c2b145b9bd02e462e7085, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -244,7 +245,7 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 0.8
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
