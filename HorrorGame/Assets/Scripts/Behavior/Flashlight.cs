@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 public class Flashlight : MonoBehaviour
 {
     public Light flashlight;
+    public HDAdditionalLightData lightData;
     Inventory inventory;
     float intensityRangeMin;
     float intensityRangeMax;
@@ -14,9 +16,11 @@ public class Flashlight : MonoBehaviour
         GameManager.instance.flashlightEnabled = false;
         flashlight.enabled = GameManager.instance.flashlightEnabled;
         inventory = Inventory.instance;
-        intensityRangeMin = 0.2f;
-        intensityRangeMax = 1.0f;
+        intensityRangeMin = 12.0f;
+        intensityRangeMax = 60.0f;
         decayThreshold = 0.5f * GameManager.instance._maxBatteryLevel;
+
+        lightData = flashlight.GetComponent<HDAdditionalLightData>();
     }
     // Update is called once per frame
     void Update()
@@ -34,7 +38,7 @@ public class Flashlight : MonoBehaviour
                 return;
             }
             GameManager.instance.batteryLevel -= 1.0f * Time.deltaTime;
-            //updateLightIntensity();
+            updateLightIntensity();
         }
         //Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
     }
@@ -48,18 +52,18 @@ public class Flashlight : MonoBehaviour
     {
         if(GameManager.instance.batteryLevel > decayThreshold)
         {
-            flashlight.intensity = 1.0f;
+            lightData.intensity = intensityRangeMax;
         }
         if(GameManager.instance.batteryLevel < decayThreshold)
         {
 
-            flashlight.intensity = intensityRangeMin + ((intensityRangeMax-intensityRangeMin)/decayThreshold * GameManager.instance.batteryLevel);
+            lightData.intensity = intensityRangeMin + ((intensityRangeMax-intensityRangeMin)/decayThreshold * GameManager.instance.batteryLevel);
             if (GameManager.instance.batteryLevel < 0.5f * decayThreshold)
             {
                 float ran = Random.Range(0.0f, 100.0f);
                 if (ran > 97.0f)
                 {
-                    flashlight.intensity *= 0.25f;
+                    lightData.intensity *= 0.25f;
                 }
             }
         }
