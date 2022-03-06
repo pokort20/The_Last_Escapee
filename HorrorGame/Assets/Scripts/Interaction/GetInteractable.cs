@@ -7,9 +7,21 @@ public class GetInteractable : MonoBehaviour
 
     RaycastHit raycastHit;
     GameObject interactingObject;
+    private bool keyPressed;
     void Start()
     {
-
+        keyPressed = false;
+    }
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            keyPressed = true;
+        }
+        if(Input.GetKeyUp(KeyCode.E))
+        {
+            keyPressed = false;
+        }
     }
 
     void FixedUpdate()
@@ -20,11 +32,11 @@ public class GetInteractable : MonoBehaviour
             {
                 interactingObject = raycastHit.collider.gameObject;
                 //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
-                if(Input.GetKeyDown(KeyCode.E))
+                if(keyPressed)
                 {
                     interactingObject.GetComponent<Interactable>().Interact();
                     //Debug.Log("Interact!");
-
+                    keyPressed = false;
                 }
             }
         }

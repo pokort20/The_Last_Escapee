@@ -16,7 +16,7 @@ public class PickupItem : MonoBehaviour
     {
         inventory = Inventory.instance;
         pressedKey = false;
-        ignoreMask = LayerMask.NameToLayer("Player");
+        ignoreMask = LayerMask.GetMask("Player");
     }
     private void Update()
     {
@@ -33,9 +33,11 @@ public class PickupItem : MonoBehaviour
     void FixedUpdate()
     {
         Debug.DrawRay(FirstPersonCamera.transform.position, Vector3.Normalize(FirstPersonCamera.transform.forward)*maxPickupDistance, Color.blue, 0.0f);
-        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxPickupDistance, ~ignoreMask))
+        if (Physics.Raycast(origin: FirstPersonCamera.transform.position, direction: FirstPersonCamera.transform.forward, hitInfo: out raycastHit, maxDistance: maxPickupDistance, layerMask: ~ignoreMask))
         {
-            Debug.Log("Collided with: " + raycastHit.collider.gameObject.name);
+            //Debug.Log("Collided with: " + raycastHit.collider.gameObject.name);
+            //Debug.Log("        layer: " + LayerMask.LayerToName(raycastHit.collider.gameObject.layer));
+
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
                 if(itemObject!=null)
