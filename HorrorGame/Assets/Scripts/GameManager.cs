@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public float _maxBatteryLevel;
     public float _maxStamina;
     public bool _flashlightEnabled;
+
     void Awake()
     {
         Debug.Log("Started GameManager");
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
     public void printGameVariables()
     {

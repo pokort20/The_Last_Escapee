@@ -154,8 +154,9 @@ public class EnemyChase : MonoBehaviour
     private bool isPlayerVisible(Vector3 agentPos, Vector3 playerPos)
     {
         RaycastHit raycastHit;
-        float visibilityDistance = remap(0.0f, 1.5f, 2.0f, 15.0f, getPlayerVisibility(playerPos));
-        //Debug.Log("visibility distance: " + visibilityDistance);
+        float playerVisibility = FindObjectOfType<EnemyUtilities>().playerVisibility;
+        float visibilityDistance = remap(0.0f, 70.0f, 2.0f, 15.0f, playerVisibility);
+        Debug.Log("visibility distance: " + visibilityDistance);
         
         Vector3 eyePos = agentPos;
         eyePos.y += 1.2f;
@@ -205,60 +206,6 @@ public class EnemyChase : MonoBehaviour
             return true;
         }
         return false;
-    }
-    private float getPlayerVisibility(Vector3 playerPos)
-    {
-        bool debugRays = true;
-        float playerIlluminationIntensity = 0.0f;
-        if (GameManager.instance.flashlightEnabled) playerIlluminationIntensity += 0.5f;
-        RaycastHit raycastHit; 
-        //Debug.Log("-----------------------------------------------------------");
-        foreach (Light light in Resources.FindObjectsOfTypeAll(typeof(Light)))
-        {
-            //Debug.Log("Light: " + light.name);
-            if (light.isActiveAndEnabled && Vector3.Distance(light.transform.position, playerPos) < light.range)
-            {
-                float intensity;
-                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.red);
-                //Debug.Log("Light: " + light.name + " isActiveAndEnabled and player is in range");
-                if (light.type == LightType.Point)
-                {
-                    
-                    if (Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, light.range))
-                    {
-                        if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-                        {
-                            //Point Light shines on player
-                            if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
-
-                            intensity = Mathf.Clamp(light.range * light.intensity / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
-                            //Debug.Log("Point light: " + light.ToString() + " shines on player, distance: " + Vector3.Distance(light.transform.position, playerPos) + ", intensity: " + intensity);
-                            playerIlluminationIntensity += intensity;
-                        }
-                    }
-                }
-                else if(light.type == LightType.Spot)
-                {
-                    if (Vector3.Angle(light.transform.forward, playerPos - light.transform.position) < light.spotAngle * 0.5f)
-                    {
-                        if(Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, light.range))
-                        {
-                            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-                            {
-                                //Spot light shines on player
-
-                                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * light.range, Color.green);
-                                intensity = Mathf.Clamp(light.range * light.intensity / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, light.intensity);
-                                //Debug.Log("SpotLight " + light.ToString() + " shines on player, intensity: " + intensity);
-                                playerIlluminationIntensity += intensity;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
-        return playerIlluminationIntensity;
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {
