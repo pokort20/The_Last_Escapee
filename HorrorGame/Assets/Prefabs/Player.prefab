@@ -635,7 +635,6 @@ GameObject:
   - component: {fileID: 3476730348906112949}
   - component: {fileID: 5949736693423157336}
   - component: {fileID: 8124124245931059825}
-  - component: {fileID: 2219363454910824175}
   - component: {fileID: 7485517181845992503}
   m_Layer: 10
   m_Name: Player
@@ -763,20 +762,6 @@ MonoBehaviour:
   maxGrabDistance: 2.8
   grabSpeedMultiplier: 49
   toCenterParam: 0.1
---- !u!114 &2219363454910824175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3476730348906112950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d09a1752c00c01469ed98e69a4fdfa0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 3476730348035874806}
-  maxInteractionDistance: 1
 --- !u!114 &7485517181845992503
 MonoBehaviour:
   m_ObjectHideFlags: 0

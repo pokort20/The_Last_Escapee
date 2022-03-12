@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickupItem : MonoBehaviour
+public class FindInteraction : MonoBehaviour
 {
     public Camera FirstPersonCamera;
     public float maxPickupDistance;
 
     RaycastHit raycastHit;
     GameObject itemObject;
+    GameObject interactingObject;
     Inventory inventory;
     private bool pressedKey;
     private LayerMask ignoreMask;
+    private bool isInteracting = false;
     void Start()
     {
         inventory = Inventory.instance;
@@ -38,9 +40,11 @@ public class PickupItem : MonoBehaviour
             //Debug.Log("Collided with: " + raycastHit.collider.gameObject.name);
             //Debug.Log("        layer: " + LayerMask.LayerToName(raycastHit.collider.gameObject.layer));
 
+            //ITEMS
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
-                if(itemObject!=null)
+                handleInteractionText("E - pick up");
+                if (itemObject!=null)
                 {
                     if(!ReferenceEquals(itemObject, raycastHit.collider.gameObject))
                     {
@@ -59,13 +63,29 @@ public class PickupItem : MonoBehaviour
                     }
                 }
             }
+            //INTERACTABLES
+            else if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+            {
+                handleInteractionText("E - Interact");
+                interactingObject = raycastHit.collider.gameObject;
+                //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
+                if (pressedKey)
+                {
+                    interactingObject.GetComponent<Interactable>().Interact();
+                    //Debug.Log("Interact!");
+                    pressedKey = false;
+                }
+            }
+            //not item nor interactable
             else
             {
-                if(itemObject != null)removeItemHighlight(itemObject);
+                handleInteractionText(null);
+                if (itemObject != null) removeItemHighlight(itemObject);
             }
         }
         else
         {
+            handleInteractionText(null);
             if (itemObject != null) removeItemHighlight(itemObject);
         }
     }
@@ -104,6 +124,19 @@ public class PickupItem : MonoBehaviour
         else
         {
             Debug.LogWarning("Attempted to remove highlight from null object");
+        }
+    }
+    private void handleInteractionText(string interactionText)
+    {
+        if (isInteracting)
+        {
+            inventory.interactText = interactionText;
+            isInteracting = false;
+        }
+        else
+        {
+            inventory.interactText = interactionText;
+            isInteracting = true;
         }
     }
 }

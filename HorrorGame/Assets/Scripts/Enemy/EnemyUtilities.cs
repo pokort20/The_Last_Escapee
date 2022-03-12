@@ -33,11 +33,11 @@ public class EnemyUtilities : MonoBehaviour
         float playerIlluminationIntensity = 0.0f;
         if (GameManager.instance.flashlightEnabled) playerIlluminationIntensity += 0.5f;
         RaycastHit raycastHit;
-        Debug.Log("----------------------------LIGHTS---------------------------");
+        //Debug.Log("----------------------------LIGHTS---------------------------");
         foreach (Light light in Resources.FindObjectsOfTypeAll(typeof(Light)))
         {
-            Debug.Log("-------------------------------");
-            Debug.Log("Light: " + light.name);
+            //Debug.Log("-------------------------------");
+            //Debug.Log("Light: " + light.name);
             float intensity;
             HDAdditionalLightData lightData = light.GetComponent<HDAdditionalLightData>();
             if (lightData == null)
@@ -48,7 +48,7 @@ public class EnemyUtilities : MonoBehaviour
 
             if (light.isActiveAndEnabled && Vector3.Distance(light.transform.position, playerPos) < light.range)
             {
-                Debug.Log("HD intensity: " + lightData.intensity);
+                //Debug.Log("HD intensity: " + lightData.intensity);
 
                 if (lightData.type == HDLightType.Point)
                 {
@@ -87,7 +87,7 @@ public class EnemyUtilities : MonoBehaviour
             }
         }
 
-        Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
+        //Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
         return playerIlluminationIntensity;
     }
 }

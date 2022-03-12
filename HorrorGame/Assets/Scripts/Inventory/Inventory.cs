@@ -16,10 +16,30 @@ public class Inventory : MonoBehaviour
         }
         instance = this;
     }
+    //Variables
     public List<Item> items;
     public int inventorySize;
+    private string interactTxt;
+    public string interactText
+    {
+        get { 
+            return interactTxt; 
+        }
+
+        set {
+            interactTxt = value;
+            if (onInteractTextChangedCallback != null)
+            {
+                onInteractTextChangedCallback.Invoke();
+            }
+        }
+    }
+
+    //Callbacks
     public delegate void OnInventoryChanged();
     public OnInventoryChanged onInventoryChangedCallback;
+    public delegate void OnInteractTextChanged();
+    public OnInteractTextChanged onInteractTextChangedCallback;
 
 
     // Start is called before the first frame update

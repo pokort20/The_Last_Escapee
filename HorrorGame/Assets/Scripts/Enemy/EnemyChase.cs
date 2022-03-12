@@ -156,7 +156,7 @@ public class EnemyChase : MonoBehaviour
         RaycastHit raycastHit;
         float playerVisibility = FindObjectOfType<EnemyUtilities>().playerVisibility;
         float visibilityDistance = remap(0.0f, 70.0f, 2.0f, 15.0f, playerVisibility);
-        Debug.Log("visibility distance: " + visibilityDistance);
+        //Debug.Log("visibility distance: " + visibilityDistance);
         
         Vector3 eyePos = agentPos;
         eyePos.y += 1.2f;

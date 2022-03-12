@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventoryUI :MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InventoryUI :MonoBehaviour
     public Image flashlightImage;
     public Image batteryLevelImage;
     public Image healthFillImage;
+    public TMP_Text interactText;
     Canvas canvas;
     Inventory inventory;
 
@@ -18,6 +20,7 @@ public class InventoryUI :MonoBehaviour
     {
         inventory = Inventory.instance;
         inventory.onInventoryChangedCallback += updateInventoryUI;
+        inventory.onInteractTextChangedCallback += updateInteractText;
         itemSlots = itemSlotsParent.GetComponentsInChildren<InventorySlot>();
         flashlightImage.enabled = false;
         batteryLevelImage.enabled = false;
@@ -69,6 +72,21 @@ public class InventoryUI :MonoBehaviour
             }
         }
 
+    }
+    public void updateInteractText()
+    {
+
+        if (inventory.interactText != null)
+        {
+            Debug.Log("Enabling interact text");
+            interactText.text = inventory.interactText;
+            interactText.enabled = true;
+        }
+        else
+        {
+            Debug.Log("Disabling interact text");
+            interactText.enabled = false;
+        }
     }
     public void openInventory()
     {
