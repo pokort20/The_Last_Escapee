@@ -12,6 +12,7 @@ public class InventoryUI :MonoBehaviour
     public Image batteryLevelImage;
     public Image healthFillImage;
     public TMP_Text interactText;
+    public Image interactImage;
     Canvas canvas;
     Inventory inventory;
 
@@ -81,11 +82,13 @@ public class InventoryUI :MonoBehaviour
             Debug.Log("Enabling interact text");
             interactText.text = inventory.interactText;
             interactText.enabled = true;
+            interactImage.enabled = true;
         }
         else
         {
             Debug.Log("Disabling interact text");
             interactText.enabled = false;
+            interactImage.enabled = false;
         }
     }
     public void openInventory()

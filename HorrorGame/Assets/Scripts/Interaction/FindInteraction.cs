@@ -43,7 +43,7 @@ public class FindInteraction : MonoBehaviour
             //ITEMS
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
-                handleInteractionText("E - pick up");
+                handleInteractionText("E   Pick up item");
                 if (itemObject!=null)
                 {
                     if(!ReferenceEquals(itemObject, raycastHit.collider.gameObject))
@@ -66,8 +66,16 @@ public class FindInteraction : MonoBehaviour
             //INTERACTABLES
             else if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
-                handleInteractionText("E - Interact");
+                handleInteractionText("E   Interact");
+                //if(interactingObject != null)
+                //{
+                //    if(!ReferenceEquals(interactingObject, raycastHit.collider.gameObject))
+                //    {
+                //        removeItemHighlight(interactingObject);
+                //    }
+                //}
                 interactingObject = raycastHit.collider.gameObject;
+                //highlightItem(interactingObject);
                 //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
                 if (pressedKey)
                 {
@@ -81,12 +89,14 @@ public class FindInteraction : MonoBehaviour
             {
                 handleInteractionText(null);
                 if (itemObject != null) removeItemHighlight(itemObject);
+                //if (interactingObject != null) removeItemHighlight(interactingObject);
             }
         }
         else
         {
             handleInteractionText(null);
             if (itemObject != null) removeItemHighlight(itemObject);
+            //if (interactingObject != null) removeItemHighlight(interactingObject);
         }
     }
     private void highlightItem(GameObject gameObject)
