@@ -118,17 +118,18 @@ public class EnemyChase : MonoBehaviour
         }
         if (!agent.hasPath /*&& !isPlayerVisible(agent.transform.position, player.position)*/)
         {
-            //find closest point and explore
-            float bestDistance = -1.0f;
-            float currentDistance;
+            //find the point in the best direction 
+            float bestValue = -1.0f;
+            float currentValue;
             Transform toBeExplored = null;
             foreach(Transform patrolPoint in patrolPoints.transform)
             {
-                currentDistance = Vector3.Distance(agent.transform.position, patrolPoint.position);
-                if (currentDistance < bestDistance || bestDistance == -1.0f)
+                currentValue = Vector3.Angle(agent.transform.forward, patrolPoint.position - agent.transform.position);
+                currentValue *= Mathf.Max(1.0f, Vector3.Distance(agent.transform.position, patrolPoint.position));
+                if (currentValue < bestValue || bestValue == -1.0f)
                 {
                     toBeExplored = patrolPoint;
-                    bestDistance = currentDistance;
+                    bestValue = currentValue;
                 }
             }
             Debug.Log("Selected point to explore: " + toBeExplored.name);
@@ -181,6 +182,8 @@ public class EnemyChase : MonoBehaviour
     {
         float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
         float noiseRange = moveVecMag * 0.5f;
+        noiseRange = Mathf.Pow(noiseRange, 2.0f);
+        //Debug.Log("Noise range: " + noiseRange);
         float dist = Vector3.Distance(agentPos, playerPos);
         RaycastHit raycastHit;
         Vector3 earPos = agentPos;
@@ -194,7 +197,7 @@ public class EnemyChase : MonoBehaviour
             {
                 //Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
                 //Debug.Log("Wall between enemy and player in hearing range");
-                if(2*dist < hearingRange + noiseRange)
+                if(3*dist < hearingRange + noiseRange)
                 {
                     //Debug.Log("Hears through wall");
                     return true;

@@ -31,7 +31,7 @@ public class EnemyUtilities : MonoBehaviour
     {
         bool debugRays = true;
         float playerIlluminationIntensity = 0.0f;
-        if (GameManager.instance.flashlightEnabled) playerIlluminationIntensity += 0.5f;
+        if (GameManager.instance.flashlightEnabled) playerIlluminationIntensity += 40.0f;
         RaycastHit raycastHit;
         //Debug.Log("----------------------------LIGHTS---------------------------");
         foreach (Light light in Resources.FindObjectsOfTypeAll(typeof(Light)))

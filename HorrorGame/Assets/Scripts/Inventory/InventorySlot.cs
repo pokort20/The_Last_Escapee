@@ -54,7 +54,7 @@ public class InventorySlot : MonoBehaviour
     {
         if(item != null && useButton != null)
         {
-            if(item.GetType() != typeof(BatteryItem) && item.GetType() != typeof(MedkitItem) && item.GetType() != typeof(FlashlightItem))
+            if(item.GetType() != typeof(BatteryItem) && item.GetType() != typeof(MedkitItem) && item.GetType() != typeof(FlashlightItem) && item.GetType() != typeof(KeyItem))
             {
                 item.isUseable = true;
             }

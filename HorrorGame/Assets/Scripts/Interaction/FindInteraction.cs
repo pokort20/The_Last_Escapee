@@ -138,12 +138,12 @@ public class FindInteraction : MonoBehaviour
     }
     private void handleInteractionText(string interactionText)
     {
-        if (isInteracting)
+        if (isInteracting && interactionText == null)
         {
             inventory.interactText = interactionText;
             isInteracting = false;
         }
-        else
+        if(!isInteracting && interactionText != null)
         {
             inventory.interactText = interactionText;
             isInteracting = true;
