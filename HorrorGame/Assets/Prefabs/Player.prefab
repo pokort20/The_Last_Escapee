@@ -759,7 +759,7 @@ MonoBehaviour:
   holdingPosition: {fileID: 5028159568648651124}
   FirstPersonCamera: {fileID: 3476730348035874806}
   forceAmount: 1500
-  maxGrabDistance: 2.8
+  maxGrabDistance: 2
   grabSpeedMultiplier: 49
   toCenterParam: 0.1
 --- !u!114 &7485517181845992503

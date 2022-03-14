@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PickupObject : MonoBehaviour
 {
     //values set in inspector
@@ -11,28 +10,33 @@ public class PickupObject : MonoBehaviour
     public float maxGrabDistance;
     public float grabSpeedMultiplier;
     public float toCenterParam;
+    
+
 
     //other variables
     float initGrabDistance;
-    float grabDistance;
-    float moveDistance;
-    float holdingObjectDefaultDrag;
-    float holdingObjectDefaultAngularDrag;
     RaycastHit raycastHit;
     bool IsHoldingObject;
     GameObject holdingObject;
-    Vector3 previousPosition;
-    Vector3 targetPosition;
-    Vector3 moveDirection;
     LayerMask layerMask;
+    private SpringJoint springJoint;
+    private float initHingeAngle;
+    private Vector2 initPlayerForward;
+    private HingeJoint hingeJnt;
+
+    //old RB values
+    bool rbUseGravity;
+    float rbDrag;
+    float rbAngularDrag;
 
     void Start()
     {
         Debug.Log("Started PickupObjects");
-        layerMask = LayerMask.GetMask("Moveable");
+        layerMask = LayerMask.GetMask("Moveable") + LayerMask.GetMask("Hinge");
         IsHoldingObject = false;
         holdingObject = null;
         initGrabDistance = 0.0f;
+        springJoint = new SpringJoint();
     }
     void Update()
     {
@@ -47,7 +51,7 @@ public class PickupObject : MonoBehaviour
             {
                 moveObject();
             }
-            if (Input.GetMouseButtonUp(0) || Vector3.Distance(holdingObject.transform.position, FirstPersonCamera.transform.position) > maxGrabDistance)
+            if (Input.GetMouseButtonUp(0) || Vector3.Distance(holdingObject.transform.position, FirstPersonCamera.transform.position) > maxGrabDistance* 1.4f)
             {
                 dropObject();
             }
@@ -62,62 +66,68 @@ public class PickupObject : MonoBehaviour
             Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
             Debug.Log("Distance: " + Vector3.Distance(FirstPersonCamera.transform.position, raycastHit.collider.gameObject.transform.position));
 
-            if (raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
+            if(raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
             {
                 holdingObject = raycastHit.collider.gameObject;
-                previousPosition = holdingObject.transform.position;
-                holdingObject.GetComponent<Rigidbody>().useGravity = false;
-                holdingObjectDefaultDrag = holdingObject.GetComponent<Rigidbody>().drag;
-                holdingObjectDefaultAngularDrag = holdingObject.GetComponent<Rigidbody>().angularDrag;
-                initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
-                Debug.Log("Distance: " + initGrabDistance);
-                Debug.Log("Direciton: " + FirstPersonCamera.transform.forward);
-                Debug.Log("Found rigidbody object! Object:" + holdingObject.name);
-                IsHoldingObject = true;
+                if(holdingObject.layer == LayerMask.NameToLayer("Moveable"))
+                {
+                    IsHoldingObject = true;
+                    setRigidbodyValues(holdingObject);
+                    initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                    springJoint = holdingObject.AddComponent<SpringJoint>();
+                    springJoint.autoConfigureConnectedAnchor = false;
+                    springJoint.connectedAnchor = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
+                    springJoint.spring = 400.0f;
+                    springJoint.damper = 50.0f;
+                }
+                else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
+                {
+                    IsHoldingObject = true;
+                    setRigidbodyValues(holdingObject);
+                    initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                    hingeJnt = holdingObject.GetComponent<HingeJoint>();
+                    springJoint = holdingObject.AddComponent<SpringJoint>();
+                    springJoint.autoConfigureConnectedAnchor = false;
+                    springJoint.spring = 40.0f;
+                    springJoint.damper = 5.0f;
 
-                targetPosition = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
+                    Vector3 posOnCircle = Vector3.Normalize( new Vector3(
+                        holdingObject.transform.position.x - hingeJnt.connectedAnchor.x,
+                        hingeJnt.connectedAnchor.y,
+                        holdingObject.transform.position.z - hingeJnt.connectedAnchor.z
+                        ));
+                    initHingeAngle = Vector3.Angle(new Vector3(1.0f, hingeJnt.connectedAnchor.y, 0.0f), posOnCircle);
+                    initPlayerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
+                    
+                    springJoint.connectedAnchor = posOnCircle;
+                }
+
             }
         }
+
+
+        
     }
     private void moveObject()
     {
-        //update holding object's pos
-        //old method, using set position
-        //holdingObject.transform.position = FirstPersonCamera.transform.forward * grabDistance + FirstPersonCamera.transform.position;
-        targetPosition = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
-
-        moveDirection = targetPosition - previousPosition; //!
-        moveDistance = Vector3.Distance(targetPosition, previousPosition);
-        Debug.Log("move distance: " + moveDistance + ", maxGrabDistance: " + maxGrabDistance);
-        if(moveDistance < maxGrabDistance)
+        Vector3 anchor;
+        if (holdingObject.layer == LayerMask.NameToLayer("Moveable"))
         {
-            Vector3 appliedForce = moveDirection * forceAmount * Time.deltaTime;
-            Debug.Log("Applying force with magnitude: " + appliedForce.magnitude + ", force direction: " + appliedForce);
-            holdingObject.GetComponent<Rigidbody>().drag = 1 / (moveDistance * moveDistance);
-            holdingObject.GetComponent<Rigidbody>().angularDrag = 1 / moveDistance;
-            holdingObject.GetComponent<Rigidbody>().AddForce(appliedForce);
+            anchor = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
+            springJoint.connectedAnchor = anchor;
         }
-        previousPosition = holdingObject.transform.position;
-        /*
-        moveDistance = Vector3.Distance(targetPosition, previousPosition);
-        targetPosition -= FirstPersonCamera.transform.position;
-        targetPosition *= toCenterParam * moveDistance;
-        moveDirection = targetPosition - previousPosition;
-        moveDirection *= grabSpeedMultiplier * moveDistance;
-        Debug.Log("vec magnitude: " + Vector3.Magnitude(clampVecMagnitude(moveDirection, 150.0f)) + " moveForce: " + clampVecMagnitude(moveDirection, 150.0f) + "velocity magnitude: " + Vector3.Magnitude(holdingObject.GetComponent<Rigidbody>().velocity)  + " moveDistance: " + moveDistance);
-        holdingObject.GetComponent<Rigidbody>().AddForce(clampVecMagnitude(moveDirection, 150.0f) - holdingObject.GetComponent<Rigidbody>().velocity * 15.0f);
-        holdingObject.GetComponent<Rigidbody>().drag = 1 / (moveDistance * moveDistance);
-        holdingObject.GetComponent<Rigidbody>().angularDrag = 1 / moveDistance;
-        previousPosition = holdingObject.transform.position;
-        */
+        else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
+        {
+            Vector2 playerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
+            float playerAngle = Vector2.SignedAngle(playerForward, initPlayerForward);
+            anchor = new Vector3(Mathf.Cos(initHingeAngle + playerAngle), hingeJnt.anchor.y, Mathf.Sin(initHingeAngle + playerAngle));
+            springJoint.connectedAnchor = anchor;
+        }
     }
     private void dropObject()
     {
-        //holdingObject.GetComponent<Rigidbody>().isKinematic = false;
-        holdingObject.GetComponent<Rigidbody>().useGravity = true;
-        holdingObject.GetComponent<Rigidbody>().drag = holdingObjectDefaultDrag;
-        holdingObject.GetComponent<Rigidbody>().angularDrag = holdingObjectDefaultAngularDrag;
-
+        Destroy(holdingObject.GetComponent<SpringJoint>());
+        setOriginalRigidbodyValues(holdingObject);
         IsHoldingObject = false;
         holdingObject = null;
         Debug.Log("Released object");
@@ -129,5 +139,25 @@ public class PickupObject : MonoBehaviour
             return Vector3.Normalize(value) * clampValue;
         }
         return value;
+    }
+    private void setRigidbodyValues(GameObject gameObject)
+    {
+        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+        //save original values
+        rbUseGravity = rb.useGravity;
+        rbDrag = rb.drag;
+        rb.angularDrag = rbAngularDrag;
+        //set new values
+        rb.useGravity = false;
+        rb.drag = 4.0f;
+        rb.angularDrag = 10.0f;
+    }
+    private void setOriginalRigidbodyValues(GameObject gameObject)
+    {
+        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+        //set original values
+        rb.useGravity = rbUseGravity;
+        rb.drag = rbDrag;
+        rb.angularDrag = rbAngularDrag;
     }
 }
