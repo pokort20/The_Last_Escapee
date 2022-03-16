@@ -93,6 +93,10 @@ public class Inventory : MonoBehaviour
         }
         return retval;
     }
+    public List<Item> getItems()
+    {
+        return items;
+    }
     private void printInventoryItems()
     {
         Debug.Log("INVENTORY:");

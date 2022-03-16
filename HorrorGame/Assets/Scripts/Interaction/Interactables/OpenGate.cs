@@ -25,6 +25,10 @@ public class OpenGate : Interactable
         Debug.Log("Moving gate!");
         isMoving = true;
     }
+    public override string InteractText()
+    {
+        return "Open/close";
+    }
     private void setMovementVariables()
     {
         startPos = Gate.transform.position;

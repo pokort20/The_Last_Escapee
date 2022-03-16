@@ -24,4 +24,8 @@ public class SwitchLamp : Interactable
             }
         }
     }
+    public override string InteractText()
+    {
+        return "ON/OFF light";
+    }
 }

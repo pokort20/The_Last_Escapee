@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 2856407755030901304}
   - component: {fileID: 1156338981668306333}
   - component: {fileID: 4028702295420455255}
-  m_Layer: 0
+  - component: {fileID: 3478065307341380289}
+  - component: {fileID: 4865857582144167817}
+  m_Layer: 8
   m_Name: door1Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,6 +84,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3478065307341380289
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3235888098415601794}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0036227438, y: 0.010242942, z: 0.020285886}
+  m_Center: {x: -0.000356607, y: -2.9975967e-17, z: 0.010100002}
+--- !u!114 &4865857582144167817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3235888098415601794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75dfe8a33ca5aef49baad9603a7951d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isLocked: 0
+  door: {fileID: 3103757531944474774}
 --- !u!1001 &973635452865216269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,21 +164,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: 0.0009999999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.y
-      value: 1.0060002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.z
-      value: 0.50799996
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_AutoConfigureConnectedAnchor
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3303988333730856225, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_Name
       value: door1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5073822462990905690, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
 --- !u!4 &3103757531944474774 stripped
 Transform:

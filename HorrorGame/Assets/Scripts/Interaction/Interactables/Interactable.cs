@@ -8,4 +8,8 @@ public class Interactable : MonoBehaviour
     {
         
     }
+    public virtual string InteractText()
+    {
+        return "Interact";
+    }
 }

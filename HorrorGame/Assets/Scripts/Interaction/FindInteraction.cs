@@ -66,21 +66,14 @@ public class FindInteraction : MonoBehaviour
             //INTERACTABLES
             else if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
-                handleInteractionText("E   Interact");
-                //if(interactingObject != null)
-                //{
-                //    if(!ReferenceEquals(interactingObject, raycastHit.collider.gameObject))
-                //    {
-                //        removeItemHighlight(interactingObject);
-                //    }
-                //}
                 interactingObject = raycastHit.collider.gameObject;
+                Interactable interactable = getInteractableComponent(interactingObject);
+                handleInteractionText("E   " + interactable.InteractText());
                 //highlightItem(interactingObject);
                 //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
                 if (pressedKey)
                 {
-                    interactingObject.GetComponent<Interactable>().Interact();
-                    //Debug.Log("Interact!");
+                    interactable.Interact();
                     pressedKey = false;
                 }
             }
@@ -148,5 +141,18 @@ public class FindInteraction : MonoBehaviour
             inventory.interactText = interactionText;
             isInteracting = true;
         }
+    }
+    private Interactable getInteractableComponent(GameObject gameObject)
+    {
+        Interactable interactable = gameObject.GetComponent<Interactable>();
+        if(interactable == null)
+        {
+            interactable = gameObject.GetComponentInChildren<Interactable>();
+        }
+        if(interactable == null)
+        {
+            Debug.LogWarning("Could not find interactable component!");
+        }
+        return interactable;
     }
 }
