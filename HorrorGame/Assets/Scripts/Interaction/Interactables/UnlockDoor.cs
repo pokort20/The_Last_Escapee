@@ -22,6 +22,7 @@ public class UnlockDoor : Interactable
         }
         else
         {
+            GetComponent<BoxCollider>().enabled = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Default");
         }
     }
@@ -49,6 +50,7 @@ public class UnlockDoor : Interactable
                     break;
                 }
             }
+            GetComponent<BoxCollider>().enabled = false;
             rb.isKinematic = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Default");
             isLocked = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class EnemyChase : MonoBehaviour
 {
 
@@ -13,6 +14,8 @@ public class EnemyChase : MonoBehaviour
     public float agentSpeed;
     public float hearingRange;
 
+    private Vector3 flashlightVisiblePoint;
+    private bool isPrevDestFromFlashlight;
     private enum enemyStates : int
     {
         PATROL = 0,
@@ -24,6 +27,8 @@ public class EnemyChase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        flashlightVisiblePoint = Vector3.zero;
+        isPrevDestFromFlashlight = false;
         enemyState = enemyStates.PATROL;
         agent.speed = agentSpeed;
     }
@@ -48,14 +53,11 @@ public class EnemyChase : MonoBehaviour
                 //Debug.Log("Enemy state unknown!");
                 break;
         }
-        //if(isPlayerVisible(agent.transform.position, player.position))
-        //{
-        //    agent.SetDestination(player.position);
-        //}
     }
     private void patrol()
     {
-        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
+            || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -63,6 +65,8 @@ public class EnemyChase : MonoBehaviour
             //chase();
             return;
         }
+        
+
         if(reachedDestination())
         {
             agent.ResetPath();
@@ -87,7 +91,13 @@ public class EnemyChase : MonoBehaviour
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
         {
             //Still can see or hear player
+            isPrevDestFromFlashlight = false;
             agent.SetDestination(player.position);
+        }
+        else if(isFlashlightHitPointVisible(agent.transform.position, player.position) && isPrevDestFromFlashlight)
+        {
+            isPrevDestFromFlashlight = true;
+            agent.SetDestination(flashlightVisiblePoint);
         }
         else if (agent.hasPath)
         {
@@ -108,7 +118,8 @@ public class EnemyChase : MonoBehaviour
     }
     private void explore()
     {
-        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
+            || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted while exploring area, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -169,7 +180,7 @@ public class EnemyChase : MonoBehaviour
             //Debug.Log("IsPlayerVisible RaycastHit: " + raycastHit.collider.gameObject.name);
             //Debug.Log("AgentPos: " + eyePos + ", PlayerPos: " + playerPos);
             //Debug.Log("Distance: " + Vector3.Distance(eyePos, raycastHit.collider.gameObject.transform.position));
-            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player") && angle < enemyFOV/2)
+            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player") && angle < enemyFOV * 0.5f)
             {
                 //Debug.Log("Enemy sees player!");
                 //enemyState = enemyStates.CHASING;
@@ -209,6 +220,48 @@ public class EnemyChase : MonoBehaviour
             return true;
         }
         return false;
+    }
+    private bool isFlashlightHitPointVisible(Vector3 agentPos, Vector3 playerPos)
+    {
+        bool isFlashlightHPVisible = false;
+        float angle;
+        Vector3 eyePos = agentPos;
+        eyePos.y += 1.2f;
+        RaycastHit raycastHit;
+        List<Vector3> flashlightHitPoints = FindObjectOfType<EnemyUtilities>().flashlightHitPoints;
+        if(flashlightHitPoints == null)
+        {
+            //Debug.Log("There are no flashlight hit points!");
+            return false;
+        }
+
+        foreach(Vector3 flashlightHitPoint in flashlightHitPoints)
+        {
+            angle = Vector3.Angle(flashlightHitPoint - eyePos, agent.transform.forward);
+            if(angle > enemyFOV * 0.5f)
+            {
+                continue;
+            }
+            if(!Physics.Raycast(origin: eyePos, direction: flashlightHitPoint - eyePos, hitInfo: out raycastHit, maxDistance: Vector3.Distance(eyePos, flashlightHitPoint) - 0.05f))
+            {
+                //Debug.Log("Enemy sees flashlight hit point " + flashlightHitPoint.ToString());
+                Debug.DrawRay(eyePos, flashlightHitPoint - eyePos, Color.blue);
+                if(!isFlashlightHPVisible)
+                {
+                    flashlightVisiblePoint = flashlightHitPoint;
+                }
+                else
+                {
+                    if(Vector3.Distance(playerPos, flashlightHitPoint) < Vector3.Distance(playerPos, flashlightVisiblePoint))
+                    {
+                        flashlightVisiblePoint = flashlightHitPoint;
+                    }
+                }
+                isFlashlightHPVisible = true;
+            }
+        }
+
+        return isFlashlightHPVisible;
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {

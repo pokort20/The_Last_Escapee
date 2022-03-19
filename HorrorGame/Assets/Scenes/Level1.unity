@@ -4144,7 +4144,7 @@ MonoBehaviour:
   player: {fileID: 1080843932}
   patrolPoints: {fileID: 1117470946}
   enemyFOV: 120
-  agentSpeed: 2
+  agentSpeed: 1.9
   hearingRange: 1.5
 --- !u!1001 &372091669
 PrefabInstance:
@@ -24634,8 +24634,8 @@ Transform:
   - {fileID: 226458957}
   - {fileID: 1766572207}
   - {fileID: 1807399913}
-  - {fileID: 146110522}
   - {fileID: 1706327014}
+  - {fileID: 146110522}
   - {fileID: 27385743}
   m_Father: {fileID: 0}
   m_RootOrder: 13

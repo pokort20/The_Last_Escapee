@@ -7,11 +7,19 @@ public class EnemyUtilities : MonoBehaviour
 {
     public Transform player;
     public float playerVisibility { get; set; }
+    public List<Vector3> flashlightHitPoints { get; set; }
+
     private float bodyArea = 2.0f;
+    private HDAdditionalLightData flashlight;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        flashlight = player.GetComponentInChildren<HDAdditionalLightData>();
+        if (flashlight == null)
+        {
+            Debug.LogError("Enemy can't access flashlight!");
+        }
     }
 
     // Update is called once per frame
@@ -20,6 +28,14 @@ public class EnemyUtilities : MonoBehaviour
         if(player != null)
         {
             playerVisibility = getPlayerVisibility(player.position);
+            if(GameManager.instance.flashlightEnabled)
+            {
+                flashlightHitPoints = getFlashlightHitPoints(flashlight);
+            }
+            else
+            {
+                flashlightHitPoints = null;
+            }
         }
         else
         {
@@ -89,5 +105,57 @@ public class EnemyUtilities : MonoBehaviour
 
         //Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
         return playerIlluminationIntensity;
+    }
+    private List<Vector3> getFlashlightHitPoints(HDAdditionalLightData flashlight)
+    {
+        //general variables
+        List<Vector3> flashlightHitPoints = new List<Vector3>();
+        bool debugFlashlightRays = true;
+        RaycastHit raycastHit;
+        //helper variables for defining the points on the circle at the end of the spot light's cone
+        float angleCenterToSide = 40.0f * 0.5f;
+        float radius = Mathf.Tan(angleCenterToSide * Mathf.Deg2Rad) * flashlight.range;
+        float sqrt3 = Mathf.Sqrt(3.0f);
+
+        //defining all the points on the circle of the spot light's cone
+        Vector3 circleCenter = flashlight.transform.position + flashlight.transform.forward * flashlight.range;
+        Vector3[] pointsOnCircle = new Vector3[7];
+        for(int i = 0; i < 7; ++i)
+        {
+            pointsOnCircle[i] = circleCenter;
+        }
+        pointsOnCircle[1] += flashlight.transform.right * radius;
+        pointsOnCircle[2] += Vector3.Normalize(sqrt3 * flashlight.transform.up + flashlight.transform.right) * radius;
+        pointsOnCircle[3] += Vector3.Normalize(sqrt3 * flashlight.transform.up - flashlight.transform.right) * radius;
+        pointsOnCircle[4] += - flashlight.transform.right * radius;
+        pointsOnCircle[5] += Vector3.Normalize(sqrt3 * -flashlight.transform.up - flashlight.transform.right) * radius;
+        pointsOnCircle[6] += Vector3.Normalize(sqrt3 * -flashlight.transform.up + flashlight.transform.right) * radius;
+
+        //approximating the area where the light from the flashlight shines using the few points above,
+        //getting the collision points with the environment
+        for(int i = 0; i < 7; ++i)
+        {
+            if(Physics.Raycast(origin: flashlight.transform.position, direction: pointsOnCircle[i] - flashlight.transform.position, hitInfo: out raycastHit, maxDistance: flashlight.range))
+            {
+                flashlightHitPoints.Add(raycastHit.point);
+            }
+        }
+
+        //Drawing rays for debug purposes
+        if (debugFlashlightRays && GameManager.instance.flashlightEnabled)
+        {
+            foreach(Vector3 hitPoint in flashlightHitPoints)
+            {
+                Debug.DrawRay(flashlight.transform.position, hitPoint - flashlight.transform.position, Color.white);
+            }
+            //for (int i = 0; i < 7; ++i)
+            //{
+            //    Vector3 dir = Vector3.Normalize(pointsOnCircle[i] - flashlight.transform.position);
+            //    Debug.DrawRay(flashlight.transform.position, dir * flashlight.range, Color.white);
+            //}
+        }
+
+
+        return flashlightHitPoints;
     }
 }
