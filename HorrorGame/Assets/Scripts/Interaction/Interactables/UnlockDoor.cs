@@ -11,6 +11,7 @@ public class UnlockDoor : Interactable
     // Start is called before the first frame update
     void Start()
     {
+        canInteract = true;
         rb = door.GetComponent<Rigidbody>();
         if (rb == null)
         {

@@ -11,10 +11,10 @@ public class OpenGate : Interactable
     private float startRot;
     private float targetRot;
     private float elapsedTime;
-    private bool isMoving;
     private float percentageMoved;
     void Start()
     {
+        canInteract = true;
         setMovementVariables();
     }
 
@@ -23,7 +23,7 @@ public class OpenGate : Interactable
     {
         base.Interact();
         Debug.Log("Moving gate!");
-        isMoving = true;
+        canInteract = false;
     }
     public override string InteractText()
     {
@@ -33,7 +33,7 @@ public class OpenGate : Interactable
     {
         startPos = Gate.transform.position;
         startRot = transform.rotation.z;
-        isMoving = false;
+        canInteract = true;
         elapsedTime = 0.0f;
         if (isClosed)
         {
@@ -48,7 +48,7 @@ public class OpenGate : Interactable
     }
     void Update()
     {
-        if (isMoving)
+        if (!canInteract)
         {
             elapsedTime += Time.deltaTime;
             percentageMoved = elapsedTime / movementDuration;

@@ -8,6 +8,10 @@ public class SwitchLamp : Interactable
 
     // Start is called before the first frame update
     bool isEnabled;
+    void Start()
+    {
+        canInteract = true;
+    }
     void Update()
     {
         isEnabled = lampParent.transform.GetChild(0).transform.GetChild(0).gameObject.activeInHierarchy;
