@@ -9,6 +9,8 @@ public class OpenSlideDoor : Interactable
     public Transform rightDoor;
     public GameObject lightObject1;
     public GameObject lightObject2;
+    public GameObject emissiveObject1;
+    public GameObject emissiveObject2;
     public bool isClosed;
 
     private float elapsedTime;
@@ -25,6 +27,10 @@ public class OpenSlideDoor : Interactable
     private Light light2;
     private HDAdditionalLightData lightData1;
     private HDAdditionalLightData lightData2;
+    private Material mat1;
+    private Material mat2;
+    private Color emissiveColor1;
+    private Color emissiveColor2;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +38,10 @@ public class OpenSlideDoor : Interactable
         lightEnabled = true;
         light1 = lightObject1.GetComponentInChildren<Light>();
         light2 = lightObject2.GetComponentInChildren<Light>();
+        mat1 = emissiveObject1.GetComponent<Renderer>().material;
+        mat2 = emissiveObject2.GetComponent<Renderer>().material;
+        emissiveColor1 = mat1.GetColor("_EmissiveColor");
+        emissiveColor2 = mat2.GetColor("_EmissiveColor");
         if(light1 != null && light2 != null)
         {
             lightData1 = light1.GetComponent<HDAdditionalLightData>();
@@ -71,6 +81,8 @@ public class OpenSlideDoor : Interactable
 
         if(percentageMoved >= 1.0f)
         {
+            lightEnabled = true;
+            handleLights();
             isClosed = false;
             canInteract = true;
             elapsedTime = 0.0f;
@@ -88,6 +100,8 @@ public class OpenSlideDoor : Interactable
 
         if (percentageMoved >= 1.0f)
         {
+            lightEnabled = true;
+            handleLights();
             isClosed = true;
             canInteract = true;
             elapsedTime = 0.0f;
@@ -123,7 +137,17 @@ public class OpenSlideDoor : Interactable
             light1.enabled = lightEnabled;
             light2.enabled = lightEnabled;
 
-            
+            if(lightEnabled)
+            {
+                mat1.SetColor("_EmissiveColor", emissiveColor1);
+                mat2.SetColor("_EmissiveColor", emissiveColor2);
+            }
+            else
+            {
+                mat1.SetColor("_EmissiveColor", Color.black);
+                mat2.SetColor("_EmissiveColor", Color.black);
+            }
+
             percentageDelta = 0.0f;
         }
     }

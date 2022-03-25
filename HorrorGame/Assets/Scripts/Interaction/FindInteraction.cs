@@ -68,13 +68,16 @@ public class FindInteraction : MonoBehaviour
             {
                 interactingObject = raycastHit.collider.gameObject;
                 Interactable interactable = getInteractableComponent(interactingObject);
-                handleInteractionText("E   " + interactable.InteractText());
-                //highlightItem(interactingObject);
-                //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
-                if (pressedKey && interactable.canInteract)
+                if(interactable.canInteract)
                 {
-                    interactable.Interact();
-                    pressedKey = false;
+                    handleInteractionText("E   " + interactable.InteractText());
+                    //highlightItem(interactingObject);
+                    //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
+                    if (pressedKey)
+                    {
+                        interactable.Interact();
+                        pressedKey = false;
+                    }
                 }
             }
             //not item nor interactable
