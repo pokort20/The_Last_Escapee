@@ -83,16 +83,19 @@ public class EnemyUtilities : MonoBehaviour
                 }
                 else if (lightData.type == HDLightType.Spot)
                 {
-                    if (Vector3.Angle(lightData.transform.forward, playerPos - lightData.transform.position) < lightData.lightAngle * 0.5f)
+                    Debug.DrawRay(light.transform.position, light.transform.forward, Color.cyan);
+                    //Debug.Log("forward: " + light.transform.forward + ", playerDir: " + (playerPos - light.transform.position) + ", angle: " + Vector3.Angle(light.transform.forward, playerPos - light.transform.position) + ", light angle: " + light.spotAngle);
+                    if (Vector3.Angle(light.transform.forward, playerPos - light.transform.position) < light.spotAngle * 0.5f)
                     {
-                        if (Physics.Raycast(lightData.transform.position, playerPos - lightData.transform.position, out raycastHit, lightData.range))
+                        if (Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, lightData.range))
                         {
+                            //Debug.Log("Hit: " + raycastHit.collider.name);
                             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                             {
                                 //Spot light shines on player
-                                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - lightData.transform.position) * lightData.range, Color.green);
+                                if (debugRays) Debug.DrawRay(light.transform.position, Vector3.Normalize(playerPos - light.transform.position) * lightData.range, Color.green);
                                 
-                                intensity = Mathf.Clamp(bodyArea * lightData.intensity / Mathf.Pow(Vector3.Distance(lightData.transform.position, playerPos), 2.0f), 0.0f, lightData.intensity);
+                                intensity = Mathf.Clamp(bodyArea * lightData.intensity / Mathf.Pow(Vector3.Distance(light.transform.position, playerPos), 2.0f), 0.0f, lightData.intensity);
                                 playerIlluminationIntensity += intensity;
                                 continue;
                             }
