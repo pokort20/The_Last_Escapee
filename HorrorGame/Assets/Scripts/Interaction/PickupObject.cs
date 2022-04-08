@@ -24,6 +24,7 @@ public class PickupObject : MonoBehaviour
     private Vector2 initPlayerForward;
     private HingeJoint hingeJnt;
     Vector3 springAnchor;
+    float circleRadius;
 
     //old RB values
     bool rbUseGravity;
@@ -103,13 +104,15 @@ public class PickupObject : MonoBehaviour
 
                     //springJoint.connectedAnchor = posOnCircle;
                     //springJoint.anchor = new Vector3(0.0f, 0.0f, 0.0f);
-
+                    circleRadius = 0.8f * Vector2.Distance(
+                        new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z),
+                        new Vector2(raycastHit.point.x, raycastHit.point.z));
                     IsHoldingObject = true;
                     setRigidbodyValues(holdingObject);
                     hingeJnt = holdingObject.GetComponent<HingeJoint>();
+                    
 
-
-                    springAnchor = FirstPersonCamera.transform.position + maxGrabDistance * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
+                    springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
                     springJoint = holdingObject.AddComponent<SpringJoint>();
                     springJoint.spring = 40.0f;
                     springJoint.damper = 5.0f;
@@ -134,13 +137,14 @@ public class PickupObject : MonoBehaviour
         }
         else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
         {
+            Debug.Log("circle radius: " + circleRadius);
             //Vector2 playerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
             //float playerAngle = Vector2.SignedAngle(playerForward, initPlayerForward);
             //anchor = hingeJnt.connectedAnchor + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (initHingeAngle + playerAngle)), hingeJnt.anchor.y, Mathf.Sin(Mathf.Deg2Rad * (initHingeAngle + playerAngle)));
             //springJoint.connectedAnchor = anchor;
             //Debug.Log("initHingeAngle: " + initHingeAngle + ", playerAngle: " + playerAngle);
 
-            springAnchor = FirstPersonCamera.transform.position + maxGrabDistance * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
+            springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
             springJoint.connectedAnchor = springAnchor;
 
 
