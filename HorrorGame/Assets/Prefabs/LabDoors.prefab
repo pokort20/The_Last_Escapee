@@ -55,6 +55,7 @@ MonoBehaviour:
   emissiveObject1: {fileID: 8228976419663418874}
   emissiveObject2: {fileID: 9021562081690284125}
   isClosed: 1
+  isOpenable: 1
   infoText: Requires a security card to be opened
 --- !u!65 &2666401769527549624
 BoxCollider:

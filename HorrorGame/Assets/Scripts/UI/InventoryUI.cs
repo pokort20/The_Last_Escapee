@@ -16,12 +16,21 @@ public class InventoryUI : MonoBehaviour
     public TMP_Text infoText;
     public TMP_Text itemInfoText;
     public Image interactImage;
+    public Image lowHealthIndicator;
 
     //other variables
     Canvas canvas;
     Inventory inventory;
     private float infoTextDefaultDuration = 5.0f;
     private float infoTextCurrentDuration;
+    private GameManager gameManager;
+
+    //low health image indicator variables
+    private Color lowHealthIndicatorColor;
+    private float indicatorAlpha;
+    private float alphaBase;
+    private float alphaBaseOld;
+    private float alphaDelta;
 
     InventorySlot[] itemSlots;
     private void Start()
@@ -34,10 +43,15 @@ public class InventoryUI : MonoBehaviour
         itemSlots = itemSlotsParent.GetComponentsInChildren<InventorySlot>();
         flashlightImage.enabled = false;
         batteryLevelImage.enabled = false;
+        gameManager = GameManager.instance;
+        lowHealthIndicatorColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        alphaDelta = 0.0005f;
+        alphaBaseOld = -1.0f;
     }
     private void Update()
     {
         updateInfoText();
+        updateLowHealthIndicator();
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Debug.Log("Opened inventory");
@@ -141,5 +155,40 @@ public class InventoryUI : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         inventoryUI.SetActive(false);
+    }
+    public void updateLowHealthIndicator()
+    {
+
+        if(gameManager.health <= gameManager._maxHealth * 0.5f)
+        {
+            alphaBase = 0.11f - remap(0.0f, gameManager._maxHealth * 0.5f, 0.0f, 0.10f, gameManager.health);
+            if (alphaBase != alphaBaseOld)
+            {
+                indicatorAlpha = alphaBase;
+                alphaBaseOld = alphaBase;
+            }
+            else
+            {
+                indicatorAlpha += alphaDelta;
+            }
+            if(indicatorAlpha > alphaBase + 0.02f || indicatorAlpha < alphaBase - 0.02f)
+            {
+                alphaDelta = -alphaDelta;
+            }
+            Debug.Log("Indicator alpha: " + indicatorAlpha);
+            lowHealthIndicatorColor.a = indicatorAlpha;
+            lowHealthIndicator.color = lowHealthIndicatorColor;
+            lowHealthIndicator.enabled = true;
+        }
+        else
+        {
+            lowHealthIndicator.enabled = false;
+        }
+    }
+    private float remap(float iMin, float iMax, float oMin, float oMax, float value)
+    {
+        float val;
+        val = Mathf.InverseLerp(iMin, iMax, value);
+        return Mathf.Lerp(oMin, oMax, val);
     }
 }

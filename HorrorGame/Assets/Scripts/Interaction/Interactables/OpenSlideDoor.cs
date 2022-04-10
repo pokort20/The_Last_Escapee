@@ -13,6 +13,7 @@ public class OpenSlideDoor : Interactable
     public GameObject emissiveObject1;
     public GameObject emissiveObject2;
     public bool isClosed;
+    public bool isOpenable;
     public string infoText;
 
     //other variables
@@ -73,7 +74,7 @@ public class OpenSlideDoor : Interactable
     }
     public override void Interact()
     {
-        if(inventory.hasItem(typeof(SecurityCardItem)) > 0)
+        if(isOpenable && inventory.hasItem(typeof(SecurityCardItem)) > 0)
         {
             canInteract = false;
         }
