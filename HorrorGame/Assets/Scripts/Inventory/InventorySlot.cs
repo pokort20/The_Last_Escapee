@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image image;
     public Item item;
     public Button useButton;
     public TMP_Text textObject;
+
+    private Inventory inventory;
 
     public void FillInventorySlot(Item newItem)
     {
@@ -32,29 +35,31 @@ public class InventorySlot : MonoBehaviour
     {
         Debug.Log("Clicked useButton");
         item.UseItem();
-        //Item temp = item;
         if(item.isUseable)
         {
-            Inventory.instance.removeFromInventory(item);
+            inventory.removeFromInventory(item);
+            inventory.itemInfoText = null;
         }
     }
-    private void Awake()
+    void Awake()
     {
         Debug.Log("Inventory slot " + ToString() + " started");
         useButton.interactable = false;
+
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        inventory = Inventory.instance;
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if(item != null && useButton != null)
         {
-            if(item.GetType() != typeof(BatteryItem) && item.GetType() != typeof(MedkitItem) && item.GetType() != typeof(FlashlightItem) && item.GetType() != typeof(KeyItem))
+            if(item.GetType() != typeof(BatteryItem) && item.GetType() != typeof(MedkitItem) && item.GetType() != typeof(FlashlightItem) && item.GetType() != typeof(KeyItem) && item.GetType() != typeof(SecurityCardItem))
             {
                 item.isUseable = true;
             }
@@ -85,5 +90,21 @@ public class InventorySlot : MonoBehaviour
                 useButton.interactable = false;
             }
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Debug.Log("Pointer enter");
+        if (item != null && item.itemInfo != null)
+        {
+            inventory.itemInfoText = item.itemInfo;
+            Debug.Log(item.itemInfo);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        inventory.itemInfoText = null;
+        //Debug.Log("Pointer exit");
     }
 }

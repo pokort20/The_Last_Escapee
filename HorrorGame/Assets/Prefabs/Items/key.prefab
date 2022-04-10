@@ -140,5 +140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Key
+  itemInfo: Used to open doors
   icon: {fileID: 21300000, guid: 057dd4fad37c8d04b8b2684b51346da5, type: 3}
   isUseable: 0

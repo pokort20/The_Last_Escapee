@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLocked: 0
   door: {fileID: 3103757531944474774}
+  infoText: Locked, look for a key.
 --- !u!1001 &973635452865216269
 PrefabInstance:
   m_ObjectHideFlags: 0

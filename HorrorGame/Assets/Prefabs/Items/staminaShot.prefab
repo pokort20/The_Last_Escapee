@@ -96,8 +96,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0070316438, y: 0.007118889, z: 0.004031058}
-  m_Center: {x: 0.0006079525, y: -0.00015096992, z: 0.00016662925}
+  m_Size: {x: 0.008107907, y: 0.008118329, z: 0.0055307588}
+  m_Center: {x: 0.00068473455, y: 0.00016552836, z: 0.00091647985}
 --- !u!65 &5222482139179519503
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -140,5 +140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Stamina Shot
+  itemInfo: Instantly replenishes your stamina
   icon: {fileID: 21300000, guid: abc817aed6857344fadadc3156f33c37, type: 3}
   isUseable: 1

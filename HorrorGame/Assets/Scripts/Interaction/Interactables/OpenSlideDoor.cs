@@ -5,6 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 public class OpenSlideDoor : Interactable
 {
+    //public variables defined in UNITY
     public Transform leftDoor;
     public Transform rightDoor;
     public GameObject lightObject1;
@@ -12,7 +13,9 @@ public class OpenSlideDoor : Interactable
     public GameObject emissiveObject1;
     public GameObject emissiveObject2;
     public bool isClosed;
+    public string infoText;
 
+    //other variables
     private float elapsedTime;
     private float movementDuration = 2.0f;
     private float percentageMoved;
@@ -31,9 +34,11 @@ public class OpenSlideDoor : Interactable
     private Material mat2;
     private Color emissiveColor1;
     private Color emissiveColor2;
+    private Inventory inventory;
     // Start is called before the first frame update
     void Start()
     {
+        inventory = Inventory.instance;
         canInteract = true;
         lightEnabled = true;
         light1 = lightObject1.GetComponentInChildren<Light>();
@@ -68,7 +73,17 @@ public class OpenSlideDoor : Interactable
     }
     public override void Interact()
     {
-        canInteract = false;
+        if(inventory.hasItem(typeof(SecurityCardItem)) > 0)
+        {
+            canInteract = false;
+        }
+        else
+        {
+            if(infoText != null)
+            {
+                inventory.infoText = infoText;
+            }
+        }
     }
     private void openDoor()
     {

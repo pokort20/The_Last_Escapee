@@ -16,6 +16,7 @@ public class EnemyChase : MonoBehaviour
 
     private Vector3 flashlightVisiblePoint;
     private bool isPrevDestFromFlashlight;
+    private float attackCooldown;
     private enum enemyStates : int
     {
         PATROL = 0,
@@ -31,6 +32,7 @@ public class EnemyChase : MonoBehaviour
         isPrevDestFromFlashlight = false;
         enemyState = enemyStates.PATROL;
         agent.speed = agentSpeed;
+        attackCooldown = 0.0f;
     }
 
     void FixedUpdate()
@@ -53,6 +55,7 @@ public class EnemyChase : MonoBehaviour
                 //Debug.Log("Enemy state unknown!");
                 break;
         }
+        isPlayerAttacked();
     }
     private void patrol()
     {
@@ -268,5 +271,22 @@ public class EnemyChase : MonoBehaviour
         float val;
         val = Mathf.InverseLerp(iMin, iMax, value);
         return Mathf.Lerp(oMin, oMax, val);
+    }
+    private void isPlayerAttacked()
+    {
+        if (attackCooldown > 0.0f) 
+        {
+            attackCooldown -= Time.fixedDeltaTime;
+            return;
+        }
+        float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
+        if (attackDistance < 1.7f)
+        {
+            attackCooldown = 1.0f;
+            float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
+            Debug.Log("Player is attacked!");
+            Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
+            GameManager.instance.health -= hitStrength;
+        }
     }
 }

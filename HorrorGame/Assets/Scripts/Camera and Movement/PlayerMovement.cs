@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,15 +15,18 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMult;
     public float crouchHeight;
     public float standardHeight;
+    public Transform groundCollisionCheck;
+    public float groundCollisionCheckSphereRadius = 0.2f;
+    public LayerMask groundMask;
 
     private bool isSprinting;
     private bool isCrouching;
     private bool wasCrouching;
     private Vector3 moveVec;
+    private PostProcessing postProcessing;
+
+
     Vector3 velocity;
-    public Transform groundCollisionCheck;
-    public float groundCollisionCheckSphereRadius = 0.2f;
-    public LayerMask groundMask;
     bool isGrounded;
     private enum playerStates : int
     {
@@ -43,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         isCrouching = false;
         isSprinting = false;
         isCrouching = !!isCrouching; //remove this once isCrouching is used, just to get rid of the warning
+        postProcessing = PostProcessing.instance;
     }
 
     // Update is called once per frame
@@ -84,21 +91,25 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log("Normal state");
                 moveVec *= movementSpeed;
                 playerController.height = standardHeight;
+                postProcessing.lensDistortionEnabled = false;
                 break;
             case playerStates.CROUCHING:
                 //Debug.Log("Crouching state");
                 moveVec *= movementSpeed * crouchMult;
                 playerController.height = crouchHeight;
                 isCrouching = true;
+                postProcessing.lensDistortionEnabled = false;
                 break;
             case playerStates.UNCROUCHING:
                 //Debug.Log("Uncrouching state");
+                postProcessing.lensDistortionEnabled = false;
                 break;
             case playerStates.SPRINTING:
                 //Debug.Log("Sprinting state");
                 moveVec *= movementSpeed * sprintMult;
                 playerController.height = standardHeight;
                 isSprinting = true;
+                postProcessing.lensDistortionEnabled = true;
                 break;
             default:
                 //Debug.Log("Default");

@@ -43,7 +43,6 @@ public class FindInteraction : MonoBehaviour
             //ITEMS
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
-                handleInteractionText("E   Pick up item");
                 if (itemObject!=null)
                 {
                     if(!ReferenceEquals(itemObject, raycastHit.collider.gameObject))
@@ -52,6 +51,7 @@ public class FindInteraction : MonoBehaviour
                     }
                 }
                 itemObject = raycastHit.collider.gameObject;
+                handleInteractionText("E   Pick up " + itemObject.GetComponent<Item>().itemName);
                 highlightItem(itemObject);
                 //Debug.Log("Coliding with item" + itemObject.name);
                 if (pressedKey)

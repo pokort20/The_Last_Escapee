@@ -6,8 +6,16 @@ public class UnlockDoor : Interactable
 {
     public bool isLocked;
     public Transform door;
+    public string infoText;
+
+
+    private Inventory inventory;
 
     Rigidbody rb;
+    void Awake()
+    {
+        inventory = Inventory.instance;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +43,7 @@ public class UnlockDoor : Interactable
     }
     public override void Interact()
     {
-        if(Inventory.instance.hasItem(typeof(KeyItem)) > 0)
+        if(inventory.hasItem(typeof(KeyItem)) > 0)
         {
             //UNLOCK DOOR
             if (rb == null)
@@ -43,11 +51,11 @@ public class UnlockDoor : Interactable
                 Debug.LogWarning(door.name + "has no rigidbody component!");
                 return;
             }
-            foreach(Item item in Inventory.instance.getItems())
+            foreach(Item item in inventory.getItems())
             {
                 if(typeof(KeyItem) == item.GetType())
                 {
-                    Inventory.instance.removeFromInventory(item);
+                    inventory.removeFromInventory(item);
                     break;
                 }
             }
@@ -58,6 +66,10 @@ public class UnlockDoor : Interactable
         }
         else
         {
+            if (infoText != null)
+            {
+                inventory.infoText = infoText;
+            }
             Debug.Log("Player does not have any key!");
         }
     }

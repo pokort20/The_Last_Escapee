@@ -140,5 +140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Medkit
+  itemInfo: Replenishes health
   icon: {fileID: 21300000, guid: e13e307052dbef241a91079b4f9ba99c, type: 3}
   isUseable: 1

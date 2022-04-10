@@ -357,5 +357,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Flashlight
+  itemInfo: Standard LED flashlight
   icon: {fileID: 21300000, guid: dca139df1eb8b1f4c965bc23ba257350, type: 3}
   isUseable: 1

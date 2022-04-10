@@ -4,17 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class InventoryUI :MonoBehaviour
+public class InventoryUI : MonoBehaviour
 {
+    //public variables defined in UNITY
     public GameObject inventoryUI;
     public Transform itemSlotsParent;
     public Image flashlightImage;
     public Image batteryLevelImage;
     public Image healthFillImage;
     public TMP_Text interactText;
+    public TMP_Text infoText;
+    public TMP_Text itemInfoText;
     public Image interactImage;
+
+    //other variables
     Canvas canvas;
     Inventory inventory;
+    private float infoTextDefaultDuration = 5.0f;
+    private float infoTextCurrentDuration;
 
     InventorySlot[] itemSlots;
     private void Start()
@@ -22,12 +29,15 @@ public class InventoryUI :MonoBehaviour
         inventory = Inventory.instance;
         inventory.onInventoryChangedCallback += updateInventoryUI;
         inventory.onInteractTextChangedCallback += updateInteractText;
+        inventory.onInfoTextChangedCallback += displayInfoText;
+        inventory.onItemInfoTextChangedCallback += updateItemInfoText;
         itemSlots = itemSlotsParent.GetComponentsInChildren<InventorySlot>();
         flashlightImage.enabled = false;
         batteryLevelImage.enabled = false;
     }
     private void Update()
     {
+        updateInfoText();
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Debug.Log("Opened inventory");
@@ -90,6 +100,32 @@ public class InventoryUI :MonoBehaviour
             interactText.enabled = false;
             interactImage.enabled = false;
         }
+    }
+    public void updateInfoText()
+    {
+        infoTextCurrentDuration -= Time.deltaTime;
+        if(infoTextCurrentDuration < 0.0f)
+        {
+            infoText.enabled = false;
+        }
+    }
+    public void updateItemInfoText()
+    {
+        if(inventory.itemInfoText != null)
+        {
+            itemInfoText.text = inventory.itemInfoText;
+            itemInfoText.enabled = true;
+        }
+        else
+        {
+            itemInfoText.enabled = false;
+        }
+    }
+    public void displayInfoText()
+    {
+        infoText.text = inventory.infoText;
+        infoTextCurrentDuration = infoTextDefaultDuration;
+        infoText.enabled = true;
     }
     public void openInventory()
     {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public string itemName;
+    public string itemInfo;
     public Sprite icon;
     public bool isUseable = true;
 
