@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0069709793, g: 0.0069709793, b: 0.0069709793, a: 1}
+  m_IndirectSpecularColor: {r: 0.013941571, g: 0.013941571, b: 0.013941571, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -853,7 +853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3476730348906112955, guid: 234c3535e8838fe4b9e5ea0e9a68fb53, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -59.4
+      value: -54.2
       objectReference: {fileID: 0}
     - target: {fileID: 3476730348906112955, guid: 234c3535e8838fe4b9e5ea0e9a68fb53, type: 3}
       propertyPath: m_LocalPosition.y
@@ -861,7 +861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3476730348906112955, guid: 234c3535e8838fe4b9e5ea0e9a68fb53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 40.9
+      value: 28.800001
       objectReference: {fileID: 0}
     - target: {fileID: 3476730348906112955, guid: 234c3535e8838fe4b9e5ea0e9a68fb53, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7311,6 +7311,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: electricBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7033258473913436983, guid: 276b19118f176ee4b8351179dd344e41, type: 3}
+      propertyPath: interactingGameObject
+      value: 
+      objectReference: {fileID: 1443616286}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 276b19118f176ee4b8351179dd344e41, type: 3}
 --- !u!4 &397270085 stripped
@@ -20939,7 +20943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5534140207740975879, guid: 789c846774ad81842ae79501fc7447f2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -91.9
+      value: -59.3
       objectReference: {fileID: 0}
     - target: {fileID: 5534140207740975879, guid: 789c846774ad81842ae79501fc7447f2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -20947,7 +20951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5534140207740975879, guid: 789c846774ad81842ae79501fc7447f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 67.3
+      value: 30.5
       objectReference: {fileID: 0}
     - target: {fileID: 5534140207740975879, guid: 789c846774ad81842ae79501fc7447f2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -29478,6 +29482,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6720952682150591912, guid: 2cf07e096b8e18346bb961037cd4864a, type: 3}
   m_PrefabInstance: {fileID: 1540164255}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1443616286 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2176609137076436635, guid: 96845bb6f2862644193611349f6d0666, type: 3}
+  m_PrefabInstance: {fileID: 1841562910}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1445526512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36550,6 +36559,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2176609137076436636, guid: 96845bb6f2862644193611349f6d0666, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990252866265013197, guid: 96845bb6f2862644193611349f6d0666, type: 3}
+      propertyPath: infoText
+      value: out of power, I need to switch it on somewhere
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990252866265013197, guid: 96845bb6f2862644193611349f6d0666, type: 3}
+      propertyPath: isOpenable
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
