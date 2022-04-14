@@ -17,6 +17,8 @@ public class InventoryUI : MonoBehaviour
     public TMP_Text itemInfoText;
     public Image interactImage;
     public Image lowHealthIndicator;
+    public Image CursorCrosshair;
+    public Texture2D cursorTexture;
 
     //other variables
     Canvas canvas;
@@ -47,6 +49,9 @@ public class InventoryUI : MonoBehaviour
         lowHealthIndicatorColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         alphaDelta = 0.0005f;
         alphaBaseOld = -1.0f;
+        int textureSize = 48;
+        //cursorTexture.Resize(textureSize, textureSize);
+        Cursor.SetCursor(cursorTexture, new Vector2(textureSize/2, textureSize/2), CursorMode.ForceSoftware);
     }
     private void Update()
     {
@@ -143,6 +148,7 @@ public class InventoryUI : MonoBehaviour
     }
     public void openInventory()
     {
+        CursorCrosshair.enabled = false;
         updateInventoryUI();
         Time.timeScale = 0.25f;
         Cursor.visible = true;
@@ -151,6 +157,7 @@ public class InventoryUI : MonoBehaviour
     }
     public void closeInventory()
     {
+        CursorCrosshair.enabled = true;
         Time.timeScale = 1.0f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -175,7 +182,7 @@ public class InventoryUI : MonoBehaviour
             {
                 alphaDelta = -alphaDelta;
             }
-            Debug.Log("Indicator alpha: " + indicatorAlpha);
+            //Debug.Log("Indicator alpha: " + indicatorAlpha);
             lowHealthIndicatorColor.a = indicatorAlpha;
             lowHealthIndicator.color = lowHealthIndicatorColor;
             lowHealthIndicator.enabled = true;
