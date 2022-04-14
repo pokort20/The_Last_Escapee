@@ -14,7 +14,7 @@ public class OpenSlideDoor : Interactable
     public GameObject emissiveObject2;
     public bool isClosed;
     public bool isOpenable;
-    public string infoText;
+    //public string infoText;
 
     //other variables
     private float elapsedTime;

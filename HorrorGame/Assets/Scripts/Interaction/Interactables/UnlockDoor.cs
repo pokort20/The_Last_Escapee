@@ -6,8 +6,6 @@ public class UnlockDoor : Interactable
 {
     public bool isLocked;
     public Transform door;
-    public string infoText;
-
 
     private Inventory inventory;
 

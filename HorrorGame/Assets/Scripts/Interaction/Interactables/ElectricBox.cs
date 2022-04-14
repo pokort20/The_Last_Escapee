@@ -26,24 +26,34 @@ public class ElectricBox : Interactable
     {
         isEnabled = !isEnabled;
         handleIndicator();
-        canInteract = false;
-        if(interactingGameObject != null)
+        if (interactingGameObject != null)
         {
             OpenSlideDoor openSlideDoor = interactingGameObject.GetComponentInChildren<OpenSlideDoor>();
             if(openSlideDoor != null)
             {
-                openSlideDoor.isOpenable = true;
+                openSlideDoor.isOpenable = isEnabled;
+                return;
             }
-            else
+            OpenGate openGate = interactingGameObject.GetComponent<OpenGate>();
+            if(openGate != null)
             {
-                Debug.LogWarning("Can not find OpenSlideDoor script on the interacting game object");
+                openGate.isOpenable = isEnabled;
+                return;
             }
+
         }
-        //base.Interact();
     }
     public override string InteractText()
     {
-        return "Switch ON";
+        if(isEnabled)
+        {
+            return "Switch OFF";
+        }
+        else
+        {
+            return "Switch ON";
+        }
+       
     }
     private void handleIndicator()
     {

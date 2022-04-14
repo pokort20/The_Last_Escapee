@@ -3,6 +3,7 @@ using UnityEngine;
 public class OpenGate : Interactable
 {
     public GameObject Gate;
+    public bool isOpenable;
     public bool isClosed;
 
     float movementDuration = 3.0f;
@@ -12,8 +13,10 @@ public class OpenGate : Interactable
     private float targetRot;
     private float elapsedTime;
     private float percentageMoved;
+    private Inventory inventory;
     void Start()
     {
+        inventory = Inventory.instance;
         canInteract = true;
         setMovementVariables();
     }
@@ -21,9 +24,18 @@ public class OpenGate : Interactable
     // Update is called once per frame
     public override void Interact()
     {
-        base.Interact();
-        Debug.Log("Moving gate!");
-        canInteract = false;
+        if (isOpenable)
+        {
+            Debug.Log("Moving gate!");
+            canInteract = false;
+        }
+        else
+        {
+            if(infoText != null)
+            {
+                inventory.infoText = infoText;
+            }
+        }
     }
     public override string InteractText()
     {
