@@ -55,6 +55,8 @@ public class InventoryUI : MonoBehaviour
         int textureSize = 48;
         //cursorTexture.Resize(textureSize, textureSize);
         Cursor.SetCursor(cursorTexture, new Vector2(textureSize/2, textureSize/2), CursorMode.ForceSoftware);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     private void Update()
     {
