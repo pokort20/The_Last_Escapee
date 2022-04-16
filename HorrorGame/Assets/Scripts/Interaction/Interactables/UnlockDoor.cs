@@ -12,11 +12,12 @@ public class UnlockDoor : Interactable
     Rigidbody rb;
     void Awake()
     {
-        inventory = Inventory.instance;
+        
     }
     // Start is called before the first frame update
     void Start()
     {
+        inventory = Inventory.instance;
         canInteract = true;
         rb = door.GetComponent<Rigidbody>();
         if (rb == null)

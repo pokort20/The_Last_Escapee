@@ -10,13 +10,22 @@ public class PickupObject : MonoBehaviour
     public float maxGrabDistance;
     public float grabSpeedMultiplier;
     public float toCenterParam;
-    
+
 
 
     //other variables
+    private enum mouseStates : int
+    {
+        DEFAULT = 0,
+        DOWN = 1,
+        HOLDING = 2,
+        UP = 3
+    }
+    private mouseStates mouseState;
+    private Inventory inventory;
     float initGrabDistance;
     RaycastHit raycastHit;
-    bool IsHoldingObject;
+    private bool isHoldingObject;
     GameObject holdingObject;
     LayerMask layerMask;
     private SpringJoint springJoint;
@@ -33,16 +42,36 @@ public class PickupObject : MonoBehaviour
 
     void Start()
     {
+        mouseState = mouseStates.DEFAULT;
         Debug.Log("Started PickupObjects");
+        inventory = Inventory.instance;
         layerMask = LayerMask.GetMask("Moveable") + LayerMask.GetMask("Hinge");
-        IsHoldingObject = false;
+        isHoldingObject = false;
         holdingObject = null;
         initGrabDistance = 0.0f;
         springJoint = new SpringJoint();
     }
     void Update()
     {
-        //Debug.Log("Is Holding Object: " + IsHoldingObject.ToString());
+        if(Input.GetMouseButtonDown(0))
+        {
+            mouseState = mouseStates.DOWN;
+        }
+        else if(Input.GetMouseButton(0))
+        {
+            mouseState = mouseStates.HOLDING;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            mouseState = mouseStates.UP;
+        }
+        else
+        {
+            mouseState = mouseStates.DEFAULT;
+        }
+
+        
+        /*
         if (Input.GetMouseButtonDown(0))
         {
             pickupObject();
@@ -59,76 +88,121 @@ public class PickupObject : MonoBehaviour
             }
 
         }
+        */
+    }
+
+    void FixedUpdate()
+    {
+        bool colided = false;
+        if(!isHoldingObject)
+        {
+            colided = Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance, layerMask);
+            if(colided)
+            {
+                inventory.mouseInteracted = true;
+            }
+            else
+            {
+                inventory.mouseInteracted = false; ;
+            }
+        }
+        else
+        {
+            inventory.mouseInteracted = true;
+        }
+
+        switch (mouseState)
+        {
+            case mouseStates.DOWN:
+                if (colided && !isHoldingObject) pickupObject();
+                break;
+            case mouseStates.HOLDING:
+                if (isHoldingObject)
+                {
+                    if (Vector3.Distance(holdingObject.transform.position, FirstPersonCamera.transform.position) > maxGrabDistance * 1.4f)
+                    {
+                        dropObject();
+                    }
+                    else
+                    {
+                        moveObject();
+                    }
+                }
+                break;
+            case mouseStates.UP:
+                if (isHoldingObject) dropObject();
+                break;
+            case mouseStates.DEFAULT:
+                break;
+            default:
+                break;
+        }
     }
 
     private void pickupObject()
     {
-        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance, layerMask))
+        Debug.LogWarning("Picked up object");
+        Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
+        //Debug.Log("Distance: " + Vector3.Distance(FirstPersonCamera.transform.position, raycastHit.collider.gameObject.transform.position));
+
+        if(raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
         {
-            Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
-            Debug.Log("Distance: " + Vector3.Distance(FirstPersonCamera.transform.position, raycastHit.collider.gameObject.transform.position));
-
-            if(raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
+            holdingObject = raycastHit.collider.gameObject;
+            if(holdingObject.layer == LayerMask.NameToLayer("Moveable"))
             {
-                holdingObject = raycastHit.collider.gameObject;
-                if(holdingObject.layer == LayerMask.NameToLayer("Moveable"))
-                {
-                    IsHoldingObject = true;
-                    setRigidbodyValues(holdingObject);
-                    initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
-                    springJoint = holdingObject.AddComponent<SpringJoint>();
-                    springJoint.autoConfigureConnectedAnchor = false;
-                    springJoint.connectedAnchor = FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
-                    springJoint.spring = 400.0f;
-                    springJoint.damper = 50.0f;
-                }
-                else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
-                {
-                    //IsHoldingObject = true;
-                    //setRigidbodyValues(holdingObject);
-                    //initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
-                    //hingeJnt = holdingObject.GetComponent<HingeJoint>();
-                    //springJoint = holdingObject.AddComponent<SpringJoint>();
-                    //springJoint.autoConfigureConnectedAnchor = false;
-                    //springJoint.spring = 40.0f;
-                    //springJoint.damper = 5.0f;
+                isHoldingObject = true;
+                setRigidbodyValues(holdingObject);
+                initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                springJoint = holdingObject.AddComponent<SpringJoint>();
+                springJoint.autoConfigureConnectedAnchor = false;
+                springJoint.connectedAnchor = raycastHit.point;//FirstPersonCamera.transform.forward * initGrabDistance + FirstPersonCamera.transform.position;
+                springJoint.spring = 400.0f;
+                springJoint.damper = 50.0f;
+            }
+            else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
+            {
+                //IsHoldingObject = true;
+                //setRigidbodyValues(holdingObject);
+                //initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                //hingeJnt = holdingObject.GetComponent<HingeJoint>();
+                //springJoint = holdingObject.AddComponent<SpringJoint>();
+                //springJoint.autoConfigureConnectedAnchor = false;
+                //springJoint.spring = 40.0f;
+                //springJoint.damper = 5.0f;
 
-                    //Vector3 posOnCircle = Vector3.Normalize(new Vector3(
-                    //    holdingObject.transform.position.x - hingeJnt.connectedAnchor.x,
-                    //    hingeJnt.connectedAnchor.y,
-                    //    holdingObject.transform.position.z - hingeJnt.connectedAnchor.z
-                    //    ));
-                    //initHingeAngle = Vector3.Angle(new Vector3(1.0f, hingeJnt.connectedAnchor.y, 0.0f), posOnCircle);
-                    //initHingeAngle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), new Vector2(posOnCircle.x, posOnCircle.z));
-                    //initPlayerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
+                //Vector3 posOnCircle = Vector3.Normalize(new Vector3(
+                //    holdingObject.transform.position.x - hingeJnt.connectedAnchor.x,
+                //    hingeJnt.connectedAnchor.y,
+                //    holdingObject.transform.position.z - hingeJnt.connectedAnchor.z
+                //    ));
+                //initHingeAngle = Vector3.Angle(new Vector3(1.0f, hingeJnt.connectedAnchor.y, 0.0f), posOnCircle);
+                //initHingeAngle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), new Vector2(posOnCircle.x, posOnCircle.z));
+                //initPlayerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
 
-                    //springJoint.connectedAnchor = posOnCircle;
-                    //springJoint.anchor = new Vector3(0.0f, 0.0f, 0.0f);
-                    circleRadius = 0.8f * Vector2.Distance(
-                        new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z),
-                        new Vector2(raycastHit.point.x, raycastHit.point.z));
-                    IsHoldingObject = true;
-                    setRigidbodyValues(holdingObject);
-                    hingeJnt = holdingObject.GetComponent<HingeJoint>();
-                    
+                //springJoint.connectedAnchor = posOnCircle;
+                //springJoint.anchor = new Vector3(0.0f, 0.0f, 0.0f);
+                circleRadius = 0.8f * Vector2.Distance(
+                    new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z),
+                    new Vector2(raycastHit.point.x, raycastHit.point.z));
+                isHoldingObject = true;
+                setRigidbodyValues(holdingObject);
+                hingeJnt = holdingObject.GetComponent<HingeJoint>();
+                
 
-                    springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
-                    springJoint = holdingObject.AddComponent<SpringJoint>();
-                    springJoint.spring = 40.0f;
-                    springJoint.damper = 5.0f;
-                    springJoint.autoConfigureConnectedAnchor = false;
-                    springJoint.connectedAnchor = springAnchor;
-
-                }
+                springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
+                springJoint = holdingObject.AddComponent<SpringJoint>();
+                springJoint.spring = 40.0f;
+                springJoint.damper = 5.0f;
+                springJoint.autoConfigureConnectedAnchor = false;
+                springJoint.connectedAnchor = springAnchor;
 
             }
+
         }
-
-
-        
     }
     private void moveObject()
     {
+        Debug.LogWarning("Moving object");
         Vector3 anchor;
         if (holdingObject.layer == LayerMask.NameToLayer("Moveable"))
         {
@@ -156,19 +230,19 @@ public class PickupObject : MonoBehaviour
         {
             Destroy(holdingObject.GetComponent<SpringJoint>());
             setOriginalRigidbodyValues(holdingObject);
-            IsHoldingObject = false;
+            isHoldingObject = false;
             holdingObject = null;
         }
         else if (holdingObject.layer == LayerMask.NameToLayer("Hinge"))
         {
             Destroy(holdingObject.GetComponent<SpringJoint>());
             setOriginalRigidbodyValues(holdingObject);
-            IsHoldingObject = false;
+            isHoldingObject = false;
             holdingObject = null;
 
 
         }
-        Debug.Log("Released object");
+        Debug.LogWarning("Released object");
     }
     private Vector3 clampVecMagnitude(Vector3 value, float clampValue)
     {

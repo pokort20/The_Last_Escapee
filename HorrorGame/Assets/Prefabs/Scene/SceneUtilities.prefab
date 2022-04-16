@@ -239,3 +239,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalVolume: {fileID: 4880549228061161517}
   maxLensDistortion: -0.5
+  maxMotionBlur: 4

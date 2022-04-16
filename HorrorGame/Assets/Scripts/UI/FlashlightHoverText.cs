@@ -9,7 +9,8 @@ public class FlashlightHoverText : UIHoverText
     private GameManager gameManager;
     public override void OnPointerEnter(PointerEventData eventData)
     {
-        inventory.itemInfoText = "STANDARD LED FLASHLIGHT";
+        float batteryPercentage = gameManager.batteryLevel / gameManager._maxBatteryLevel * 100.0f;
+        inventory.itemInfoText = "FLASHLIGHT: " + Mathf.RoundToInt(batteryPercentage) + "%";
     }
 
     public override void OnPointerExit(PointerEventData eventData)

@@ -92,6 +92,7 @@ public class PlayerMovement : MonoBehaviour
                 moveVec *= movementSpeed;
                 playerController.height = standardHeight;
                 postProcessing.lensDistortionEnabled = false;
+                postProcessing.motionBlurEnabled = false;
                 break;
             case playerStates.CROUCHING:
                 //Debug.Log("Crouching state");
@@ -99,10 +100,12 @@ public class PlayerMovement : MonoBehaviour
                 playerController.height = crouchHeight;
                 isCrouching = true;
                 postProcessing.lensDistortionEnabled = false;
+                postProcessing.motionBlurEnabled = false;
                 break;
             case playerStates.UNCROUCHING:
                 //Debug.Log("Uncrouching state");
                 postProcessing.lensDistortionEnabled = false;
+                postProcessing.motionBlurEnabled = false;
                 break;
             case playerStates.SPRINTING:
                 //Debug.Log("Sprinting state");
@@ -110,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
                 playerController.height = standardHeight;
                 isSprinting = true;
                 postProcessing.lensDistortionEnabled = true;
+                postProcessing.motionBlurEnabled = true;
                 break;
             default:
                 //Debug.Log("Default");

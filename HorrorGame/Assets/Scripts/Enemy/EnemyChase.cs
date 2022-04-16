@@ -17,6 +17,7 @@ public class EnemyChase : MonoBehaviour
     private Vector3 flashlightVisiblePoint;
     private bool isPrevDestFromFlashlight;
     private float attackCooldown;
+    private PostProcessing postProcessing;
     private enum enemyStates : int
     {
         PATROL = 0,
@@ -28,6 +29,7 @@ public class EnemyChase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        postProcessing = PostProcessing.instance;
         flashlightVisiblePoint = Vector3.zero;
         isPrevDestFromFlashlight = false;
         enemyState = enemyStates.PATROL;
@@ -282,6 +284,7 @@ public class EnemyChase : MonoBehaviour
         float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
         if (attackDistance < 1.7f)
         {
+            postProcessing.depthOfFieldEnabled = true;
             attackCooldown = 1.0f;
             float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
             Debug.Log("Player is attacked!");

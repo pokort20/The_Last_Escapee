@@ -26,6 +26,7 @@ public class InventoryUI : MonoBehaviour
     private float infoTextDefaultDuration = 5.0f;
     private float infoTextCurrentDuration;
     private GameManager gameManager;
+    private Color cursorCrosshairColor;
 
     //low health image indicator variables
     private Color lowHealthIndicatorColor;
@@ -42,11 +43,13 @@ public class InventoryUI : MonoBehaviour
         inventory.onInteractTextChangedCallback += updateInteractText;
         inventory.onInfoTextChangedCallback += displayInfoText;
         inventory.onItemInfoTextChangedCallback += updateItemInfoText;
+        inventory.onMouseInteractionCallback += displayCursorCrosshair;
         itemSlots = itemSlotsParent.GetComponentsInChildren<InventorySlot>();
         flashlightImage.enabled = false;
         batteryLevelImage.enabled = false;
         gameManager = GameManager.instance;
         lowHealthIndicatorColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        cursorCrosshairColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         alphaDelta = 0.0005f;
         alphaBaseOld = -1.0f;
         int textureSize = 48;
@@ -57,6 +60,7 @@ public class InventoryUI : MonoBehaviour
     {
         updateInfoText();
         updateLowHealthIndicator();
+        updateCursorCrosshair();
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Debug.Log("Opened inventory");
@@ -190,6 +194,31 @@ public class InventoryUI : MonoBehaviour
         else
         {
             lowHealthIndicator.enabled = false;
+        }
+    }
+    public void displayCursorCrosshair()
+    {
+        if (inventory.mouseInteracted == true)
+        {
+            cursorCrosshairColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            CursorCrosshair.enabled = true;
+            CursorCrosshair.color = cursorCrosshairColor;
+        }
+    }
+    public void updateCursorCrosshair()
+    {
+        if(CursorCrosshair.enabled)
+        {
+            cursorCrosshairColor = CursorCrosshair.color;
+            cursorCrosshairColor.a -= 2.0f * Time.deltaTime;
+            if(cursorCrosshairColor.a <= 0.0f)
+            {
+                CursorCrosshair.enabled = false;
+            }
+            else
+            {
+                CursorCrosshair.color = cursorCrosshairColor;
+            }
         }
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)

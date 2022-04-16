@@ -14,9 +14,11 @@ public class OpenGate : Interactable
     private float elapsedTime;
     private float percentageMoved;
     private Inventory inventory;
+    private bool used;
     void Start()
     {
         inventory = Inventory.instance;
+        used = false;
         canInteract = true;
         setMovementVariables();
     }
@@ -24,28 +26,30 @@ public class OpenGate : Interactable
     // Update is called once per frame
     public override void Interact()
     {
-        if (isOpenable)
+        if(canInteract)
         {
-            Debug.Log("Moving gate!");
-            canInteract = false;
-        }
-        else
-        {
-            if(infoText != null)
+            if (isOpenable)
             {
-                inventory.infoText = infoText;
+                Debug.Log("Moving gate!");
+                used = true;
+            }
+            else
+            {
+                if (infoText != null)
+                {
+                    inventory.infoText = infoText;
+                }
             }
         }
     }
     public override string InteractText()
     {
-        return "Open/close";
+        return "Open";
     }
     private void setMovementVariables()
     {
         startPos = Gate.transform.position;
         startRot = transform.rotation.z;
-        canInteract = true;
         elapsedTime = 0.0f;
         if (isClosed)
         {
@@ -60,7 +64,7 @@ public class OpenGate : Interactable
     }
     void Update()
     {
-        if (!canInteract)
+        if (used)
         {
             elapsedTime += Time.deltaTime;
             percentageMoved = elapsedTime / movementDuration;
@@ -74,7 +78,9 @@ public class OpenGate : Interactable
             {
                 Debug.Log("Movement finished!");
                 isClosed = !isClosed;
-                setMovementVariables();
+                used = false;
+                canInteract = false;
+                //setMovementVariables();
             }
         }
     }

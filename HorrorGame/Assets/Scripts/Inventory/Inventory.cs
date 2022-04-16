@@ -22,6 +22,8 @@ public class Inventory : MonoBehaviour
     private string interactTxt;
     private string infoTxt;
     private string itemInfoTxt;
+    private bool mouseInteractd;
+    //properties
     public string interactText
     {
         get { 
@@ -68,6 +70,22 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+    public bool mouseInteracted
+    {
+        get
+        {
+            return mouseInteractd;
+        }
+
+        set
+        {
+            mouseInteractd = value;
+            if (onMouseInteractionCallback != null)
+            {
+                onMouseInteractionCallback.Invoke();
+            }
+        }
+    }
 
     //Callbacks
     public delegate void OnInventoryChanged();
@@ -78,12 +96,15 @@ public class Inventory : MonoBehaviour
     public OnInfoTextChanged onInfoTextChangedCallback;
     public delegate void OnItemInfoTextChanged();
     public OnItemInfoTextChanged onItemInfoTextChangedCallback;
+    public delegate void OnMouseInteraction();
+    public OnMouseInteraction onMouseInteractionCallback;
 
 
     // Start is called before the first frame update
     void Start()
     {
         items = new List<Item>();
+        mouseInteractd = false;
     }
 
     // Update is called once per frame
