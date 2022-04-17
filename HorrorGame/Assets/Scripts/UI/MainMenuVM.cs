@@ -5,7 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuVM : MonoBehaviour
 {
+    public Texture2D cursorTexture;
     // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
+    }
     public void OnPlayButtonUse()
     {
         Debug.Log("Clicked PLAY!");
