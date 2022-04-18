@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class InventoryUI : MonoBehaviour
 {
     //public variables defined in UNITY
+    public GameObject uiElements;
+    public GameObject pauseMenuUI;
     public GameObject inventoryUI;
+    public GameObject controlsUI;
+
     public Transform itemSlotsParent;
     public Image flashlightImage;
     public Image batteryLevelImage;
@@ -21,6 +26,7 @@ public class InventoryUI : MonoBehaviour
     public Texture2D cursorTexture;
 
     //other variables
+    private bool isPaused;
     Canvas canvas;
     Inventory inventory;
     private float infoTextDefaultDuration = 5.0f;
@@ -38,6 +44,7 @@ public class InventoryUI : MonoBehaviour
     InventorySlot[] itemSlots;
     private void Start()
     {
+        isPaused = false;
         inventory = Inventory.instance;
         inventory.onInventoryChangedCallback += updateInventoryUI;
         inventory.onInteractTextChangedCallback += updateInteractText;
@@ -57,21 +64,42 @@ public class InventoryUI : MonoBehaviour
         Cursor.SetCursor(cursorTexture, new Vector2(textureSize/2, textureSize/2), CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        centerCursor();
+
+        controlsUI.SetActive(false);
+        inventoryUI.SetActive(false);
+        pauseMenuUI.SetActive(false);
+        uiElements.SetActive(true);
     }
     private void Update()
     {
         updateInfoText();
         updateLowHealthIndicator();
         updateCursorCrosshair();
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Opened inventory");
-            openInventory();
+            Debug.LogWarning("Pressed ESC");
+            if(isPaused)
+            {
+                resumeGame();
+            }
+            else
+            {
+                pauseGame();
+            }
         }
-        if(Input.GetKeyUp(KeyCode.Tab))
+        if(!isPaused)
         {
-            Debug.Log("Closed inventory"); 
-            closeInventory();
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                Debug.Log("Opened inventory");
+                openInventory();
+            }
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                Debug.Log("Closed inventory");
+                closeInventory();
+            }
         }
     }
     public void updateInventoryUI()
@@ -154,6 +182,7 @@ public class InventoryUI : MonoBehaviour
     }
     public void openInventory()
     {
+        inventory.inventoryOpened = true;
         CursorCrosshair.enabled = false;
         updateInventoryUI();
         Time.timeScale = 0.25f;
@@ -163,6 +192,7 @@ public class InventoryUI : MonoBehaviour
     }
     public void closeInventory()
     {
+        inventory.inventoryOpened = false;
         CursorCrosshair.enabled = true;
         Time.timeScale = 1.0f;
         Cursor.visible = false;
@@ -228,5 +258,53 @@ public class InventoryUI : MonoBehaviour
         float val;
         val = Mathf.InverseLerp(iMin, iMax, value);
         return Mathf.Lerp(oMin, oMax, val);
+    }
+    private void centerCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    //Pause Game Menu functions
+    public void pauseGame()
+    {
+        closeInventory();
+        isPaused = true;
+        centerCursor();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        uiElements.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0.0f;
+    }
+    public void resumeGame()
+    {
+        isPaused = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        pauseMenuUI.SetActive(false);
+        uiElements.SetActive(true);
+        Time.timeScale = 1.0f;
+    }
+    public void OnResumeButtonUse()
+    {
+        Debug.Log("Resuming game!");
+        resumeGame();
+    }
+    public void OnControlsButtonUse()
+    {
+        Debug.Log("Opened controls!");
+        pauseMenuUI.SetActive(false);
+        controlsUI.SetActive(true);
+    }
+    public void OnQuitButtonUse()
+    {
+        Debug.Log("Returning to main menu!");
+        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
+    }
+    public void OnBackButtonUse()
+    {
+        Debug.Log("Returning back to pause menu!");
+        controlsUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
     }
 }

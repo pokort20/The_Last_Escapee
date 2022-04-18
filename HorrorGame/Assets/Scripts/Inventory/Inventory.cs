@@ -24,6 +24,7 @@ public class Inventory : MonoBehaviour
     private string itemInfoTxt;
     private bool mouseInteractd;
     //properties
+    public bool inventoryOpened { get; set; }
     public string interactText
     {
         get { 

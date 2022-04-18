@@ -99,7 +99,10 @@ public class PickupObject : MonoBehaviour
             colided = Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance, layerMask);
             if(colided)
             {
-                inventory.mouseInteracted = true;
+                if (!inventory.inventoryOpened)
+                {
+                    inventory.mouseInteracted = true;
+                }
             }
             else
             {
@@ -108,7 +111,10 @@ public class PickupObject : MonoBehaviour
         }
         else
         {
-            inventory.mouseInteracted = true;
+            if (!inventory.inventoryOpened)
+            {
+                inventory.mouseInteracted = true;
+            }
         }
 
         switch (mouseState)

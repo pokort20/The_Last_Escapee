@@ -8,6 +8,10 @@ public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointe
 {
     public Transform buttonTransform;
 
+    void OnDisable()
+    {
+        OnPointerExit(null);
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         buttonTransform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
