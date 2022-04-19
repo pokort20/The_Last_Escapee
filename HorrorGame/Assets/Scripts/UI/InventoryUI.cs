@@ -78,10 +78,18 @@ public class InventoryUI : MonoBehaviour
         updateCursorCrosshair();
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.LogWarning("Pressed ESC");
+            //Debug.LogWarning("Pressed ESC");
             if(isPaused)
             {
-                resumeGame();
+                if(controlsUI.activeInHierarchy)
+                {
+                    controlsUI.SetActive(false);
+                    pauseMenuUI.SetActive(true);
+                }
+                else
+                {
+                    resumeGame();
+                }
             }
             else
             {
