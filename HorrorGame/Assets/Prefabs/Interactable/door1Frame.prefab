@@ -109,9 +109,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75dfe8a33ca5aef49baad9603a7951d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoText: Locked, look for a key.
   isLocked: 0
   door: {fileID: 3103757531944474774}
-  infoText: Locked, look for a key.
 --- !u!1001 &973635452865216269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,15 +165,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: 0
+      value: 0.0009999999
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.y
-      value: 0
+      value: 1.0060002
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.z
-      value: 0
+      value: 0.50799996
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_AutoConfigureConnectedAnchor
