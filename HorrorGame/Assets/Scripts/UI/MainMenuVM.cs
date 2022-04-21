@@ -63,7 +63,7 @@ public class MainMenuVM : MonoBehaviour
     public void OnLevel3ButtonUse()
     {
         Debug.Log("Clicked LEVEL3!");
-        Debug.LogWarning("No level 3 yet!");
+        SceneManager.LoadScene("Level3", LoadSceneMode.Single);
         //SceneManager.LoadScene("Level3", LoadSceneMode.Single);
     }
 }
