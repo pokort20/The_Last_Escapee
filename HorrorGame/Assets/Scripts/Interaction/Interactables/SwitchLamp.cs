@@ -14,7 +14,7 @@ public class SwitchLamp : Interactable
     }
     void Update()
     {
-        isEnabled = lampParent.transform.GetChild(0).transform.GetChild(0).gameObject.activeInHierarchy;
+       if(lampParent != null) isEnabled = lampParent.transform.GetChild(0).transform.GetChild(0).gameObject.activeInHierarchy;
     }
     public override void Interact()
     {

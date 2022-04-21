@@ -177,11 +177,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_AutoConfigureConnectedAnchor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3303988333730856225, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_Name
       value: door1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156711372221958942, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_Size.y
+      value: 0.00930736
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156711372221958942, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_Center.x
+      value: 0.00020076975
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156711372221958942, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_Center.y
+      value: 0.00019440308
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156711372221958942, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_Center.z
+      value: 0.009932258
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5073822462990905690, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
