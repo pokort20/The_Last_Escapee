@@ -11,6 +11,7 @@ public class Flashlight : MonoBehaviour
     float intensityRangeMin;
     float intensityRangeMax;
     float decayThreshold;
+    float flashlightSwitchCooldown;
     private void Start()
     {
         GameManager.instance.flashlightEnabled = false;
@@ -19,15 +20,20 @@ public class Flashlight : MonoBehaviour
         intensityRangeMin = 12.0f;
         intensityRangeMax = 60.0f;
         decayThreshold = 0.5f * GameManager.instance._maxBatteryLevel;
-
+        flashlightSwitchCooldown = 0.0f;
         lightData = flashlight.GetComponent<HDAdditionalLightData>();
     }
     // Update is called once per frame
     void Update()
     {
+        flashlightSwitchCooldown -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.F) && inventory.hasItem(typeof(FlashlightItem)) > 0 && GameManager.instance.batteryLevel > 0.0f)
         {
-            switchFlaslight();
+            if(flashlightSwitchCooldown <= 0.0)
+            {
+                switchFlaslight();
+                flashlightSwitchCooldown = 0.5f;
+            }
         }
         if (GameManager.instance.flashlightEnabled)
         {
@@ -44,7 +50,16 @@ public class Flashlight : MonoBehaviour
     }
     private void switchFlaslight()
     {
-        Debug.Log("Enabled / disabled flashlight");
+        if(GameManager.instance.flashlightEnabled)
+        {
+            Debug.Log("Disabled flashlight");
+            AudioManager.instance.playAudio("flashlight_ON");
+        }
+        else
+        {
+            Debug.Log("Eisabled flashlight");
+            AudioManager.instance.playAudio("flashlight_OFF");
+        }
         GameManager.instance.flashlightEnabled = !GameManager.instance.flashlightEnabled;
         flashlight.enabled = GameManager.instance.flashlightEnabled;
     }

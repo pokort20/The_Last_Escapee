@@ -1,5 +1,181 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3510672622843539378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1871798319658199243}
+  - component: {fileID: 2903848706320310732}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1871798319658199243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510672622843539378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4880549228835444641}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2903848706320310732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510672622843539378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52629e9e4548791458035887d7ef9fb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMovementAudioSource: {fileID: 0}
+  playerBreathingAudioSource: {fileID: 0}
+  player: {fileID: 0}
+  generalVolume: 0.5
+  ambientVolume: 1
+  effectsVolume: 1
+  audios:
+  - audioClip: {fileID: 8300000, guid: b55393bc4b938ee40881fd5e0b8866c3, type: 3}
+    name: player_walk
+    volume: 0.5
+    pitch: 1.5
+    loop: 1
+  - audioClip: {fileID: 8300000, guid: ff5f2462a8edbb14282466fc68b498d5, type: 3}
+    name: player_breathe
+    volume: 1
+    pitch: 1
+    loop: 1
+  - audioClip: {fileID: 8300000, guid: 76819665afdceec4fab277e4faa57138, type: 3}
+    name: player_grunt1
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 2b8cd8922483067429886555fb67aeea, type: 3}
+    name: player_grunt2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 071f2116b587a2b4cb403f06fe6203af, type: 3}
+    name: flicker
+    volume: 0.3
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 6da0cb1932b857444922e4c02bdfc978, type: 3}
+    name: unlock_door
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 174fb42a63f7b0347bf37a59293011cd, type: 3}
+    name: item_pickup
+    volume: 0.8
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 1687bbee10d53c44da698aff6f9d9a11, type: 3}
+    name: flashlight_ON
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: c59c3b2df159b8840af763214d231e9a, type: 3}
+    name: flashlight_OFF
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 4da0d496f803fcb4ab5c0f37b67eab36, type: 3}
+    name: switch
+    volume: 0.1
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 401cd603a2b149e40998d7b251b09466, type: 3}
+    name: enemy_walk
+    volume: 1
+    pitch: 1
+    loop: 1
+  - audioClip: {fileID: 0}
+    name: 
+    volume: 0
+    pitch: 0
+    loop: 0
+  - audioClip: {fileID: 0}
+    name: 
+    volume: 0
+    pitch: 0
+    loop: 0
+  - audioClip: {fileID: 0}
+    name: 
+    volume: 0
+    pitch: 0
+    loop: 0
+  - audioClip: {fileID: 0}
+    name: 
+    volume: 0
+    pitch: 0
+    loop: 0
+  ambientEffectAudios:
+  - audioClip: {fileID: 8300000, guid: 2c6990207a1f02b4181fd957a7d39bd8, type: 3}
+    name: swosh1
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 43091995b839967428351b8ab5d2edc4, type: 3}
+    name: swosh2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 7f6162beb0253024fbe09b1bc1d84d3c, type: 3}
+    name: swosh3
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: dc851f7af6ef31a438974ffe7ccd2809, type: 3}
+    name: blow1
+    volume: 0.4
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 04500a63d3ef6ff4f8ffa4c854de1ba0, type: 3}
+    name: blow2
+    volume: 0.4
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 5f1d7cf17a9b7a64ebd49cecadc140b0, type: 3}
+    name: blow3
+    volume: 0.4
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: ee2c8c4d2a900f543bd37d5348bd2ff4, type: 3}
+    name: shriek1
+    volume: 0.2
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 91fd76f95f86e36429bda3fb7d67b0c4, type: 3}
+    name: sfx1
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 83e2e828b258779438a99c3a4a7dd90c, type: 3}
+    name: sfx2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: a76f5f6759586154c80feda5677cdadb, type: 3}
+    name: sfx3
+    volume: 0.5
+    pitch: 1
+    loop: 0
 --- !u!1 &4880549227590565606
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4880549228061161518}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.4299526, y: 1.5028646, z: -0.08094615}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4880549228835444641}
@@ -144,6 +320,7 @@ Transform:
   - {fileID: 4880549228061161516}
   - {fileID: 4880549227590565611}
   - {fileID: 4880549229538769435}
+  - {fileID: 1871798319658199243}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -175,7 +352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4880549229538769429}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.3874106, y: 1.1544303, z: 2.266739}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4880549228835444641}

@@ -101,11 +101,13 @@ public class InventoryUI : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 Debug.Log("Opened inventory");
+                //AudioManager.instance.playAudio("item_pickup");
                 openInventory();
             }
             if (Input.GetKeyUp(KeyCode.Tab))
             {
                 Debug.Log("Closed inventory");
+                //AudioManager.instance.playAudio("item_pickup");
                 closeInventory();
             }
         }

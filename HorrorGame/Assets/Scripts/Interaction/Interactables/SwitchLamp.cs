@@ -19,6 +19,8 @@ public class SwitchLamp : Interactable
     public override void Interact()
     {
         Debug.Log("Enabled / disabled " + lampParent.name + " lights!");
+
+        AudioManager.instance.playAudio("switch");
         isEnabled = !isEnabled;
         foreach (Transform FluorescentLamp in lampParent.transform)
         {

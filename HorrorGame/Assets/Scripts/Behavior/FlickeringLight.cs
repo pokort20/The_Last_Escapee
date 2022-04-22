@@ -8,6 +8,7 @@ public class FlickeringLight : MonoBehaviour
     public Light flickeringLight;
     public GameObject emissivePart;
     public bool isFlickeringEnabled;
+    public AudioSource audioSource;
 
     private HDAdditionalLightData lightData;
     private float ranNum;
@@ -32,6 +33,10 @@ public class FlickeringLight : MonoBehaviour
         {
             defaultIntensity = lightData.intensity;
         }
+        if(audioSource == null)
+        {
+            Debug.LogWarning("Flickering light script has no audio source attached!");
+        }
     }
 
     // Update is called once per frame
@@ -43,8 +48,9 @@ public class FlickeringLight : MonoBehaviour
             {
                 ranNum = Random.value;
                 //Debug.Log("ranNum: " + ranNum);
-                if (ranNum >= 0.985f)
+                if (ranNum >= 0.995f)
                 {
+                    AudioManager.instance.playAudio("flicker", audioSource);
                     lightData.intensity = 0.2f * defaultIntensity;
                     if (emissivePart != null)
                     {

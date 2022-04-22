@@ -13,6 +13,8 @@ public class EnemyChase : MonoBehaviour
     public float enemyFOV;
     public float agentSpeed;
     public float hearingRange;
+    public AudioSource loopAudioSource;
+    public AudioSource effectAudioSource;
 
     private Vector3 flashlightVisiblePoint;
     private bool isPrevDestFromFlashlight;
@@ -35,6 +37,9 @@ public class EnemyChase : MonoBehaviour
         enemyState = enemyStates.PATROL;
         agent.speed = agentSpeed;
         attackCooldown = 0.0f;
+
+        EnemyAudio ea = new EnemyAudio(GetHashCode(), agent.velocity, agent.transform.position, loopAudioSource, effectAudioSource);
+        AudioManager.instance.addEnemy(ea);
     }
 
     void FixedUpdate()
@@ -57,6 +62,7 @@ public class EnemyChase : MonoBehaviour
                 //Debug.Log("Enemy state unknown!");
                 break;
         }
+        AudioManager.instance.updateEnemy(GetHashCode(), agent.transform.position, agent.velocity);
         isPlayerAttacked();
     }
     private void patrol()
@@ -284,7 +290,8 @@ public class EnemyChase : MonoBehaviour
         float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
         if (attackDistance < 1.7f)
         {
-            postProcessing.depthOfFieldEnabled = true;
+            //postProcessing.depthOfFieldEnabled = true;
+            AudioManager.instance.playAudio("player_grunt" + Random.Range(1,3).ToString());
             attackCooldown = 1.0f;
             float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
             Debug.Log("Player is attacked!");

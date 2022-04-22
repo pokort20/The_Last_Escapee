@@ -117,6 +117,7 @@ public class Inventory : MonoBehaviour
     {
         if(items.Count < inventorySize)
         {
+            AudioManager.instance.playAudio("item_pickup");
             items.Add(item);
             if (onInventoryChangedCallback != null)
             {

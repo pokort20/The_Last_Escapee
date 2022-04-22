@@ -58,6 +58,7 @@ public class UnlockDoor : Interactable
                     break;
                 }
             }
+            AudioManager.instance.playAudio("unlock_door");
             GetComponent<BoxCollider>().enabled = false;
             rb.isKinematic = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Default");

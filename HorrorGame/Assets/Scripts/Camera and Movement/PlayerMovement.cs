@@ -112,16 +112,22 @@ public class PlayerMovement : MonoBehaviour
                 moveVec *= movementSpeed * sprintMult;
                 playerController.height = standardHeight;
                 isSprinting = true;
-                postProcessing.lensDistortionEnabled = true;
-                postProcessing.motionBlurEnabled = true;
+                if(moveVec.magnitude != 0.0)
+                {
+                    postProcessing.lensDistortionEnabled = true;
+                    postProcessing.motionBlurEnabled = true;
+                }
                 break;
             default:
                 //Debug.Log("Default");
                 break;
         }
+        //AudioManager.instance.movementVec = moveVec;
         playerController.Move(moveVec * Time.deltaTime);
+        AudioManager.instance.movementVec = playerController.velocity;
+        AudioManager.instance.isGrounded = isGrounded;
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
         }
