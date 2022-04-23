@@ -87,7 +87,7 @@ public class AudioManager : MonoBehaviour
     {
         foreach(Audio audio in audios)
         {
-            if(audio.name == "player_walk")
+            if(audio.name == "enemy_walk")
             {
                 enemyLoopAudio = audio;
 
@@ -135,6 +135,23 @@ public class AudioManager : MonoBehaviour
         }
         Debug.LogWarning("Audio with given name not found!");
     }
+    public void playAudio(string name, AudioSource source)
+    {
+        foreach (Audio audio in audios)
+        {
+            if (audio.name == name)
+            {
+                source.clip = audio.audioClip;
+                source.loop = audio.loop;
+                source.volume = audio.volume * effectsVolume * generalVolume;
+                source.pitch = audio.pitch;
+                source.Play();
+
+                return;
+            }
+        }
+        Debug.LogWarning("Audio with given name not found!");
+    }
     public void playAudio(string name, Vector3 position)
     {
         foreach (Audio audio in audios)
@@ -153,24 +170,7 @@ public class AudioManager : MonoBehaviour
         Audio audio = thudEffectAudios[index];
         AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * generalVolume);
     }
-    public void playAudio(string name, AudioSource source)
-    {
-        foreach(Audio audio in audios)
-        {
-            if(audio.name == name)
-            {
-                Debug.Log("Playing audio: " + audio.name);
-                source.clip = audio.audioClip;
-                source.loop = audio.loop;
-                source.volume = audio.volume * effectsVolume * generalVolume;
-                source.pitch = audio.pitch;
-                source.Play();
-
-                return;
-            }
-        }
-        Debug.LogWarning("Audio with given name not found!");
-    }
+    
     public void addEnemy(EnemyAudio ea)
     {
         enemies.Add(ea); //could be buggy, order of initialization - enemy / audio manager!
@@ -191,7 +191,7 @@ public class AudioManager : MonoBehaviour
     {
         foreach (EnemyAudio ea in enemies)
         {
-            if (Vector3.Distance(ea.enemyPos, player.position) > 15.0f)
+            if (Vector3.Distance(ea.enemyPos, player.position) > 15.0f || ea.movementVec.magnitude <= 0.0f)
             {
                 if(ea.loopAudioSource.isPlaying)
                 {
@@ -204,7 +204,7 @@ public class AudioManager : MonoBehaviour
                 ea.loopAudioSource.clip = enemyLoopAudio.audioClip;
             }
             ea.loopAudioSource.volume = enemyLoopAudio.volume; //to be changed
-            ea.loopAudioSource.pitch = enemyLoopAudio.pitch; //to be changed
+            ea.loopAudioSource.pitch = remap(0.0f, 6.0f, 0.7f, 1.5f, ea.movementVec.magnitude); //enemyLoopAudio.pitch; //to be changed
 
             if (!ea.loopAudioSource.isPlaying)
             {
@@ -227,14 +227,14 @@ public class AudioManager : MonoBehaviour
 
         if (audio != null)
         {
-            Debug.LogWarning("Playing: " + audio.name);
-            Vector3 pos = new Vector3(Random.Range(-4.0f, 4.0f), player.position.y + 0.5f, Random.Range(-4.0f, 4.0f));
+            Debug.Log("Playing: " + audio.name);
+            Vector3 pos = new Vector3(Random.Range(-2.0f, 2.0f), player.position.y + 0.5f, Random.Range(-2.0f, 2.0f));
             AudioSource.PlayClipAtPoint(audio.audioClip, pos, audio.volume * ambientVolume * generalVolume);
         }
 
-        float nextTime = Random.Range(9, 11);
+        float nextTime = Random.Range(10, 30);
 
-        //Invoke("playAmbientEffect", nextTime);
+        Invoke("playAmbientEffect", nextTime);
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {

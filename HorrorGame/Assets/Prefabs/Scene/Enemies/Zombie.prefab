@@ -73,7 +73,7 @@ MonoBehaviour:
   player: {fileID: 0}
   patrolPoints: {fileID: 0}
   enemyFOV: 120
-  agentSpeed: 1.9
+  agentSpeed: 2.5
   hearingRange: 1.5
   loopAudioSource: {fileID: 59817422583878283}
   effectAudioSource: {fileID: 7392297976133916222}
@@ -129,7 +129,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 15
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0

@@ -9,7 +9,6 @@ public class DoorAudio : MonoBehaviour
     public GameObject door;
 
     private Rigidbody rb;
-    private float maxDoorAngularVegMag;
     private float volumeDecay;
     private bool isSqueaking;
     private float volumeLevel;
@@ -28,7 +27,6 @@ public class DoorAudio : MonoBehaviour
         {
             rb = door.GetComponent<Rigidbody>();
         }
-        maxDoorAngularVegMag = 0.0f;
         volumeDecay = 0.0f;
         isSqueaking = false;
     }
@@ -36,11 +34,6 @@ public class DoorAudio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(maxDoorAngularVegMag < rb.angularVelocity.magnitude)
-        //{
-        //    maxDoorAngularVegMag = rb.angularVelocity.magnitude;
-        //    Debug.Log("Door angular vel mag:" + rb.angularVelocity.magnitude);
-        //}
         if(rb.angularVelocity.magnitude < 0.5)
         {
             audioSource.Pause();
@@ -61,7 +54,7 @@ public class DoorAudio : MonoBehaviour
         if (isSqueaking)
         {
             audioSource.volume = volumeLevel * volumeDecay;
-            volumeDecay -= 2.0f * Time.deltaTime;
+            volumeDecay -= 1.6f * Time.deltaTime;
             if (volumeDecay <= 0.0f)
             {
                 isSqueaking = false;

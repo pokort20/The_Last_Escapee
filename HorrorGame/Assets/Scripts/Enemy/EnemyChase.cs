@@ -40,6 +40,7 @@ public class EnemyChase : MonoBehaviour
 
         EnemyAudio ea = new EnemyAudio(GetHashCode(), agent.velocity, agent.transform.position, loopAudioSource, effectAudioSource);
         AudioManager.instance.addEnemy(ea);
+        Invoke("playRandomSound", Random.Range(5, 15));
     }
 
     void FixedUpdate()
@@ -73,6 +74,7 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("Player spotted, switching to CHASING!");
             enemyState = enemyStates.CHASING;
             agent.speed = agentSpeed * 2.0f;
+            playAudioOnChaseBegin();
             //chase();
             return;
         }
@@ -135,6 +137,7 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("Player spotted while exploring area, switching to CHASING!");
             enemyState = enemyStates.CHASING;
             agent.speed = agentSpeed * 2.0f;
+            playAudioOnChaseBegin();
             chase();
             return;
         }
@@ -297,6 +300,22 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("Player is attacked!");
             Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
             GameManager.instance.health -= hitStrength;
+        }
+    }
+    private void playRandomSound()
+    { 
+        if(Vector3.Distance(player.transform.position, agent.transform.position) < 10.0f && !effectAudioSource.isPlaying)
+        {
+            AudioManager.instance.playAudio("zombie" + Random.Range(1, 5).ToString(), effectAudioSource);
+        }
+        int nextTime = Random.Range(3, 9);
+        Invoke("playRandomSound", nextTime);
+    }
+    private void playAudioOnChaseBegin()
+    {
+        if(!effectAudioSource.isPlaying)
+        {
+            AudioManager.instance.playAudio("zombie" + Random.Range(1, 5).ToString(), effectAudioSource);
         }
     }
 }

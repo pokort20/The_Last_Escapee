@@ -47,8 +47,8 @@ MonoBehaviour:
   playerBreathingAudioSource: {fileID: 0}
   player: {fileID: 0}
   generalVolume: 0.5
-  ambientVolume: 1
-  effectsVolume: 1
+  ambientVolume: 0.5
+  effectsVolume: 0.5
   audios:
   - audioClip: {fileID: 8300000, guid: b55393bc4b938ee40881fd5e0b8866c3, type: 3}
     name: player_walk
@@ -72,7 +72,7 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: 071f2116b587a2b4cb403f06fe6203af, type: 3}
     name: flicker
-    volume: 0.3
+    volume: 0.2
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 6da0cb1932b857444922e4c02bdfc978, type: 3}
@@ -150,14 +150,24 @@ MonoBehaviour:
     volume: 0.5
     pitch: 1
     loop: 0
-  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
-    name: item_use
-    volume: 0.5
+  - audioClip: {fileID: 8300000, guid: de506c2a8c4b803418abcd3f0d2e2543, type: 3}
+    name: zombie1
+    volume: 0.2
     pitch: 1
     loop: 0
-  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
-    name: item_use
-    volume: 0.5
+  - audioClip: {fileID: 8300000, guid: 1aea99b1d8e68bb42a21d9ea58fb2cb7, type: 3}
+    name: zombie2
+    volume: 0.15
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 76856daaaa4a3f54c94e0385a2a58ea5, type: 3}
+    name: zombie3
+    volume: 0.15
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: ff7e31bfb4530c14e960aa82d82a3309, type: 3}
+    name: zombie4
+    volume: 0.15
     pitch: 1
     loop: 0
   ambientEffectAudios:
@@ -193,7 +203,7 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: ee2c8c4d2a900f543bd37d5348bd2ff4, type: 3}
     name: shriek1
-    volume: 0.2
+    volume: 0.25
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 91fd76f95f86e36429bda3fb7d67b0c4, type: 3}
@@ -214,17 +224,17 @@ MonoBehaviour:
   thudEffectAudios:
   - audioClip: {fileID: 8300000, guid: 1d7ba6be7ce9c0940a06ad4aa75dc99d, type: 3}
     name: thud1
-    volume: 0.5
+    volume: 0.15
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: a0223f670cefe2d4b9dfccc7ee7931dd, type: 3}
     name: thud2
-    volume: 0.5
+    volume: 0.15
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 2217dfbcce2f3324381fcbdca3eff182, type: 3}
     name: thud3
-    volume: 0.5
+    volume: 0.15
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 46e01083573612e459e5009f3171444f, type: 3}
@@ -234,7 +244,7 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: aa6ca93206d88534095656f7619ade68, type: 3}
     name: thud5
-    volume: 0.5
+    volume: 0.1
     pitch: 1
     loop: 0
 --- !u!1 &4880549227590565606
