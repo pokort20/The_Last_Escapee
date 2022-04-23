@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7173978776091807321, guid: d4df9c5edcf37e442a15940d78f8ef92, type: 3}
       propertyPath: m_Name
-      value: chair1
+      value: chair1 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7549377692782859491, guid: d4df9c5edcf37e442a15940d78f8ef92, type: 3}
       propertyPath: m_RootOrder
@@ -61,3 +61,20 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: ec4a950606a66064783c8f742aed151e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4df9c5edcf37e442a15940d78f8ef92, type: 3}
+--- !u!1 &2770301571133470113 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7173978776091807321, guid: d4df9c5edcf37e442a15940d78f8ef92, type: 3}
+  m_PrefabInstance: {fileID: 5043188489487203320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1456317973619728297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2770301571133470113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d512b7d7511df8046b8cfd868590b7aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

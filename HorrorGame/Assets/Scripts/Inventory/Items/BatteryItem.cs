@@ -25,6 +25,7 @@ public class BatteryItem : Item
     }
     public override void UseItem()
     {
+        base.UseItem();
         Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
         Debug.Log("Used battery!");
         GameManager.instance.batteryLevel += GameManager.instance._maxBatteryLevel*0.5f;

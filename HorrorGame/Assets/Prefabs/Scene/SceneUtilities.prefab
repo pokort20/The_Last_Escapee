@@ -105,25 +105,60 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     loop: 1
-  - audioClip: {fileID: 0}
-    name: 
-    volume: 0
-    pitch: 0
+  - audioClip: {fileID: 8300000, guid: 5935cbe79733ccb46a8b52dedc6d9511, type: 3}
+    name: gate
+    volume: 0.15
+    pitch: 1.45
     loop: 0
-  - audioClip: {fileID: 0}
-    name: 
-    volume: 0
-    pitch: 0
+  - audioClip: {fileID: 8300000, guid: 0a370f3617a2355419b53812f0f53373, type: 3}
+    name: electricbox_ON
+    volume: 0.3
+    pitch: 1
     loop: 0
-  - audioClip: {fileID: 0}
-    name: 
-    volume: 0
-    pitch: 0
+  - audioClip: {fileID: 8300000, guid: ed9a9a8e0fc54304595d4381e52bcd09, type: 3}
+    name: electricbox_OFF
+    volume: 0.3
+    pitch: 1
     loop: 0
-  - audioClip: {fileID: 0}
-    name: 
-    volume: 0
-    pitch: 0
+  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
+    name: item_use
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: d4e0bc8d04831b24abc0aa9028ac4262, type: 3}
+    name: door_squeak1
+    volume: 0.25
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: b65f390529248724fab68aed78a26afe, type: 3}
+    name: door_squeak2
+    volume: 0.9
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 35dbe2d0a2e70404494dc06408e63e2e, type: 3}
+    name: door_squeak3
+    volume: 0.9
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 748c0fc04268a7248ac627751734a1d5, type: 3}
+    name: lab_door
+    volume: 0.2
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
+    name: item_use
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
+    name: item_use
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
+    name: item_use
+    volume: 0.5
+    pitch: 1
     loop: 0
   ambientEffectAudios:
   - audioClip: {fileID: 8300000, guid: 2c6990207a1f02b4181fd957a7d39bd8, type: 3}
@@ -173,6 +208,32 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: a76f5f6759586154c80feda5677cdadb, type: 3}
     name: sfx3
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  thudEffectAudios:
+  - audioClip: {fileID: 8300000, guid: 1d7ba6be7ce9c0940a06ad4aa75dc99d, type: 3}
+    name: thud1
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: a0223f670cefe2d4b9dfccc7ee7931dd, type: 3}
+    name: thud2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 2217dfbcce2f3324381fcbdca3eff182, type: 3}
+    name: thud3
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: 46e01083573612e459e5009f3171444f, type: 3}
+    name: thud4
+    volume: 0.5
+    pitch: 1
+    loop: 0
+  - audioClip: {fileID: 8300000, guid: aa6ca93206d88534095656f7619ade68, type: 3}
+    name: thud5
     volume: 0.5
     pitch: 1
     loop: 0

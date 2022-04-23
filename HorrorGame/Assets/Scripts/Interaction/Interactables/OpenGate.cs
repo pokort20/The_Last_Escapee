@@ -31,6 +31,15 @@ public class OpenGate : Interactable
             if (isOpenable)
             {
                 Debug.Log("Moving gate!");
+                AudioSource source = Gate.GetComponentInChildren<AudioSource>();
+                if(source != null)
+                {
+                    AudioManager.instance.playAudio("gate", source);
+                }
+                else
+                {
+                    Debug.LogWarning("Gate has no audio source!");
+                }
                 used = true;
             }
             else

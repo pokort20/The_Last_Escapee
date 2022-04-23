@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering.HighDefinition;
 
 public class OpenSlideDoor : Interactable
@@ -12,13 +13,14 @@ public class OpenSlideDoor : Interactable
     public GameObject lightObject2;
     public GameObject emissiveObject1;
     public GameObject emissiveObject2;
+    public AudioSource audioSource;
     public bool isClosed;
     public bool isOpenable;
     //public string infoText;
 
     //other variables
     private float elapsedTime;
-    private float movementDuration = 2.0f;
+    private float movementDuration = 3.0f;
     private float percentageMoved;
     private float percentageDelta;
     private Vector3 leftOpenedPos;
@@ -77,6 +79,7 @@ public class OpenSlideDoor : Interactable
         if(isOpenable && inventory.hasItem(typeof(SecurityCardItem)) > 0)
         {
             canInteract = false;
+            AudioManager.instance.playAudio("lab_door", audioSource);
         }
         else
         {

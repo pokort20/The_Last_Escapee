@@ -24,6 +24,7 @@ public class StaminaShotItem : Item
     }
     public override void UseItem()
     {
+        base.UseItem();
         GameManager.instance.stamina = GameManager.instance._maxStamina;
         Debug.Log("Used Stamina shot!");
     }

@@ -20,6 +20,7 @@ public class AudioManager : MonoBehaviour
     public List<Audio> audios;
 
     public List<Audio> ambientEffectAudios;
+    public List<Audio> thudEffectAudios;
 
     private List<EnemyAudio> enemies;
     private Audio enemyLoopAudio;
@@ -34,11 +35,13 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Multiple instances of AudioManager!");
         }
         instance = this;
+
+        enemies = new List<EnemyAudio>();
     }
     void Start()
     {
         gameManager = GameManager.instance;
-        enemies = new List<EnemyAudio>();
+        
         initPlayerMovementAudio();
         initPlayerBreathingAudio();
         initEnemyLoopAudio();
@@ -132,6 +135,24 @@ public class AudioManager : MonoBehaviour
         }
         Debug.LogWarning("Audio with given name not found!");
     }
+    public void playAudio(string name, Vector3 position)
+    {
+        foreach (Audio audio in audios)
+        {
+            if (audio.name == name)
+            {
+                AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * generalVolume);
+                return;
+            }
+        }
+        Debug.LogWarning("Audio with given name not found!");
+    }
+    public void playThudAudio(Vector3 position)
+    {
+        int index = Random.Range(0, thudEffectAudios.Count);
+        Audio audio = thudEffectAudios[index];
+        AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * generalVolume);
+    }
     public void playAudio(string name, AudioSource source)
     {
         foreach(Audio audio in audios)
@@ -141,7 +162,7 @@ public class AudioManager : MonoBehaviour
                 Debug.Log("Playing audio: " + audio.name);
                 source.clip = audio.audioClip;
                 source.loop = audio.loop;
-                source.volume = audio.volume;
+                source.volume = audio.volume * effectsVolume * generalVolume;
                 source.pitch = audio.pitch;
                 source.Play();
 
@@ -152,7 +173,7 @@ public class AudioManager : MonoBehaviour
     }
     public void addEnemy(EnemyAudio ea)
     {
-        enemies.Add(ea);
+        enemies.Add(ea); //could be buggy, order of initialization - enemy / audio manager!
     }
     public void updateEnemy(int hash, Vector3 enemyPos, Vector3 movementVec)
     {

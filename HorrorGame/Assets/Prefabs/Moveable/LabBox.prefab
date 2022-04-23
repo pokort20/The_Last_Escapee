@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2951754915450759693}
   - component: {fileID: 6841812325581450651}
   - component: {fileID: 7744512952125437014}
+  - component: {fileID: 6458587472488285222}
   m_Layer: 11
   m_Name: LabBox
   m_TagString: Untagged
@@ -112,3 +113,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6458587472488285222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744251629564267480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d512b7d7511df8046b8cfd868590b7aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

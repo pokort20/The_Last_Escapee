@@ -24,6 +24,14 @@ public class ElectricBox : Interactable
     }
     public override void Interact()
     {
+        if(isEnabled)
+        {
+            AudioManager.instance.playAudio("electricbox_OFF");
+        }
+        else
+        {
+            AudioManager.instance.playAudio("electricbox_ON");
+        }
         isEnabled = !isEnabled;
         handleIndicator();
         if (interactingGameObject != null)

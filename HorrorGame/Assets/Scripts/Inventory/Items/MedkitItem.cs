@@ -23,6 +23,7 @@ public class MedkitItem : Item
     }
     public override void UseItem()
     {
+        base.UseItem();
         float health = GameManager.instance.health;
         Debug.Log("HEALTH: " + health);
         Debug.Log("Used medkit!");

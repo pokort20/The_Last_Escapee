@@ -11,6 +11,6 @@ public class Item : MonoBehaviour
 
     public virtual void UseItem()
     {
-
+        AudioManager.instance.playAudio("item_use");
     }
 }
