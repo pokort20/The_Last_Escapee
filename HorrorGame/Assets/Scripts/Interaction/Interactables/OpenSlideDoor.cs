@@ -80,9 +80,11 @@ public class OpenSlideDoor : Interactable
         {
             canInteract = false;
             AudioManager.instance.playAudio("lab_door", audioSource);
+            flashingLights();
         }
         else
         {
+            if(isOpenable) AudioManager.instance.playAudio("denied");
             if(infoText != null)
             {
                 inventory.infoText = infoText;
@@ -96,12 +98,10 @@ public class OpenSlideDoor : Interactable
 
         leftDoor.position = Vector3.Lerp(leftClosedPos, leftOpenedPos, Mathf.SmoothStep(0.0f, 1.0f, percentageMoved));
         rightDoor.position = Vector3.Lerp(rightClosedPos, rightOpenedPos, Mathf.SmoothStep(0.0f, 1.0f, percentageMoved));
-        handleLights();
 
         if(percentageMoved >= 1.0f)
         {
             lightEnabled = true;
-            handleLights();
             isClosed = false;
             canInteract = true;
             elapsedTime = 0.0f;
@@ -115,12 +115,10 @@ public class OpenSlideDoor : Interactable
 
         leftDoor.position = Vector3.Lerp(leftOpenedPos, leftClosedPos, Mathf.SmoothStep(0.0f, 1.0f, percentageMoved));
         rightDoor.position = Vector3.Lerp(rightOpenedPos, rightClosedPos, Mathf.SmoothStep(0.0f, 1.0f, percentageMoved));
-        handleLights();
 
         if (percentageMoved >= 1.0f)
         {
             lightEnabled = true;
-            handleLights();
             isClosed = true;
             canInteract = true;
             elapsedTime = 0.0f;
@@ -147,27 +145,49 @@ public class OpenSlideDoor : Interactable
             rightOpenedPos = rightDoor.position;
         }
     }
+    private void flashingLights()
+    {
+        for(float i = 0.5f; i < 2.5f; i += 0.5f)
+        {
+            Invoke("handleLights", i);
+        }
+    }
     private void handleLights()
     {
-        percentageDelta += Time.deltaTime;
-        if(percentageDelta / movementDuration >= 0.1 * movementDuration)
+        lightEnabled = !lightEnabled;
+        light1.enabled = lightEnabled;
+        light2.enabled = lightEnabled;
+
+        if (lightEnabled)
         {
-            lightEnabled = !lightEnabled;
-            light1.enabled = lightEnabled;
-            light2.enabled = lightEnabled;
-
-            if(lightEnabled)
-            {
-                mat1.SetColor("_EmissiveColor", emissiveColor1);
-                mat2.SetColor("_EmissiveColor", emissiveColor2);
-            }
-            else
-            {
-                mat1.SetColor("_EmissiveColor", Color.black);
-                mat2.SetColor("_EmissiveColor", Color.black);
-            }
-
-            percentageDelta = 0.0f;
+            mat1.SetColor("_EmissiveColor", emissiveColor1);
+            mat2.SetColor("_EmissiveColor", emissiveColor2);
         }
+        else
+        {
+            mat1.SetColor("_EmissiveColor", Color.black);
+            mat2.SetColor("_EmissiveColor", Color.black);
+        }
+
+        //percentageDelta += Time.deltaTime;
+        //if(percentageDelta / movementDuration >= 0.1 * movementDuration)
+        //{
+        //    lightEnabled = !lightEnabled;
+        //    light1.enabled = lightEnabled;
+        //    light2.enabled = lightEnabled;
+
+        //    if(lightEnabled)
+        //    {
+        //        mat1.SetColor("_EmissiveColor", emissiveColor1);
+        //        mat2.SetColor("_EmissiveColor", emissiveColor2);
+        //    }
+        //    else
+        //    {
+        //        mat1.SetColor("_EmissiveColor", Color.black);
+        //        mat2.SetColor("_EmissiveColor", Color.black);
+        //    }
+
+        //    percentageDelta = 0.0f;
+        //}
     }
 }

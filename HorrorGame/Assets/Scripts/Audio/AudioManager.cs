@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
 {
+    public bool MainMenuScene;
     public static AudioManager instance;
     private GameManager gameManager;
 
     public AudioSource playerMovementAudioSource;
     public AudioSource playerBreathingAudioSource;
+    public AudioSource ambientMenuAudioSource;
     public Transform player;
     [Range(0.0f, 1.0f)]
     public float generalVolume;
@@ -24,6 +28,8 @@ public class AudioManager : MonoBehaviour
 
     private List<EnemyAudio> enemies;
     private Audio enemyLoopAudio;
+    private Audio menuAudio;
+    private List<Tuple<AudioSource, bool>> sceneAudioSources;
     //properties
     public Vector3 movementVec { get; set; }
     public bool isGrounded { get; set; }
@@ -37,21 +43,46 @@ public class AudioManager : MonoBehaviour
         instance = this;
 
         enemies = new List<EnemyAudio>();
+        sceneAudioSources = new List<Tuple<AudioSource, bool>>();
     }
     void Start()
     {
         gameManager = GameManager.instance;
-        
-        initPlayerMovementAudio();
-        initPlayerBreathingAudio();
-        initEnemyLoopAudio();
-        Invoke("playAmbientEffect", Random.Range(5, 6));
+        gameManager.onGamePausedCallback += onGamePausedAudio;
+
+        initMenuAudio();
+        if(!MainMenuScene)
+        {
+            initPlayerMovementAudio();
+            initPlayerBreathingAudio();
+            initEnemyLoopAudio();
+            Invoke("playAmbientEffect", Random.Range(5, 6));
+        }
     }
     void Update()
     {
-        handlePlayerMovementAudio();
-        handlePlayerBreathAudio();
-        handleEnemyAudios();
+        if(!MainMenuScene)
+        {
+            handlePlayerMovementAudio();
+            handlePlayerBreathAudio();
+            handleEnemyAudios();
+        }
+    }
+    private void initMenuAudio()
+    {
+        foreach(Audio audio in audios)
+        {
+            if(audio.name == "menu_ambient")
+            {
+                menuAudio = audio;
+                ambientMenuAudioSource.clip = audio.audioClip;
+                ambientMenuAudioSource.pitch = audio.pitch;
+                ambientMenuAudioSource.loop = audio.loop;
+                ambientMenuAudioSource.volume = 0.0f;
+                ambientMenuAudioSource.Play();
+            }
+        }
+       
     }
     private void initPlayerMovementAudio()
     {
@@ -104,7 +135,7 @@ public class AudioManager : MonoBehaviour
         }
         playerMovementAudioSource.volume = remap(0.0f, 6.0f, 0.0f, 0.2f, movementVec.magnitude) * effectsVolume * generalVolume;
         playerMovementAudioSource.pitch = remap(0.0f, 6.0f, 0.7f, 2.0f, movementVec.magnitude);
-        if(!playerMovementAudioSource.isPlaying)
+        if(!playerMovementAudioSource.isPlaying && !gameManager.isPaused)
         {
             playerMovementAudioSource.Play();
         }
@@ -118,7 +149,7 @@ public class AudioManager : MonoBehaviour
         //}
         playerBreathingAudioSource.volume = (remap(0.0f, 6.0f, 0.01f, 0.015f, movementVec.magnitude) + remap(0.0f, gameManager._maxStamina, 0.00f, 0.1f, gameManager._maxStamina - gameManager.stamina)) * effectsVolume * generalVolume;
         playerBreathingAudioSource.pitch = remap(0.0f, gameManager._maxStamina, 0.7f, 1.3f, gameManager._maxStamina - gameManager.stamina);
-        if(!playerBreathingAudioSource.isPlaying)
+        if(!playerBreathingAudioSource.isPlaying && !gameManager.isPaused)
         {
             playerBreathingAudioSource.Play();
         }
@@ -137,6 +168,11 @@ public class AudioManager : MonoBehaviour
     }
     public void playAudio(string name, AudioSource source)
     {
+        if(!source.isActiveAndEnabled)
+        {
+            Debug.Log("Can not play sound, because this audio source is not enabled/active");
+            return;
+        }
         foreach (Audio audio in audios)
         {
             if (audio.name == name)
@@ -206,7 +242,7 @@ public class AudioManager : MonoBehaviour
             ea.loopAudioSource.volume = enemyLoopAudio.volume; //to be changed
             ea.loopAudioSource.pitch = remap(0.0f, 6.0f, 0.7f, 1.5f, ea.movementVec.magnitude); //enemyLoopAudio.pitch; //to be changed
 
-            if (!ea.loopAudioSource.isPlaying)
+            if (!ea.loopAudioSource.isPlaying && !gameManager.isPaused)
             {
                 ea.loopAudioSource.Play();
             }
@@ -235,6 +271,40 @@ public class AudioManager : MonoBehaviour
         float nextTime = Random.Range(10, 30);
 
         Invoke("playAmbientEffect", nextTime);
+    }
+    private void onGamePausedAudio()
+    {
+        Debug.Log("Audio sources in scene: " + FindObjectsOfType<AudioSource>().Length);
+        if(gameManager.isPaused)
+        {
+            
+            sceneAudioSources.Clear();
+            foreach(AudioSource source in FindObjectsOfType<AudioSource>())
+            {
+                sceneAudioSources.Add(new Tuple<AudioSource, bool>(source, source.isPlaying));
+                source.Pause();
+            }
+            ambientMenuAudioSource.UnPause();
+            ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * generalVolume;
+            Debug.Log("Audio sources paused!");
+            if(!ambientMenuAudioSource.isPlaying)
+            {
+                Debug.LogError("Ambient audio source is not playing!!!");
+            }
+        }
+        else
+        {
+            foreach(Tuple<AudioSource, bool> tuple in sceneAudioSources)
+            {
+                if(tuple.Item2)
+                {
+                    tuple.Item1.UnPause();
+                }
+            }
+            ambientMenuAudioSource.volume = 0.0f;
+            Debug.Log("Audio sources unPaused!");
+        }
+        Debug.Log("AUDIO: game pause state changed!");
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {

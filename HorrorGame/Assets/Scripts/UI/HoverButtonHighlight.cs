@@ -14,6 +14,16 @@ public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointe
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(GameManager.instance.isPaused)
+        {
+            Time.timeScale = 1.0f;
+            AudioManager.instance.playAudio("item_use");
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            AudioManager.instance.playAudio("item_use");
+        }
         buttonTransform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
         //throw new System.NotImplementedException();
     }

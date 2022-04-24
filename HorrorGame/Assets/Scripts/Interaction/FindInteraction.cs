@@ -59,6 +59,8 @@ public class FindInteraction : MonoBehaviour
                     if (inventory.addToInventory(itemObject.GetComponent<Item>()))
                     {
                         Debug.Log("Picked up " + itemObject.name + " and added it to inventory!");
+                        itemObject.transform.parent = null;
+                        DontDestroyOnLoad(itemObject);
                         itemObject.SetActive(false);
                     }
                 }

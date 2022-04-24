@@ -17,13 +17,13 @@ public class Inventory : MonoBehaviour
         instance = this;
     }
     //Variables
-    public List<Item> items;
     public int inventorySize;
     private string interactTxt;
     private string infoTxt;
     private string itemInfoTxt;
     private bool mouseInteractd;
     //properties
+    public List<Item> items;
     public bool inventoryOpened { get; set; }
     public string interactText
     {
@@ -104,7 +104,12 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        items = new List<Item>();
+        Debug.Log("STARTED INVENTORY");
+        
+        if (items == null)
+        {
+            items = new List<Item>();
+        }
         mouseInteractd = false;
     }
 

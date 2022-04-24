@@ -14,7 +14,6 @@ public class Flashlight : MonoBehaviour
     float flashlightSwitchCooldown;
     private void Start()
     {
-        GameManager.instance.flashlightEnabled = false;
         flashlight.enabled = GameManager.instance.flashlightEnabled;
         inventory = Inventory.instance;
         intensityRangeMin = 12.0f;
@@ -43,7 +42,7 @@ public class Flashlight : MonoBehaviour
                 switchFlaslight();
                 return;
             }
-            GameManager.instance.batteryLevel -= 1.0f * Time.deltaTime;
+            GameManager.instance.batteryLevel -= 0.5f * Time.deltaTime;
             updateLightIntensity();
         }
         //Debug.Log("Battery level: " + GameManager.instance.batteryLevel);

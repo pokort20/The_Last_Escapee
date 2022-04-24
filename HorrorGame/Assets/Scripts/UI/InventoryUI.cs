@@ -59,9 +59,7 @@ public class InventoryUI : MonoBehaviour
         cursorCrosshairColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         alphaDelta = 0.0005f;
         alphaBaseOld = -1.0f;
-        int textureSize = 48;
-        //cursorTexture.Resize(textureSize, textureSize);
-        Cursor.SetCursor(cursorTexture, new Vector2(textureSize/2, textureSize/2), CursorMode.ForceSoftware);
+        setCursorIcon();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         centerCursor();
@@ -111,6 +109,11 @@ public class InventoryUI : MonoBehaviour
                 closeInventory();
             }
         }
+    }
+    private void setCursorIcon()
+    {
+        int textureSize = 48;
+        Cursor.SetCursor(cursorTexture, new Vector2(textureSize / 2, textureSize / 2), CursorMode.ForceSoftware);
     }
     public void updateInventoryUI()
     {
@@ -277,6 +280,8 @@ public class InventoryUI : MonoBehaviour
     //Pause Game Menu functions
     public void pauseGame()
     {
+        setCursorIcon();
+        gameManager.isPaused = true;
         closeInventory();
         isPaused = true;
         centerCursor();
@@ -294,6 +299,7 @@ public class InventoryUI : MonoBehaviour
         pauseMenuUI.SetActive(false);
         uiElements.SetActive(true);
         Time.timeScale = 1.0f;
+        gameManager.isPaused = false;
     }
     public void OnResumeButtonUse()
     {

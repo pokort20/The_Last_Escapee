@@ -96,7 +96,13 @@ public class PickupObject : MonoBehaviour
         bool colided = false;
         if(!isHoldingObject)
         {
-            colided = Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance, layerMask);
+            if(Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+            {
+                if(raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer  == LayerMask.NameToLayer("Hinge"))
+                {
+                    colided = true;
+                }
+            }
             if(colided)
             {
                 if (!inventory.inventoryOpened)
@@ -147,7 +153,7 @@ public class PickupObject : MonoBehaviour
 
     private void pickupObject()
     {
-        Debug.LogWarning("Picked up object");
+        //Debug.LogWarning("Picked up object");
         Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
         //Debug.Log("Distance: " + Vector3.Distance(FirstPersonCamera.transform.position, raycastHit.collider.gameObject.transform.position));
 
@@ -208,7 +214,7 @@ public class PickupObject : MonoBehaviour
     }
     private void moveObject()
     {
-        Debug.LogWarning("Moving object");
+        //Debug.LogWarning("Moving object");
         Vector3 anchor;
         if (holdingObject.layer == LayerMask.NameToLayer("Moveable"))
         {
@@ -248,7 +254,7 @@ public class PickupObject : MonoBehaviour
 
 
         }
-        Debug.LogWarning("Released object");
+        //Debug.LogWarning("Released object");
     }
     private Vector3 clampVecMagnitude(Vector3 value, float clampValue)
     {

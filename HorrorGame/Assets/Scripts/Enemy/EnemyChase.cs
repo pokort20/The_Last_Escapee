@@ -83,14 +83,14 @@ public class EnemyChase : MonoBehaviour
         if(reachedDestination())
         {
             agent.ResetPath();
-            Debug.Log("Enemy reached destination!");
+            //Debug.Log("Enemy reached destination!");
         }
         if (!agent.hasPath /*&& !isPlayerVisible(agent.transform.position, player.position)*/)
         {
             //find new patrol point
 
             Transform selectedPatrolPoint = patrolPoints.transform.GetChild(Random.Range(0, patrolPoints.transform.childCount));
-            Debug.Log("Selected patrol point: " + selectedPatrolPoint.name);
+            //Debug.Log("Selected patrol point: " + selectedPatrolPoint.name);
             agent.SetDestination(selectedPatrolPoint.position);
             //foreach(Transform point in patrolPoints.transform)
             //{
@@ -294,7 +294,7 @@ public class EnemyChase : MonoBehaviour
         if (attackDistance < 1.7f)
         {
             //postProcessing.depthOfFieldEnabled = true;
-            AudioManager.instance.playAudio("player_grunt" + Random.Range(1,3).ToString());
+            AudioManager.instance.playAudio("player_grunt1");
             attackCooldown = 1.0f;
             float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
             Debug.Log("Player is attacked!");
