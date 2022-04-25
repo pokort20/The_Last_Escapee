@@ -12,6 +12,7 @@ public class InventoryUI : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject inventoryUI;
     public GameObject controlsUI;
+    public GameObject deathScreen;
 
     public Transform itemSlotsParent;
     public Image flashlightImage;
@@ -45,16 +46,18 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         isPaused = false;
+        gameManager = GameManager.instance;
         inventory = Inventory.instance;
+
         inventory.onInventoryChangedCallback += updateInventoryUI;
         inventory.onInteractTextChangedCallback += updateInteractText;
         inventory.onInfoTextChangedCallback += displayInfoText;
         inventory.onItemInfoTextChangedCallback += updateItemInfoText;
         inventory.onMouseInteractionCallback += displayCursorCrosshair;
+        gameManager.onPlayerDeathCallback += displayDeathScreen;
         itemSlots = itemSlotsParent.GetComponentsInChildren<InventorySlot>();
         flashlightImage.enabled = false;
         batteryLevelImage.enabled = false;
-        gameManager = GameManager.instance;
         lowHealthIndicatorColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         cursorCrosshairColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         alphaDelta = 0.0005f;
@@ -67,10 +70,15 @@ public class InventoryUI : MonoBehaviour
         controlsUI.SetActive(false);
         inventoryUI.SetActive(false);
         pauseMenuUI.SetActive(false);
+        deathScreen.SetActive(false);
         uiElements.SetActive(true);
     }
     private void Update()
     {
+        if(gameManager.isPlayerDead)
+        {
+            return;
+        }
         updateInfoText();
         updateLowHealthIndicator();
         updateCursorCrosshair();
@@ -266,6 +274,18 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+    public void displayDeathScreen()
+    {
+        controlsUI.SetActive(false);
+        inventoryUI.SetActive(false);
+        pauseMenuUI.SetActive(false);
+        uiElements.SetActive(false);
+        deathScreen.SetActive(true);
+
+        centerCursor();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {
         float val;
@@ -281,7 +301,6 @@ public class InventoryUI : MonoBehaviour
     public void pauseGame()
     {
         setCursorIcon();
-        gameManager.isPaused = true;
         closeInventory();
         isPaused = true;
         centerCursor();
@@ -289,7 +308,7 @@ public class InventoryUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         uiElements.SetActive(false);
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0.0f;
+        gameManager.pauseGame();
     }
     public void resumeGame()
     {
@@ -298,29 +317,54 @@ public class InventoryUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         pauseMenuUI.SetActive(false);
         uiElements.SetActive(true);
-        Time.timeScale = 1.0f;
-        gameManager.isPaused = false;
+
+        gameManager.unPauseGame();
     }
     public void OnResumeButtonUse()
     {
         Debug.Log("Resuming game!");
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
         resumeGame();
     }
     public void OnControlsButtonUse()
     {
         Debug.Log("Opened controls!");
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
         pauseMenuUI.SetActive(false);
         controlsUI.SetActive(true);
     }
     public void OnQuitButtonUse()
     {
         Debug.Log("Returning to main menu!");
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
+        SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
+        if(std != null)
+        {
+            Destroy(std.gameObject);
+        }
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
     public void OnBackButtonUse()
     {
         Debug.Log("Returning back to pause menu!");
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
         controlsUI.SetActive(false);
         pauseMenuUI.SetActive(true);
+    }
+    public void OnRetryButtonUse()
+    {
+        Debug.Log("Retrying");
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

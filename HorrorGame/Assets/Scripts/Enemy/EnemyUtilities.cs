@@ -8,6 +8,7 @@ public class EnemyUtilities : MonoBehaviour
     public Transform player;
     public float playerVisibility { get; set; }
     public List<Vector3> flashlightHitPoints { get; set; }
+    public List<int> enemiesStruckByFlashlight { get; set; }
 
     private float bodyArea = 2.0f;
     private HDAdditionalLightData flashlight;
@@ -30,10 +31,12 @@ public class EnemyUtilities : MonoBehaviour
             playerVisibility = getPlayerVisibility(player.position);
             if(GameManager.instance.flashlightEnabled)
             {
+                enemiesStruckByFlashlight = new List<int>();
                 flashlightHitPoints = getFlashlightHitPoints(flashlight);
             }
             else
             {
+                enemiesStruckByFlashlight = null;
                 flashlightHitPoints = null;
             }
         }
@@ -141,6 +144,13 @@ public class EnemyUtilities : MonoBehaviour
             if(Physics.Raycast(origin: flashlight.transform.position, direction: pointsOnCircle[i] - flashlight.transform.position, hitInfo: out raycastHit, maxDistance: flashlight.range))
             {
                 flashlightHitPoints.Add(raycastHit.point);
+
+                if(raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    enemiesStruckByFlashlight.Add(raycastHit.collider.gameObject.transform.parent.gameObject.GetHashCode());
+                    //Debug.Log("Shines directly on" + raycastHit.collider.gameObject.transform.parent.gameObject.name + 
+                    //    ", with hash: " + raycastHit.collider.gameObject.transform.parent.gameObject.GetHashCode());
+                }
             }
         }
 

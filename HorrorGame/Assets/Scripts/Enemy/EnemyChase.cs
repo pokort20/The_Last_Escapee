@@ -69,7 +69,7 @@ public class EnemyChase : MonoBehaviour
     private void patrol()
     {
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
-            || isFlashlightHitPointVisible(agent.transform.position, player.position))
+           || isStruckByFlashlight() || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -101,7 +101,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void chase()
     {
-        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position))
+        if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position) || isStruckByFlashlight())
         {
             //Still can see or hear player
             isPrevDestFromFlashlight = false;
@@ -132,7 +132,7 @@ public class EnemyChase : MonoBehaviour
     private void explore()
     {
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
-            || isFlashlightHitPointVisible(agent.transform.position, player.position))
+           || isStruckByFlashlight() || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
             Debug.Log("Player spotted while exploring area, switching to CHASING!");
             enemyState = enemyStates.CHASING;
@@ -276,6 +276,29 @@ public class EnemyChase : MonoBehaviour
         }
 
         return isFlashlightHPVisible;
+    }
+    private bool isStruckByFlashlight()
+    {
+        List<int> enemiesStruckByFlashlight = FindObjectOfType<EnemyUtilities>().enemiesStruckByFlashlight;
+        if (enemiesStruckByFlashlight == null || enemiesStruckByFlashlight.Count == 0)
+        {
+            return false;
+        }
+
+        foreach(int i in enemiesStruckByFlashlight)
+        {
+            if(i == gameObject.GetHashCode())
+            {
+                //Debug.Log("Flashlight shines on me");
+                return true;
+            }
+            //else
+            //{
+            //    Debug.Log("My name: " + name);
+            //    Debug.Log("My hash code: " + gameObject.GetHashCode() + ", struck enemy hash code: " + i);
+            //}
+        }
+        return false;
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {

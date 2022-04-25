@@ -25,10 +25,17 @@ public class LevelTransition : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Debug.LogWarning("Player switching level!");
+            //destroy scene transition from previous level
+            SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
+            if (std != null)
+            {
+                Destroy(std.gameObject);
+            }
+            //create new scene transition for the following level
             GameObject ga = new GameObject();
             ga.name = "SceneTransition";
             ga.AddComponent<SceneTransitionData>();
-            SceneTransitionData std = ga.GetComponent<SceneTransitionData>();
+            std = ga.GetComponent<SceneTransitionData>();
             std.health = gameManager.health;
             std.stamina = gameManager.stamina;
             std.batteryLevel = gameManager.batteryLevel;

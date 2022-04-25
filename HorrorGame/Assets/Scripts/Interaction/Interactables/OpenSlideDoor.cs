@@ -22,7 +22,6 @@ public class OpenSlideDoor : Interactable
     private float elapsedTime;
     private float movementDuration = 3.0f;
     private float percentageMoved;
-    private float percentageDelta;
     private Vector3 leftOpenedPos;
     private Vector3 leftClosedPos;
     private Vector3 rightOpenedPos;
@@ -105,7 +104,6 @@ public class OpenSlideDoor : Interactable
             isClosed = false;
             canInteract = true;
             elapsedTime = 0.0f;
-            percentageDelta = 0.0f;
         }
     }
     private void closeDoor()
@@ -122,14 +120,12 @@ public class OpenSlideDoor : Interactable
             isClosed = true;
             canInteract = true;
             elapsedTime = 0.0f;
-            percentageDelta = 0.0f;
         }
     }
     private void setMovementVariables()
     {
         elapsedTime = 0.0f;
         percentageMoved = 0.0f;
-        percentageDelta = 0.0f;
         if(isClosed)
         {
             leftClosedPos = leftDoor.position;

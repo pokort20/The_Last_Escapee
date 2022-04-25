@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,12 @@ public class GameManager : MonoBehaviour
     public float _maxBatteryLevel;
     public float _maxStamina;
     public bool _flashlightEnabled;
+
+    private float _health;
     private bool _isPaused;
+    private bool _isPlayerDead;
+
+    //Init
     void Awake()
     {
         Debug.Log("Started GameManager");
@@ -29,14 +35,32 @@ public class GameManager : MonoBehaviour
         stamina = _maxStamina;
         flashlightEnabled = _flashlightEnabled;
         isPaused = false;
+        isPlayerDead = false;
     }
     void Start()
     {
         printGameVariables();
         loadSceneData();
+        setTimeScale(1.0f);
     }
+
     //Properties
-    public float health { get; set; }
+    public float health
+    {
+        get
+        {
+            return _health;
+        }
+        set
+        {
+            _health = value;
+            if(_health <= 0.0f)
+            {
+                isPlayerDead = true;
+                setTimeScale(0.0f);
+            }
+        }
+    }
     public float movementSpeed { get; set; }
     public float batteryLevel { get; set; }
     public float stamina { get; set; }
@@ -49,6 +73,7 @@ public class GameManager : MonoBehaviour
         }
         set
         {
+            if(value)Debug.LogWarning("GAME PAUSED");
             _isPaused = value;
             if(onGamePausedCallback != null)
             {
@@ -56,16 +81,35 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    public bool isPlayerDead
+    {
+        get
+        {
+            return _isPlayerDead;
+        }
+        set
+        {
+            _isPlayerDead = value;
+            if(onPlayerDeathCallback != null)
+            {
+                if(_isPlayerDead)onPlayerDeathCallback.Invoke();
+            }
+        }
+    }
+    
     //Callbacks
     public delegate void OnGamePaused();
     public OnGamePaused onGamePausedCallback;
+    public delegate void OnPlayerDeath();
+    public OnPlayerDeath onPlayerDeathCallback;
 
-    void Update()
-    {
-
-    }
+    //Functions
     private void loadSceneData()
     {
+        //if(SceneManager.GetActiveScene().name == "MainMenuScene")
+        //{
+        //    return;
+        //}
         SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
         if(std != null)
         {
@@ -84,7 +128,7 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("Transitioned item: " + item.itemName);
             }
-            Destroy(std.gameObject);
+            //Destroy(std.gameObject);
         }
         else
         {
@@ -98,6 +142,20 @@ public class GameManager : MonoBehaviour
         Debug.Log("            Movement speed: " + movementSpeed);
         Debug.Log("            batteryLevel: " + batteryLevel);
         Debug.Log("            stamina: " + stamina);
+    }
+    public void pauseGame()
+    {
+        instance.isPaused = true;
+        Time.timeScale = 0.0f;
+    }
+    public void unPauseGame()
+    {
+        instance.isPaused = false;
+        Time.timeScale = 1.0f;
+    }
+    public void setTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
     }
 
 }

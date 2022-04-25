@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -14,7 +11,7 @@ public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointe
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(GameManager.instance.isPaused)
+        if(GameManager.instance.isPaused || GameManager.instance.isPlayerDead)
         {
             Time.timeScale = 1.0f;
             AudioManager.instance.playAudio("item_use");
@@ -25,7 +22,6 @@ public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointe
             AudioManager.instance.playAudio("item_use");
         }
         buttonTransform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-        //throw new System.NotImplementedException();
     }
 
     public void OnPointerExit(PointerEventData eventData)
