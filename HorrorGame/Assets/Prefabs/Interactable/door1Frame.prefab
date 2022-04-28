@@ -334,6 +334,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
+      propertyPath: m_Spring.damper
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900396168559020448, guid: a7db7dc3ec118084990a1a9145661d89, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: 0.0009999999
       objectReference: {fileID: 0}

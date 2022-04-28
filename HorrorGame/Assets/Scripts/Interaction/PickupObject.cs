@@ -3,7 +3,6 @@ using UnityEngine;
 public class PickupObject : MonoBehaviour
 {
     //values set in inspector
-    public Transform holdingPosition;
     public Camera FirstPersonCamera;
     public float forceAmount = 9.81f;
     public float maxGrabDistance;
@@ -18,10 +17,11 @@ public class PickupObject : MonoBehaviour
     private bool mouseDown;
     private bool mouseHold;
     private Rigidbody holdingObjectRB;
-    private float currentDistance;
+    private Vector3 holdingPosition;
 
     private Inventory inventory;
-    float initGrabDistance;
+    private float initGrabDistance;
+    private float currentGrabDistance;
     RaycastHit raycastHit;
     private bool isHoldingObject;
     GameObject holdingObject;
@@ -102,7 +102,7 @@ public class PickupObject : MonoBehaviour
 
         if (isHoldingObject)
         {
-            if(raycastHit.collider == null || raycastHit.collider.gameObject != holdingObject)
+            if(holdingObject.layer == LayerMask.NameToLayer("Moveable") && (raycastHit.collider == null || raycastHit.collider.gameObject != holdingObject))
             {
                 Debug.Log("Colliding with different object, dropping");
                 dropObject();
@@ -124,6 +124,14 @@ public class PickupObject : MonoBehaviour
                 pickupObject();
             }
         }
+    }
+    void FixedUpdate()
+    {
+        //if (springJoint != null)
+        //{
+        //    currentGrabDistance = remap(0.0f, 1.0f, initGrabDistance, maxGrabDistance, Vector2.Distance(
+        //            springJoint.transform.TransformPoint(springJoint.anchor), springJoint.connectedAnchor));
+        //}
     }
 
     private void pickupObject()
@@ -147,42 +155,22 @@ public class PickupObject : MonoBehaviour
             else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
             {
                 isHoldingObject = true;
-                setRigidbodyValues(holdingObject);
-                initGrabDistance = Vector3.Distance(FirstPersonCamera.transform.position, holdingObject.transform.position);
+                initGrabDistance = Vector2.Distance(new Vector2(FirstPersonCamera.transform.position.x,
+                    FirstPersonCamera.transform.position.z), new Vector2(raycastHit.point.x, raycastHit.point.z));
+                holdingObject.AddComponent<SpringJoint>();
+                springJoint = holdingObject.GetComponent<SpringJoint>();
                 hingeJnt = holdingObject.GetComponent<HingeJoint>();
-                springJoint = holdingObject.AddComponent<SpringJoint>();
+                hingeJnt.useSpring = true;
+                springJoint.spring = 80.0f;
+                springJoint.damper = 1.0f;
+                springJoint.tolerance = 0.0f;
                 springJoint.autoConfigureConnectedAnchor = false;
-                springJoint.spring = 40.0f;
-                springJoint.damper = 5.0f;
+                springJoint.anchor = springJoint.transform.InverseTransformPoint(new Vector3(raycastHit.point.x, FirstPersonCamera.transform.position.y, raycastHit.point.z));
+                //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-                Vector3 posOnCircle = Vector3.Normalize(new Vector3(
-                    holdingObject.transform.position.x - hingeJnt.connectedAnchor.x,
-                    hingeJnt.connectedAnchor.y,
-                    holdingObject.transform.position.z - hingeJnt.connectedAnchor.z
-                    ));
-                initHingeAngle = Vector3.Angle(new Vector3(1.0f, hingeJnt.connectedAnchor.y, 0.0f), posOnCircle);
-                initHingeAngle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), new Vector2(posOnCircle.x, posOnCircle.z));
-                initPlayerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
-
-                springJoint.connectedAnchor = posOnCircle;
-                springJoint.anchor = new Vector3(0.0f, 0.0f, 0.0f);
-
-                //working for refrigerator doors
-                //circleRadius = 0.8f * Vector2.Distance(
-                //    new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z),
-                //    new Vector2(raycastHit.point.x, raycastHit.point.z));
-                //isHoldingObject = true;
-                //setRigidbodyValues(holdingObject);
-                //hingeJnt = holdingObject.GetComponent<HingeJoint>();
-
-
-                springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
-                springJoint = holdingObject.AddComponent<SpringJoint>();
-                springJoint.spring = 40.0f;
-                springJoint.damper = 5.0f;
-                springJoint.autoConfigureConnectedAnchor = false;
-                springJoint.connectedAnchor = springAnchor;
-
+                holdingPosition = new Vector3(raycastHit.point.x, FirstPersonCamera.transform.position.y, raycastHit.point.z);
+                springJoint.connectedAnchor = holdingPosition;
+                
             }
 
         }
@@ -190,32 +178,34 @@ public class PickupObject : MonoBehaviour
     private void moveObject()
     {
         //Debug.LogWarning("Moving object");
-        Vector3 anchor;
         if (holdingObject.layer == LayerMask.NameToLayer("Moveable"))
         {
             
             holder.transform.position = FirstPersonCamera.transform.position + FirstPersonCamera.transform.forward * initGrabDistance;
-            currentDistance = Vector3.Distance(holdingObject.transform.position, holder.transform.position);
-            if(currentDistance > 0.9f)
+            currentGrabDistance = Vector3.Distance(holdingObject.transform.position, holder.transform.position);
+            if(currentGrabDistance > 0.9f)
             {
                 dropObject();
                 return;
             }
-            if(currentDistance > 0.2f)
+            if(currentGrabDistance > 0.2f)
             {
-                holdingObjectRB.drag = remap(0.0f, 0.9f, 1.0f, 5.0f, currentDistance);
-                holdingObjectRB.AddForce(currentDistance * 100.0f * (holder.transform.position - holdingObject.transform.position));
+                holdingObjectRB.drag = remap(0.0f, 0.9f, 1.0f, 5.0f, currentGrabDistance);
+                holdingObjectRB.AddForce(currentGrabDistance * 100.0f * (holder.transform.position - holdingObject.transform.position));
             }
         }
         else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
         {
-            Debug.Log("circle radius: " + circleRadius);
-            Vector2 playerForward = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
-            float playerAngle = Vector2.SignedAngle(playerForward, initPlayerForward);
-            anchor = hingeJnt.connectedAnchor + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (initHingeAngle + playerAngle)), hingeJnt.anchor.y, Mathf.Sin(Mathf.Deg2Rad * (initHingeAngle + playerAngle)));
-            springJoint.connectedAnchor = anchor;
-            Debug.Log("initHingeAngle: " + initHingeAngle + ", playerAngle: " + playerAngle);
-
+            if(holdingObject.GetComponent<Rigidbody>().velocity.magnitude == 0.0f)
+            {
+                holdingObject.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.0001f, 0.0001f), 0, Random.Range(-0.0001f, 0.0001f));
+            }
+            Vector2 xzPos = new Vector2(FirstPersonCamera.transform.forward.x, FirstPersonCamera.transform.forward.z);
+            xzPos.Normalize();
+            xzPos *= initGrabDistance;
+            xzPos += new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z);
+            holdingPosition = new Vector3(xzPos.x, FirstPersonCamera.transform.position.y, xzPos.y);
+            springJoint.connectedAnchor = holdingPosition;
             //springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
             //springJoint.connectedAnchor = springAnchor;
 
@@ -230,6 +220,7 @@ public class PickupObject : MonoBehaviour
             isHoldingObject = false;
             holdingObjectRB.drag = rbDrag;
             Vector3 force = (FirstPersonCamera.transform.position + FirstPersonCamera.transform.forward * initGrabDistance) - holder.transform.position;
+            force *= Time.deltaTime;
             holdingObjectRB.AddForce(force * 2000.0f);
             holdingObjectRB.useGravity = true;
             holdingObject.transform.parent = oldParent;
@@ -240,12 +231,10 @@ public class PickupObject : MonoBehaviour
         }
         else if (holdingObject.layer == LayerMask.NameToLayer("Hinge"))
         {
-            Destroy(holdingObject.GetComponent<SpringJoint>());
-            setOriginalRigidbodyValues(holdingObject);
+            hingeJnt.useSpring = false;
+            Destroy(springJoint);
+            springJoint = null;
             isHoldingObject = false;
-            holdingObject = null;
-
-
         }
         //Debug.LogWarning("Released object");
     }

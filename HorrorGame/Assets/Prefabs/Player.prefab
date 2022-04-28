@@ -734,6 +734,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  moveableMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!114 &5949736693423157336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,10 +763,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1a1b62b9fb2384da1ec12175e7c1b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdingPosition: {fileID: 5028159568648651124}
   FirstPersonCamera: {fileID: 3476730348035874806}
   forceAmount: 1500
-  maxGrabDistance: 2
+  maxGrabDistance: 1.5
   grabSpeedMultiplier: 49
   toCenterParam: 0.1
 --- !u!114 &7485517181845992503

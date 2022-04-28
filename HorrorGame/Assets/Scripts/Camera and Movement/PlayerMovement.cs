@@ -18,9 +18,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCollisionCheck;
     public float groundCollisionCheckSphereRadius = 0.2f;
     public LayerMask groundMask;
+    public LayerMask moveableMask;
 
     private bool isSprinting;
     private bool isCrouching;
+    private bool isOnMoveable;
     private bool wasCrouching;
     private Vector3 moveVec;
     private PostProcessing postProcessing;
@@ -48,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
         standardHeight = 1.7f;
         isCrouching = false;
         isSprinting = false;
+        isOnMoveable = false;
         isCrouching = !!isCrouching; //remove this once isCrouching is used, just to get rid of the warning
         postProcessing = PostProcessing.instance;
     }
@@ -56,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCollisionCheck.position, groundCollisionCheckSphereRadius, groundMask);
+        isOnMoveable = Physics.CheckSphere(groundCollisionCheck.position, 0.2f, moveableMask);
 
         if (isGrounded && velocity.y < 0.0f) velocity.y = -1.5f;
 
@@ -131,8 +135,10 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
         }
-
-        velocity.y += gravity * Time.deltaTime;
+        if(!isOnMoveable)
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
 
         playerController.Move(velocity * Time.deltaTime);
         updateStamina();
