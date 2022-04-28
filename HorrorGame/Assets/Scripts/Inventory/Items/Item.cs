@@ -11,6 +11,10 @@ public class Item : MonoBehaviour
 
     public virtual void UseItem()
     {
-        AudioManager.instance.playAudio("item_use");
+        float timeScale = Time.timeScale;
+        GameManager.instance.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        GameManager.instance.setTimeScale(timeScale);
+        
     }
 }

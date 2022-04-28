@@ -71,15 +71,15 @@ public class PickupObject : MonoBehaviour
         }
 
         bool colided = false;
+        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+        {
+            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Hinge"))
+            {
+                colided = true;
+            }
+        }
         if (!isHoldingObject)
         {
-            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
-            {
-                if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Hinge"))
-                {
-                    colided = true;
-                }
-            }
             if (colided)
             {
                 if (!inventory.inventoryOpened)
@@ -102,6 +102,12 @@ public class PickupObject : MonoBehaviour
 
         if (isHoldingObject)
         {
+            if(raycastHit.collider == null || raycastHit.collider.gameObject != holdingObject)
+            {
+                Debug.Log("Colliding with different object, dropping");
+                dropObject();
+                return;
+            }
             if (mouseHold)
             {
                 moveObject();
@@ -118,58 +124,6 @@ public class PickupObject : MonoBehaviour
                 pickupObject();
             }
         }
-    }
-
-    void FixedUpdate()
-    {
-        //bool colided = false;
-        //if(!isHoldingObject)
-        //{
-        //    if(Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
-        //    {
-        //        if(raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer  == LayerMask.NameToLayer("Hinge"))
-        //        {
-        //            colided = true;
-        //        }
-        //    }
-        //    if(colided)
-        //    {
-        //        if (!inventory.inventoryOpened)
-        //        {
-        //            inventory.mouseInteracted = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        inventory.mouseInteracted = false; ;
-        //    }
-        //}
-        //else
-        //{
-        //    if (!inventory.inventoryOpened)
-        //    {
-        //        inventory.mouseInteracted = true;
-        //    }
-        //}
-
-        //if(isHoldingObject)
-        //{
-        //    if(mouseHold)
-        //    {
-        //        moveObject();
-        //    }
-        //    else
-        //    {
-        //        dropObject();
-        //    }
-        //}
-        //else
-        //{
-        //    if(mouseDown && colided)
-        //    {
-        //        pickupObject();
-        //    }
-        //}
     }
 
     private void pickupObject()
@@ -276,7 +230,7 @@ public class PickupObject : MonoBehaviour
             isHoldingObject = false;
             holdingObjectRB.drag = rbDrag;
             Vector3 force = (FirstPersonCamera.transform.position + FirstPersonCamera.transform.forward * initGrabDistance) - holder.transform.position;
-            holdingObjectRB.AddForce(force * 5000.0f);
+            holdingObjectRB.AddForce(force * 2000.0f);
             holdingObjectRB.useGravity = true;
             holdingObject.transform.parent = oldParent;
             holdingObject = null;
