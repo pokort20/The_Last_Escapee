@@ -9,19 +9,6 @@ public class StaminaShotItem : Item
     {
         itemName = "Stamina shot";
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (GameManager.instance.stamina < GameManager.instance._maxStamina / 2)
-        //{
-        //    isUseable = true;
-        //}
-        //else
-        //{
-        //    isUseable = false;
-        //}
-    }
     public override void UseItem()
     {
         base.UseItem();

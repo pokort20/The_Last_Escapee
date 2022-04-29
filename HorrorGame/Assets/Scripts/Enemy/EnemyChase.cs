@@ -314,7 +314,7 @@ public class EnemyChase : MonoBehaviour
             return;
         }
         float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
-        if (attackDistance < 1.7f)
+        if (attackDistance < 1.5f)
         {
             //postProcessing.depthOfFieldEnabled = true;
             AudioManager.instance.playAudio("player_grunt1");

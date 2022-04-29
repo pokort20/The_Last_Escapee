@@ -8,7 +8,6 @@ using UnityEngine.Rendering.HighDefinition;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController playerController;
-    private float movementSpeed;
     public float gravity;
     public float jumpHeight;
     public float sprintMult;
@@ -16,16 +15,18 @@ public class PlayerMovement : MonoBehaviour
     public float crouchHeight;
     public float standardHeight;
     public Transform groundCollisionCheck;
+    public Transform uncrouchCollisionCheck;
     public float groundCollisionCheckSphereRadius = 0.2f;
     public LayerMask groundMask;
     public LayerMask moveableMask;
+    public LayerMask uncrouchMask;
 
+    private float movementSpeed;
     private bool isSprinting;
-    private bool isCrouching;
     private bool isOnMoveable;
-    private bool wasCrouching;
     private Vector3 moveVec;
     private PostProcessing postProcessing;
+    private float uncrouchCollisionCheckSphereRadius;
 
 
     Vector3 velocity;
@@ -48,26 +49,30 @@ public class PlayerMovement : MonoBehaviour
         crouchMult = 0.75f;
         crouchHeight = 1.0f;
         standardHeight = 1.7f;
-        isCrouching = false;
         isSprinting = false;
         isOnMoveable = false;
-        isCrouching = !!isCrouching; //remove this once isCrouching is used, just to get rid of the warning
         postProcessing = PostProcessing.instance;
+        uncrouchCollisionCheckSphereRadius = crouchHeight * 0.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Helper spheres to check if player is grounded or stands on moveable object
         isGrounded = Physics.CheckSphere(groundCollisionCheck.position, groundCollisionCheckSphereRadius, groundMask);
         isOnMoveable = Physics.CheckSphere(groundCollisionCheck.position, 0.2f, moveableMask);
 
-        if (isGrounded && velocity.y < 0.0f) velocity.y = -1.5f;
-
+        //compute movement direction
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
         moveVec = transform.right * horizontal + transform.forward * vertical;
-        if(playerState != playerStates.UNCROUCHING)
+        if (moveVec.magnitude > 1.0f)
+        {
+            moveVec.Normalize();
+        }
+
+        //handle uncrouching state
+        if (playerState != playerStates.UNCROUCHING)
         {
             FindPlayerState();
         }
@@ -76,8 +81,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 bottomSphere = new Vector3(playerController.transform.position.x, playerController.transform.position.y - 0.5f, playerController.transform.position.z);
             Vector3 topSphere = new Vector3(playerController.transform.position.x, playerController.transform.position.y + 0.5f, playerController.transform.position.z);
 
-            LayerMask mask =~ LayerMask.GetMask("Player");
-            if (Physics.CapsuleCast(bottomSphere, topSphere, 2.0f, playerController.transform.forward, mask)) 
+            if (Physics.CheckSphere(uncrouchCollisionCheck.position, radius: uncrouchCollisionCheckSphereRadius, uncrouchMask))
             {
                 Debug.Log("Can't uncrouch yet");
             }
@@ -87,7 +91,8 @@ public class PlayerMovement : MonoBehaviour
                 playerState = playerStates.NORMAL;
             }
         }
-        isCrouching = false;
+
+        //handle speed and other stuff based on player's state
         isSprinting = false;
         switch (playerState)
         {
@@ -102,7 +107,6 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log("Crouching state");
                 moveVec *= movementSpeed * crouchMult;
                 playerController.height = crouchHeight;
-                isCrouching = true;
                 postProcessing.lensDistortionEnabled = false;
                 postProcessing.motionBlurEnabled = false;
                 break;
@@ -126,21 +130,21 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log("Default");
                 break;
         }
-        //AudioManager.instance.movementVec = moveVec;
         playerController.Move(moveVec * Time.deltaTime);
-        AudioManager.instance.movementVec = playerController.velocity;
-        AudioManager.instance.isGrounded = isGrounded;
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        //handle audio
+        AudioManager.instance.movementVec = playerController.velocity;
+        AudioManager.instance.isGrounded = isGrounded || isOnMoveable;
+
+        //add jump force if player jumps
+        if (Input.GetButtonDown("Jump") && (isGrounded || isOnMoveable))
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
         }
-        if(!isOnMoveable)
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
-
+        velocity.y += gravity * Time.deltaTime;
         playerController.Move(velocity * Time.deltaTime);
+
+
         updateStamina();
     }
     private void FindPlayerState()
@@ -204,6 +208,5 @@ public class PlayerMovement : MonoBehaviour
         {
             GameManager.instance.stamina = 0.0f;
         }
-        //Debug.Log("Stamina: " + GameManager.instance.stamina);
     }
 }

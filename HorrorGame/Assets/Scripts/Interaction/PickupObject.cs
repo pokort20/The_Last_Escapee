@@ -25,13 +25,8 @@ public class PickupObject : MonoBehaviour
     RaycastHit raycastHit;
     private bool isHoldingObject;
     GameObject holdingObject;
-    LayerMask layerMask;
     private SpringJoint springJoint;
-    private float initHingeAngle;
-    private Vector2 initPlayerForward;
     private HingeJoint hingeJnt;
-    Vector3 springAnchor;
-    float circleRadius;
 
     //old RB values
     bool rbUseGravity;
@@ -42,7 +37,6 @@ public class PickupObject : MonoBehaviour
     {
         Debug.Log("Started PickupObjects");
         inventory = Inventory.instance;
-        layerMask = LayerMask.GetMask("Moveable") + LayerMask.GetMask("Hinge");
         isHoldingObject = false;
         holdingObject = null;
         initGrabDistance = 0.0f;
@@ -125,14 +119,6 @@ public class PickupObject : MonoBehaviour
             }
         }
     }
-    void FixedUpdate()
-    {
-        //if (springJoint != null)
-        //{
-        //    currentGrabDistance = remap(0.0f, 1.0f, initGrabDistance, maxGrabDistance, Vector2.Distance(
-        //            springJoint.transform.TransformPoint(springJoint.anchor), springJoint.connectedAnchor));
-        //}
-    }
 
     private void pickupObject()
     {
@@ -166,8 +152,6 @@ public class PickupObject : MonoBehaviour
                 springJoint.tolerance = 0.0f;
                 springJoint.autoConfigureConnectedAnchor = false;
                 springJoint.anchor = springJoint.transform.InverseTransformPoint(new Vector3(raycastHit.point.x, FirstPersonCamera.transform.position.y, raycastHit.point.z));
-                //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
                 holdingPosition = new Vector3(raycastHit.point.x, FirstPersonCamera.transform.position.y, raycastHit.point.z);
                 springJoint.connectedAnchor = holdingPosition;
                 
@@ -196,6 +180,11 @@ public class PickupObject : MonoBehaviour
         }
         else if(holdingObject.layer == LayerMask.NameToLayer("Hinge"))
         {
+            if (Vector2.Distance(new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z), new Vector2(holdingObject.transform.position.x, holdingObject.transform.position.z)) > maxGrabDistance)
+            {
+                dropObject();
+                return;
+            }
             if(holdingObject.GetComponent<Rigidbody>().velocity.magnitude == 0.0f)
             {
                 holdingObject.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-0.0001f, 0.0001f), 0, Random.Range(-0.0001f, 0.0001f));
@@ -206,10 +195,6 @@ public class PickupObject : MonoBehaviour
             xzPos += new Vector2(FirstPersonCamera.transform.position.x, FirstPersonCamera.transform.position.z);
             holdingPosition = new Vector3(xzPos.x, FirstPersonCamera.transform.position.y, xzPos.y);
             springJoint.connectedAnchor = holdingPosition;
-            //springAnchor = FirstPersonCamera.transform.position + circleRadius * Vector3.Normalize(new Vector3(FirstPersonCamera.transform.forward.x, hingeJnt.connectedAnchor.y, FirstPersonCamera.transform.forward.z));
-            //springJoint.connectedAnchor = springAnchor;
-
-
         }
     }
     private void dropObject()
@@ -219,14 +204,13 @@ public class PickupObject : MonoBehaviour
             
             isHoldingObject = false;
             holdingObjectRB.drag = rbDrag;
-            Vector3 force = (FirstPersonCamera.transform.position + FirstPersonCamera.transform.forward * initGrabDistance) - holder.transform.position;
-            force *= Time.deltaTime;
-            holdingObjectRB.AddForce(force * 2000.0f);
+            //Vector3 force = (FirstPersonCamera.transform.position + FirstPersonCamera.transform.forward * initGrabDistance) - holder.transform.position;
+            //holdingObjectRB.AddForce(force * 250000.0f * Time.deltaTime);
             holdingObjectRB.useGravity = true;
             holdingObject.transform.parent = oldParent;
             holdingObject = null;
             
-            Debug.Log("Dropped object, added force: " + force.magnitude*100.0f);
+            //Debug.Log("Dropped object, added force: " + force.magnitude*100.0f);
             Destroy(holder);
         }
         else if (holdingObject.layer == LayerMask.NameToLayer("Hinge"))

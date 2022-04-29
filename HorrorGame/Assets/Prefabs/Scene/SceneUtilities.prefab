@@ -425,6 +425,7 @@ GameObject:
   - component: {fileID: 4880549229538769434}
   - component: {fileID: 1512567185336143002}
   - component: {fileID: 9204748012916301474}
+  - component: {fileID: 775625643092807265}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -505,3 +506,16 @@ MonoBehaviour:
   globalVolume: {fileID: 4880549228061161517}
   maxLensDistortion: -0.5
   maxMotionBlur: 4
+--- !u!114 &775625643092807265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4880549229538769429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b881b58df1c17d54ab9ce2a5529a63bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpslimit: 100
