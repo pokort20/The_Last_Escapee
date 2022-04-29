@@ -15,6 +15,7 @@ public class Tutorial : MonoBehaviour
     public GameObject medkitHelp;
     public GameObject staminaShotHelp;
     public GameObject moveObjectHelp;
+    public GameObject lightHelp;
 
 
     public float helpDurationTime;
@@ -24,7 +25,7 @@ public class Tutorial : MonoBehaviour
     private float helpDuration;
     void Awake()
     {
-        if(enabled)
+        if(tutorialEnabled)
         {
             Debug.Log("Started Tutorial");
             if (instance != null)
@@ -38,11 +39,11 @@ public class Tutorial : MonoBehaviour
         {
             instance = null;
         }
+        helps = new Dictionary<string, Tuple<GameObject, bool>>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        helps = new Dictionary<string, Tuple<GameObject, bool>>();
         helps.Add("movement", new Tuple<GameObject, bool>(movementHelp, false));
         helps.Add("inventory", new Tuple<GameObject, bool>(inventoryHelp, false));
         helps.Add("flashlight", new Tuple<GameObject, bool>(flashlightHelp, false));
@@ -50,6 +51,7 @@ public class Tutorial : MonoBehaviour
         helps.Add("medkit", new Tuple<GameObject, bool>(medkitHelp, false));
         helps.Add("staminaShot", new Tuple<GameObject, bool>(staminaShotHelp, false));
         helps.Add("moveObject", new Tuple<GameObject, bool>(moveObjectHelp, false));
+        helps.Add("light", new Tuple<GameObject, bool>(lightHelp, false));
 
         hideAllHelps();
     }
@@ -57,6 +59,7 @@ public class Tutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!tutorialEnabled) return;
         helpDuration -= Time.deltaTime;
         if(helpDuration <= 0.0f)
         {
@@ -65,14 +68,41 @@ public class Tutorial : MonoBehaviour
     }
     public void hideAllHelps()
     {
-        foreach(KeyValuePair<string, Tuple<GameObject, bool>> help in helps)
+        if (!tutorialEnabled) return;
+        foreach (KeyValuePair<string, Tuple<GameObject, bool>> help in helps)
         {
             help.Value.Item1.SetActive(false);
         }
     }
+    public void hideHelp(string helpName)
+    {
+        if (!tutorialEnabled) return;
+        Tuple<GameObject, bool> help;
+        if (helps != null)
+        {
+            helps.TryGetValue(helpName, out help);
+        }
+        else
+        {
+            return;
+        }
+        if(help != null)
+        {
+            help.Item1.SetActive(false);
+        }
+    }
     public void showHelp(string helpName)
     {
-        helps.TryGetValue(helpName, out Tuple<GameObject, bool> help);
+        if (!tutorialEnabled) return;
+        Tuple<GameObject, bool> help;
+        if (helps != null)
+        {
+            helps.TryGetValue(helpName, out help);
+        }
+        else
+        {
+            return;
+        }
         if (help!=null)
         {
             if (help.Item2)

@@ -214,8 +214,9 @@ public class InventoryUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         if(tutorial != null)
         {
-            tutorial.hideAllHelps();
+            tutorial.hideHelp("inventory");
         }
+        tutorialUI.SetActive(false);
         inventoryUI.SetActive(true);
     }
     public void closeInventory()
@@ -225,6 +226,7 @@ public class InventoryUI : MonoBehaviour
         Time.timeScale = 1.0f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        tutorialUI.SetActive(true);
         inventoryUI.SetActive(false);
     }
     public void updateLowHealthIndicator()

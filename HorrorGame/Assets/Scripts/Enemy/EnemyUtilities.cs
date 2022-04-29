@@ -86,6 +86,7 @@ public class EnemyUtilities : MonoBehaviour
                 }
                 else if (lightData.type == HDLightType.Spot)
                 {
+                    if (lightData.gameObject.name == "FlashLight") continue;
                     Debug.DrawRay(light.transform.position, light.transform.forward, Color.cyan);
                     //Debug.Log("forward: " + light.transform.forward + ", playerDir: " + (playerPos - light.transform.position) + ", angle: " + Vector3.Angle(light.transform.forward, playerPos - light.transform.position) + ", light angle: " + light.spotAngle);
                     if (Vector3.Angle(light.transform.forward, playerPos - light.transform.position) < light.spotAngle * 0.5f)
@@ -109,7 +110,11 @@ public class EnemyUtilities : MonoBehaviour
             }
         }
 
-        //Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
+        Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
+        if(Tutorial.instance != null && playerIlluminationIntensity > 60.0f)
+        {
+            Tutorial.instance.showHelp("light");
+        }
         return playerIlluminationIntensity;
     }
     private List<Vector3> getFlashlightHitPoints(HDAdditionalLightData flashlight)

@@ -318,14 +318,13 @@ public class EnemyChase : MonoBehaviour
         float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
         if (attackDistance < 1.5f)
         {
-            //postProcessing.depthOfFieldEnabled = true;
             AudioManager.instance.playAudio("player_grunt1");
             attackCooldown = 1.0f;
             float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
             Debug.Log("Player is attacked!");
             Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
             GameManager.instance.health -= hitStrength;
-            if(GameManager.instance.health <= GameManager.instance._maxHealth * 0.5f)
+            if(Inventory.instance.hasItem(typeof(MedkitItem)) > 0 && GameManager.instance.health <= GameManager.instance._maxHealth * 0.5f)
             {
                 if(tutorial != null)
                 {

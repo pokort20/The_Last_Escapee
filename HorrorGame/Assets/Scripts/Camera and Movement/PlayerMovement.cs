@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         isSprinting = false;
         isOnMoveable = false;
         postProcessing = PostProcessing.instance;
-        uncrouchCollisionCheckSphereRadius = crouchHeight * 0.5f;
+        uncrouchCollisionCheckSphereRadius = 0.3f;
         if(Tutorial.instance != null)
         {
             Tutorial.instance.showHelp("movement");
