@@ -20,6 +20,7 @@ public class EnemyChase : MonoBehaviour
     private bool isPrevDestFromFlashlight;
     private float attackCooldown;
     private PostProcessing postProcessing;
+    private Tutorial tutorial;
     private enum enemyStates : int
     {
         PATROL = 0,
@@ -32,6 +33,7 @@ public class EnemyChase : MonoBehaviour
     void Start()
     {
         postProcessing = PostProcessing.instance;
+        tutorial = Tutorial.instance;
         flashlightVisiblePoint = Vector3.zero;
         isPrevDestFromFlashlight = false;
         enemyState = enemyStates.PATROL;
@@ -323,6 +325,13 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("Player is attacked!");
             Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
             GameManager.instance.health -= hitStrength;
+            if(GameManager.instance.health <= GameManager.instance._maxHealth * 0.5f)
+            {
+                if(tutorial != null)
+                {
+                    tutorial.showHelp("medkit");
+                }
+            }
         }
     }
     private void playRandomSound()

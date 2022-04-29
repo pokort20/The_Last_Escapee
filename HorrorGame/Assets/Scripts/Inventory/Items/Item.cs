@@ -15,6 +15,10 @@ public class Item : MonoBehaviour
         GameManager.instance.setTimeScale(1.0f);
         AudioManager.instance.playAudio("menu_click");
         GameManager.instance.setTimeScale(timeScale);
+        if(Tutorial.instance != null)
+        {
+            Tutorial.instance.hideAllHelps();
+        }
         
     }
 }

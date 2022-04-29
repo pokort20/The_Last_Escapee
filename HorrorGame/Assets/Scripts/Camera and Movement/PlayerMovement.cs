@@ -53,6 +53,10 @@ public class PlayerMovement : MonoBehaviour
         isOnMoveable = false;
         postProcessing = PostProcessing.instance;
         uncrouchCollisionCheckSphereRadius = crouchHeight * 0.5f;
+        if(Tutorial.instance != null)
+        {
+            Tutorial.instance.showHelp("movement");
+        }
     }
 
     // Update is called once per frame
@@ -207,6 +211,10 @@ public class PlayerMovement : MonoBehaviour
         if(GameManager.instance.stamina < 0.0f)
         {
             GameManager.instance.stamina = 0.0f;
+            if(Tutorial.instance != null && Inventory.instance != null && Inventory.instance.hasItem(typeof(StaminaShotItem)) > 0)
+            {
+                Tutorial.instance.showHelp("staminaShot");
+            }
         }
     }
 }

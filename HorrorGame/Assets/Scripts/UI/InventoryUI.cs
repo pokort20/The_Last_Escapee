@@ -13,6 +13,7 @@ public class InventoryUI : MonoBehaviour
     public GameObject inventoryUI;
     public GameObject controlsUI;
     public GameObject deathScreen;
+    public GameObject tutorialUI;
 
     public Transform itemSlotsParent;
     public Image flashlightImage;
@@ -33,6 +34,7 @@ public class InventoryUI : MonoBehaviour
     private float infoTextDefaultDuration = 5.0f;
     private float infoTextCurrentDuration;
     private GameManager gameManager;
+    private Tutorial tutorial;
     private Color cursorCrosshairColor;
 
     //low health image indicator variables
@@ -48,6 +50,7 @@ public class InventoryUI : MonoBehaviour
         isPaused = false;
         gameManager = GameManager.instance;
         inventory = Inventory.instance;
+        tutorial = Tutorial.instance;
 
         inventory.onInventoryChangedCallback += updateInventoryUI;
         inventory.onInteractTextChangedCallback += updateInteractText;
@@ -209,6 +212,10 @@ public class InventoryUI : MonoBehaviour
         Time.timeScale = 0.25f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        if(tutorial != null)
+        {
+            tutorial.hideAllHelps();
+        }
         inventoryUI.SetActive(true);
     }
     public void closeInventory()
@@ -256,6 +263,10 @@ public class InventoryUI : MonoBehaviour
             cursorCrosshairColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             CursorCrosshair.enabled = true;
             CursorCrosshair.color = cursorCrosshairColor;
+            if(tutorial != null)
+            {
+                tutorial.showHelp("moveObject");
+            }
         }
     }
     public void updateCursorCrosshair()
@@ -276,6 +287,10 @@ public class InventoryUI : MonoBehaviour
     }
     public void displayDeathScreen()
     {
+        if(tutorial != null)
+        {
+            tutorial.hideAllHelps();
+        }
         controlsUI.SetActive(false);
         inventoryUI.SetActive(false);
         pauseMenuUI.SetActive(false);
@@ -307,6 +322,7 @@ public class InventoryUI : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         uiElements.SetActive(false);
+        tutorialUI.SetActive(false);
         pauseMenuUI.SetActive(true);
         gameManager.pauseGame();
     }
@@ -316,6 +332,7 @@ public class InventoryUI : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         pauseMenuUI.SetActive(false);
+        tutorialUI.SetActive(true);
         uiElements.SetActive(true);
 
         gameManager.unPauseGame();

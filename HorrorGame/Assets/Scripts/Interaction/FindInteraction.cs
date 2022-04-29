@@ -14,11 +14,13 @@ public class FindInteraction : MonoBehaviour
     private bool pressedKey;
     private LayerMask ignoreMask;
     private bool isInteracting = false;
+    private Tutorial tutorial;
     void Start()
     {
         inventory = Inventory.instance;
         pressedKey = false;
         ignoreMask = LayerMask.GetMask("Player");
+        tutorial = Tutorial.instance;
     }
     private void Update()
     {
@@ -59,9 +61,21 @@ public class FindInteraction : MonoBehaviour
                     if (inventory.addToInventory(itemObject.GetComponent<Item>()))
                     {
                         Debug.Log("Picked up " + itemObject.name + " and added it to inventory!");
+                        if (tutorial != null)
+                        {
+                            if (itemObject.GetComponent<Item>().GetType() != typeof(FlashlightItem))
+                            {
+                                tutorial.showHelp("inventory");
+                            }
+                            else
+                            {
+                                tutorial.showHelp("flashlight");
+                            }
+                        }
                         itemObject.transform.parent = null;
                         DontDestroyOnLoad(itemObject);
                         itemObject.SetActive(false);
+                        
                     }
                 }
             }

@@ -57,6 +57,10 @@ public class Flashlight : MonoBehaviour
         else
         {
             Debug.Log("Eisabled flashlight");
+            if (Tutorial.instance != null)
+            {
+                Tutorial.instance.hideAllHelps();
+            }
             AudioManager.instance.playAudio("flashlight_OFF");
         }
         GameManager.instance.flashlightEnabled = !GameManager.instance.flashlightEnabled;
@@ -70,7 +74,10 @@ public class Flashlight : MonoBehaviour
         }
         if(GameManager.instance.batteryLevel < decayThreshold)
         {
-
+            if(Tutorial.instance != null)
+            {
+                Tutorial.instance.showHelp("batteries");
+            }
             lightData.intensity = intensityRangeMin + ((intensityRangeMax-intensityRangeMin)/decayThreshold * GameManager.instance.batteryLevel);
             if (GameManager.instance.batteryLevel < 0.5f * decayThreshold)
             {
