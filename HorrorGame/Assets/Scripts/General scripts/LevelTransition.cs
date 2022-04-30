@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +8,6 @@ public class LevelTransition : MonoBehaviour
 
     private GameManager gameManager;
     private Inventory inventory;
-    // Start is called before the first frame update
     void Start()
     {
         if(sceneName == null || sceneName == "")
@@ -31,6 +28,7 @@ public class LevelTransition : MonoBehaviour
             {
                 Destroy(std.gameObject);
             }
+
             //create new scene transition for the following level
             GameObject ga = new GameObject();
             ga.name = "SceneTransition";
@@ -43,8 +41,10 @@ public class LevelTransition : MonoBehaviour
             std.inventoryItems = inventory.items;
             DontDestroyOnLoad(ga);
 
+            //create save
             SaveLoadSystem.SaveGame(std, sceneName);
 
+            //Load next scene
             try
             {
                 SceneManager.LoadScene(sceneName);

@@ -8,7 +8,7 @@ public class SecurityCardItem : Item
     void Awake()
     {
         isUseable = false;
-        itemName = "securityCard";
+        itemName = "labCard";
     }
     public override void UseItem()
     {

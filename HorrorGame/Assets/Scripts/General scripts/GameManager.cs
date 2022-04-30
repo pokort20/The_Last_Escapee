@@ -106,46 +106,38 @@ public class GameManager : MonoBehaviour
     //Functions
     private void loadSceneData()
     {
-        //if(SceneManager.GetActiveScene().name == "MainMenuScene")
-        //{
-        //    return;
-        //}
-        SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
-        if(std != null)
+        //Main menu scene does not require any loaded scene data
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
         {
+            return;
+        }
+
+        //First check for save data transitioned from previous scene
+        SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
+
+        //if not present, try loading it from save file
+        if (std == null)
+        {
+            std = SaveLoadSystem.LoadGame(SceneManager.GetActiveScene().name);
+        }
+
+        if (std != null)
+        {
+            //set game variables
             instance.health = std.health;
             instance.stamina = std.stamina;
             instance.batteryLevel = std.batteryLevel;
             instance.flashlightEnabled = std.flashlightEnabled;
 
-            Debug.Log("Transitioned health: " + std.health);
-            Debug.Log("Transitioned stamina: " + std.stamina);
-            Debug.Log("Transitioned battery level: " + std.batteryLevel);
-            Debug.Log("Transitioned flashlight enabled: " + std.flashlightEnabled);
+            //set inventory items
             foreach(Item item in std.inventoryItems)
             {
                 Inventory.instance.addToInventory(item);
-
-                Debug.Log("Transitioned item: " + item.itemName);
             }
-            //Destroy(std.gameObject);
         }
         else
         {
-            Debug.LogWarning("Can not find Scene transition, attempting to load game");
-            std = SaveLoadSystem.LoadGame(SceneManager.GetActiveScene().name);
-            if (std != null)
-            {
-                instance.health = std.health;
-                instance.stamina = std.stamina;
-                instance.batteryLevel = std.batteryLevel;
-                instance.flashlightEnabled = std.flashlightEnabled;
-            }
-            else
-            {
-                Debug.LogWarning("Can not load game, starting with default stats and items");
-            }
-            
+            Debug.LogWarning("Can not find scene transition nor load game, starting with default stats and items");
         }
     }
     public void printGameVariables()

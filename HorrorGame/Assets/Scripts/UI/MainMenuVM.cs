@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuVM : MonoBehaviour
 {
@@ -9,14 +10,42 @@ public class MainMenuVM : MonoBehaviour
     public GameObject mainMenu;
     public GameObject levelsMenu;
     public GameObject controlsMenu;
-    // Start is called before the first frame update
+
     void Start()
     {
+        Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
+        Time.timeScale = 1.0f;
+        try
+        {
+            string path = Application.dataPath + "/Saves/Level2.sejv";
+            if (!File.Exists(path))
+            {
+                levelsMenu.transform.GetChild(1).gameObject.GetComponentInChildren<Button>().interactable = false;
+                levelsMenu.transform.GetChild(1).gameObject.GetComponentInChildren<HoverButtonHighlight>().enabled = false;
+            }
+            path = Application.dataPath + "/Saves/Level3.sejv";
+            if (!File.Exists(path))
+            {
+                levelsMenu.transform.GetChild(2).gameObject.GetComponentInChildren<Button>().interactable = false;
+                levelsMenu.transform.GetChild(2).gameObject.GetComponentInChildren<HoverButtonHighlight>().enabled = false;
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Failed to disable levels menu item, " + e.Message);
+        }
         levelsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         mainMenu.SetActive(true);
-        Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
-        Time.timeScale = 1.0f;
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            levelsMenu.SetActive(false);
+            controlsMenu.SetActive(false);
+            mainMenu.SetActive(true);
+        }
     }
     public void OnPlayButtonUse()
     {
