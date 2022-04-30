@@ -132,7 +132,20 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Can not find Scene transition data, starting with default stats and items");
+            Debug.LogWarning("Can not find Scene transition, attempting to load game");
+            std = SaveLoadSystem.LoadGame(SceneManager.GetActiveScene().name);
+            if (std != null)
+            {
+                instance.health = std.health;
+                instance.stamina = std.stamina;
+                instance.batteryLevel = std.batteryLevel;
+                instance.flashlightEnabled = std.flashlightEnabled;
+            }
+            else
+            {
+                Debug.LogWarning("Can not load game, starting with default stats and items");
+            }
+            
         }
     }
     public void printGameVariables()

@@ -6,7 +6,7 @@ public class MedkitItem : Item
 {
     void Awake()
     {
-        itemName = "Medkit";
+        itemName = "medkit";
     }
 
     // Update is called once per frame

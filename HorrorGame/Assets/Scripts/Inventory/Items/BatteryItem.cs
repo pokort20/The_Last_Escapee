@@ -6,7 +6,7 @@ public class BatteryItem : Item
 {
     void Awake()
     {
-        itemName = "Batteries";
+        itemName = "batteries";
     }
 
     // Update is called once per frame

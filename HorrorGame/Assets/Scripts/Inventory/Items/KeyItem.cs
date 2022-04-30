@@ -7,7 +7,7 @@ public class KeyItem : Item
     void Awake()
     {
         isUseable = false;
-        itemName = "Key";
+        itemName = "key";
     }
     public override void UseItem()
     {

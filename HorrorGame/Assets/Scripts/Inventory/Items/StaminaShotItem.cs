@@ -7,7 +7,7 @@ public class StaminaShotItem : Item
     // Start is called before the first frame update
     void Awake()
     {
-        itemName = "Stamina shot";
+        itemName = "staminaShot";
     }
     public override void UseItem()
     {

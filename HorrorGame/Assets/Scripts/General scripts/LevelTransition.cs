@@ -43,6 +43,8 @@ public class LevelTransition : MonoBehaviour
             std.inventoryItems = inventory.items;
             DontDestroyOnLoad(ga);
 
+            SaveLoadSystem.SaveGame(std, sceneName);
+
             try
             {
                 SceneManager.LoadScene(sceneName);
