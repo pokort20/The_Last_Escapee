@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
         }
         set
         {
-            if(value)Debug.LogWarning("GAME PAUSED");
             _isPaused = value;
             if(onGamePausedCallback != null)
             {

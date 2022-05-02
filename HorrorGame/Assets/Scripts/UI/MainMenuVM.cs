@@ -14,6 +14,8 @@ public class MainMenuVM : MonoBehaviour
     void Start()
     {
         Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Time.timeScale = 1.0f;
         try
         {

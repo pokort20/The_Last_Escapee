@@ -273,7 +273,7 @@ public class AudioManager : MonoBehaviour
             AudioSource.PlayClipAtPoint(audio.audioClip, pos, audio.volume * ambientVolume * generalVolume);
         }
 
-        float nextTime = Random.Range(10, 30);
+        float nextTime = Random.Range(10, 22);
 
         Invoke("playAmbientEffect", nextTime);
     }

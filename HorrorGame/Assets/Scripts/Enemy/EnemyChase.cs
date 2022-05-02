@@ -21,6 +21,8 @@ public class EnemyChase : MonoBehaviour
     private float attackCooldown;
     private PostProcessing postProcessing;
     private Tutorial tutorial;
+    private Animator animator;
+    float attackDistance;
     private enum enemyStates : int
     {
         PATROL = 0,
@@ -39,13 +41,13 @@ public class EnemyChase : MonoBehaviour
         enemyState = enemyStates.PATROL;
         agent.speed = agentSpeed;
         attackCooldown = 0.0f;
-
+        animator = GetComponentInChildren<Animator>();
         EnemyAudio ea = new EnemyAudio(GetHashCode(), agent.velocity, agent.transform.position, loopAudioSource, effectAudioSource);
         AudioManager.instance.addEnemy(ea);
         Invoke("playRandomSound", Random.Range(5, 15));
     }
 
-    void FixedUpdate()
+    void Update()
     {
         switch (enemyState)
         {
@@ -70,6 +72,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void patrol()
     {
+        animator.SetFloat("speed", 0.0f, 0.15f, Time.deltaTime);
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
            || isStruckByFlashlight() || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
@@ -103,11 +106,18 @@ public class EnemyChase : MonoBehaviour
     }
     private void chase()
     {
+        animator.SetFloat("speed", 1.0f, 0.15f, Time.deltaTime);
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position) || isStruckByFlashlight())
         {
             //Still can see or hear player
             isPrevDestFromFlashlight = false;
             agent.SetDestination(player.position);
+
+            //Vector3 direction = player.position - agent.transform.position;
+            //direction.y = 0;
+            //Quaternion rotation = Quaternion.LookRotation(direction);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 100.0f * Time.deltaTime);
+            //agent.transform.rotation = rotation;
         }
         else if(isFlashlightHitPointVisible(agent.transform.position, player.position) && isPrevDestFromFlashlight)
         {
@@ -133,6 +143,7 @@ public class EnemyChase : MonoBehaviour
     }
     private void explore()
     {
+        animator.SetFloat("speed", 0.8f, 0.15f, Time.deltaTime);
         if (isPlayerVisible(agent.transform.position, player.position) || isPlayerHearable(agent.transform.position, player.position)
            || isStruckByFlashlight() || isFlashlightHitPointVisible(agent.transform.position, player.position))
         {
@@ -315,23 +326,35 @@ public class EnemyChase : MonoBehaviour
             attackCooldown -= Time.fixedDeltaTime;
             return;
         }
-        float attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
-        if (attackDistance < 1.5f)
+        attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
+        if (attackDistance < 1.8f)
         {
-            AudioManager.instance.playAudio("player_grunt1");
-            attackCooldown = 1.0f;
-            float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
-            Debug.Log("Player is attacked!");
-            Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
-            GameManager.instance.health -= hitStrength;
-            if(Inventory.instance.hasItem(typeof(MedkitItem)) > 0 && GameManager.instance.health <= GameManager.instance._maxHealth * 0.5f)
+            RaycastHit raycastHit;
+            //Debug.DrawRay(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), Color.green);
+            Physics.Raycast(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), maxDistance: 5.0f, hitInfo: out raycastHit);
+            if(raycastHit.collider != null && raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                if(tutorial != null)
-                {
-                    tutorial.showHelp("medkit");
-                }
+                attackCooldown = 1.0f;
+                animator.SetTrigger("attack");
+                Invoke("attackPlayer", 0.2f);
             }
         }
+    }
+    private void attackPlayer()
+    {
+        AudioManager.instance.playAudio("player_grunt1");
+        float hitStrength = 60.0f - remap(0.9f, 1.7f, 20.0f, 40.0f, attackDistance);
+        Debug.Log("Player is attacked!");
+        Debug.Log("HEALTH: " + GameManager.instance.health + ", ATTACK DISTANCE: " + attackDistance + ", HIT: -" + hitStrength + "HP");
+        GameManager.instance.health -= hitStrength;
+        if (Inventory.instance.hasItem(typeof(MedkitItem)) > 0 && GameManager.instance.health <= GameManager.instance._maxHealth * 0.5f)
+        {
+            if (tutorial != null)
+            {
+                tutorial.showHelp("medkit");
+            }
+        }
+        
     }
     private void playRandomSound()
     { 

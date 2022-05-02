@@ -97,8 +97,7 @@ public class PickupObject : MonoBehaviour
         if (isHoldingObject)
         {
             if(holdingObject.layer == LayerMask.NameToLayer("Moveable") && (raycastHit.collider == null || raycastHit.collider.gameObject != holdingObject))
-            {
-                Debug.Log("Colliding with different object, dropping");
+            {;
                 dropObject();
                 return;
             }
@@ -122,7 +121,7 @@ public class PickupObject : MonoBehaviour
 
     private void pickupObject()
     {
-        Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
+        //Debug.Log("Raycast collided with: " + raycastHit.collider.gameObject.name);
         if(raycastHit.collider.gameObject.GetComponent<Rigidbody>() != null)
         {
             holdingObject = raycastHit.collider.gameObject;

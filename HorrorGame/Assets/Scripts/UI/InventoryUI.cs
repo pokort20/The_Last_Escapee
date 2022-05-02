@@ -129,9 +129,6 @@ public class InventoryUI : MonoBehaviour
     public void updateInventoryUI()
     {
         Debug.Log("Updating inventory UI!");
-        Debug.Log("Items.length: " + itemSlots.Length);
-        Debug.Log("Inventory.items.count: " + inventory.items.Count);
-
         float fillAmount = GameManager.instance.health / GameManager.instance._maxHealth;
         healthFillImage.fillAmount = fillAmount;
         if(inventory.hasItem(typeof(FlashlightItem)) > 0)
@@ -139,7 +136,6 @@ public class InventoryUI : MonoBehaviour
             flashlightImage.enabled = true;
             batteryLevelImage.enabled = true;
             fillAmount = GameManager.instance.batteryLevel / GameManager.instance._maxBatteryLevel;
-            Debug.Log("batteryLevel: " + GameManager.instance.batteryLevel + " maxBatteryLevel: " + GameManager.instance._maxBatteryLevel + " fill amount: " + fillAmount);
             if (fillAmount > 1.0f)
             {
                 fillAmount = 1.0f;
@@ -166,14 +162,12 @@ public class InventoryUI : MonoBehaviour
 
         if (inventory.interactText != null)
         {
-            Debug.Log("Enabling interact text");
             interactText.text = inventory.interactText;
             interactText.enabled = true;
             interactImage.enabled = true;
         }
         else
         {
-            Debug.Log("Disabling interact text");
             interactText.enabled = false;
             interactImage.enabled = false;
         }

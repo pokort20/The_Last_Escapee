@@ -10,7 +10,6 @@ public class DisableDirectionalLight : MonoBehaviour
     {
         foreach(Light light in FindObjectsOfType<Light>())
         {
-            Debug.Log("SCENE LIGHT: " + light.name);
             if(light.type == LightType.Directional)
             {
                 light.enabled = false;

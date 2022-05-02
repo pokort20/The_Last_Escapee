@@ -16,7 +16,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void FillInventorySlot(Item newItem)
     {
-        Debug.Log("Filled inventory slot " + name + " with " + newItem.name);
+        //Debug.Log("Filled inventory slot " + name + " with " + newItem.name);
         item = newItem;
         image.sprite = item.icon;
         image.enabled = true;
@@ -94,17 +94,14 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //Debug.Log("Pointer enter");
         if (item != null && item.itemInfo != null)
         {
             inventory.itemInfoText = item.itemInfo;
-            Debug.Log(item.itemInfo);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         inventory.itemInfoText = null;
-        //Debug.Log("Pointer exit");
     }
 }

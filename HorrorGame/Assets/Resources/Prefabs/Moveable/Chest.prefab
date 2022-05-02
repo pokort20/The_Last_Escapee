@@ -156,10 +156,10 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.00375, y: 0.0055, z: 0.0005}
+  m_Extents: {x: 0.0035, y: 0.005, z: 0.0005}
   m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &7323665549537416822
@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d512b7d7511df8046b8cfd868590b7aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHinge: 0
 --- !u!1 &6858778249962552479
 GameObject:
   m_ObjectHideFlags: 0

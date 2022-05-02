@@ -109,8 +109,6 @@ public class EnemyUtilities : MonoBehaviour
                 if (debugRays) Debug.DrawRay(lightData.transform.position, Vector3.Normalize(playerPos - lightData.transform.position) * lightData.range, Color.red);
             }
         }
-
-        Debug.Log("Player illumination intensity: " + playerIlluminationIntensity);
         if(Tutorial.instance != null && playerIlluminationIntensity > 60.0f)
         {
             Tutorial.instance.showHelp("light");

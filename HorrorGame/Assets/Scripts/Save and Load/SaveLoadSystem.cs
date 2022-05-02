@@ -109,6 +109,7 @@ public static class SaveLoadSystem
                             Debug.LogError("wrong item name while loading from save");
                             break;
                     }
+                    gameObject.SetActive(false);
                 }
                 catch(Exception e)
                 {
