@@ -138,7 +138,7 @@ public class AudioManager : MonoBehaviour
             playerMovementAudioSource.Pause();
             return;
         }
-        playerMovementAudioSource.volume = remap(0.0f, 6.0f, 0.0f, 0.2f, movementVec.magnitude) * effectsVolume * generalVolume;
+        playerMovementAudioSource.volume = remap(1.0f, 6.0f, 0.0f, 0.2f, movementVec.magnitude) * effectsVolume * generalVolume;
         playerMovementAudioSource.pitch = remap(0.0f, 6.0f, 0.7f, 2.0f, movementVec.magnitude);
         if(!playerMovementAudioSource.isPlaying && !gameManager.isPaused && !gameManager.isPlayerDead)
         {

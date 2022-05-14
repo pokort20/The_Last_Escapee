@@ -65,7 +65,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
             else
             {
-                if (item.GetType() == typeof(BatteryItem) && GameManager.instance.batteryLevel < GameManager.instance._maxBatteryLevel / 2)
+                if (item.GetType() == typeof(BatteryItem) && GameManager.instance.batteryLevel <= GameManager.instance._maxBatteryLevel / 2)
                 {
                     item.isUseable = true;
                 }

@@ -192,6 +192,7 @@ public class EnemyChase : MonoBehaviour
     }
     private bool isPlayerVisible(Vector3 agentPos, Vector3 playerPos)
     {
+        //Debug.Log("GO.layer: " + player.gameObject.layer + ", LM.NameToLayer: " + LayerMask.NameToLayer("Player") + ", LM.GetMask: " + LayerMask.GetMask("Player"));
         RaycastHit raycastHit;
         float playerVisibility = FindObjectOfType<EnemyUtilities>().playerVisibility;
         float visibilityDistance = remap(0.0f, 70.0f, 2.0f, 15.0f, playerVisibility);
@@ -220,18 +221,19 @@ public class EnemyChase : MonoBehaviour
     {
         float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
         float noiseRange = moveVecMag * 0.5f;
-        noiseRange = Mathf.Pow(noiseRange, 2.0f);
+        noiseRange = Mathf.Pow(noiseRange, 3.0f);
         //Debug.Log("Noise range: " + noiseRange);
         float dist = Vector3.Distance(agentPos, playerPos);
         RaycastHit raycastHit;
         Vector3 earPos = agentPos;
         earPos.y += 1.2f;
-        int layerMask = LayerMask.NameToLayer("Walls");
+        int layerMask = LayerMask.GetMask("Walls");
 
         //Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
         if (dist < hearingRange + noiseRange)
         {
-            if (Physics.Raycast(agentPos, playerPos - agentPos, out raycastHit, hearingRange + noiseRange, layerMask))
+            //Debug.DrawRay(earPos, playerPos - earPos, Color.red);
+            if (Physics.Raycast(earPos, playerPos - earPos, out raycastHit, hearingRange + noiseRange, layerMask: layerMask))
             {
                 //Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
                 //Debug.Log("Wall between enemy and player in hearing range");
