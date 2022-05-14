@@ -327,7 +327,7 @@ public class EnemyChase : MonoBehaviour
             return;
         }
         attackDistance = Vector3.Distance(player.transform.position, agent.transform.position);
-        if (attackDistance < 1.8f)
+        if (attackDistance < 1.9f)
         {
             RaycastHit raycastHit;
             //Debug.DrawRay(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), Color.green);

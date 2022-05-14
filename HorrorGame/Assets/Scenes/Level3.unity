@@ -4542,6 +4542,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: door1Frame
       objectReference: {fileID: 0}
+    - target: {fileID: 6869111060178228981, guid: a51de58ea2f168c4999c8171e17ff36e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a51de58ea2f168c4999c8171e17ff36e, type: 3}
 --- !u!4 &237401419 stripped
@@ -36243,7 +36247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2856407755030901304, guid: a51de58ea2f168c4999c8171e17ff36e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.36518097
+      value: -0.3999939
       objectReference: {fileID: 0}
     - target: {fileID: 2856407755030901304, guid: a51de58ea2f168c4999c8171e17ff36e, type: 3}
       propertyPath: m_LocalPosition.y
