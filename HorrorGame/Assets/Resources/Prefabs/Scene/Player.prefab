@@ -691,7 +691,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 3476730348906112950}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.4
   m_Height: 1.9
   m_Direction: 1
@@ -710,7 +710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 3476730348906112948}
   gravity: -19.62
-  jumpHeight: 0.5
+  jumpHeight: 0.7
   sprintMult: 1.5
   crouchMult: 0.75
   crouchHeight: 1
@@ -720,10 +720,7 @@ MonoBehaviour:
   groundCollisionCheckSphereRadius: 0.3
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
-  moveableMask:
-    serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2113
   uncrouchMask:
     serializedVersion: 2
     m_Bits: 14656

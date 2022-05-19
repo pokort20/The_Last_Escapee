@@ -16,17 +16,16 @@ public class PlayerMovement : MonoBehaviour
     public float standardHeight;
     public Transform groundCollisionCheck;
     public Transform uncrouchCollisionCheck;
-    public float groundCollisionCheckSphereRadius = 0.2f;
+    public float groundCollisionCheckSphereRadius = 0.15f;
     public LayerMask groundMask;
-    public LayerMask moveableMask;
     public LayerMask uncrouchMask;
 
     private float movementSpeed;
     private bool isSprinting;
-    private bool isOnMoveable;
     private Vector3 moveVec;
     private PostProcessing postProcessing;
     private float uncrouchCollisionCheckSphereRadius;
+    private float stepOffset;
 
 
     Vector3 velocity;
@@ -49,8 +48,8 @@ public class PlayerMovement : MonoBehaviour
         crouchMult = 0.75f;
         crouchHeight = 1.0f;
         standardHeight = 1.7f;
+        stepOffset = 0.3f;
         isSprinting = false;
-        isOnMoveable = false;
         postProcessing = PostProcessing.instance;
         uncrouchCollisionCheckSphereRadius = 0.3f;
         if(Tutorial.instance != null)
@@ -62,9 +61,17 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Helper spheres to check if player is grounded or stands on moveable object
+        
+        //Helper sphere to check if player is grounded
         isGrounded = Physics.CheckSphere(groundCollisionCheck.position, groundCollisionCheckSphereRadius, groundMask);
-        isOnMoveable = Physics.CheckSphere(groundCollisionCheck.position, 0.2f, moveableMask);
+
+        if (isGrounded && velocity.y < 0.0f)
+        {
+            //Debug.Log("reseting gravity force");
+            velocity.y = -2.2f;
+            playerController.stepOffset = stepOffset;
+            //velocity = new Vector3(0.0f, 0.0f, 0.0f);
+        }
 
         //compute movement direction
         float horizontal = Input.GetAxis("Horizontal");
@@ -138,11 +145,14 @@ public class PlayerMovement : MonoBehaviour
 
         //handle audio
         AudioManager.instance.movementVec = playerController.velocity;
-        AudioManager.instance.isGrounded = isGrounded || isOnMoveable;
+        AudioManager.instance.isGrounded = isGrounded;
 
         //add jump force if player jumps
-        if (Input.GetButtonDown("Jump") && (isGrounded || isOnMoveable))
+        if (Input.GetButtonDown("Jump") && isGrounded && playerState != playerStates.CROUCHING)
         {
+            Debug.Log("JUMP");
+            stepOffset = playerController.stepOffset;
+            playerController.stepOffset = 0.0f;
             velocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
         }
         velocity.y += gravity * Time.deltaTime;
@@ -216,5 +226,9 @@ public class PlayerMovement : MonoBehaviour
                 Tutorial.instance.showHelp("staminaShot");
             }
         }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collided!");
     }
 }

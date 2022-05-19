@@ -88,20 +88,13 @@ public class EnemyChase : MonoBehaviour
         if(reachedDestination())
         {
             agent.ResetPath();
-            //Debug.Log("Enemy reached destination!");
         }
-        if (!agent.hasPath /*&& !isPlayerVisible(agent.transform.position, player.position)*/)
+        if (!agent.hasPath)
         {
             //find new patrol point
-
             Transform selectedPatrolPoint = patrolPoints.transform.GetChild(Random.Range(0, patrolPoints.transform.childCount));
             //Debug.Log("Selected patrol point: " + selectedPatrolPoint.name);
             agent.SetDestination(selectedPatrolPoint.position);
-            //foreach(Transform point in patrolPoints.transform)
-            //{
-            //    Debug.Log("Patrol point: " + point.name);
-            //}
-            //Debug.Log("Enemy is not moving");
         }
     }
     private void chase()
@@ -154,7 +147,7 @@ public class EnemyChase : MonoBehaviour
             chase();
             return;
         }
-        if (!agent.hasPath /*&& !isPlayerVisible(agent.transform.position, player.position)*/)
+        if (!agent.hasPath)
         {
             //find the point in the best direction 
             float bestValue = -1.0f;
