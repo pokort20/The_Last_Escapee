@@ -142,6 +142,7 @@ public class GameManager : MonoBehaviour
     }
     private void loadSettingsData()
     {
+        Debug.Log("Loading settings data");
         SettingsData settingsData = SaveLoadSystem.LoadSettings();
         if(settingsData == null)
         {

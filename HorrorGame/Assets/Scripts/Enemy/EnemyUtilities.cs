@@ -144,15 +144,13 @@ public class EnemyUtilities : MonoBehaviour
         //getting the collision points with the environment
         for(int i = 0; i < 7; ++i)
         {
-            if(Physics.Raycast(origin: flashlight.transform.position, direction: pointsOnCircle[i] - flashlight.transform.position, hitInfo: out raycastHit, maxDistance: flashlight.range))
+            if(Physics.Raycast(origin: flashlight.transform.position, direction: pointsOnCircle[i] - flashlight.transform.position, hitInfo: out raycastHit, maxDistance: flashlight.range*0.5f))
             {
                 flashlightHitPoints.Add(raycastHit.point);
 
                 if(raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
                     enemiesStruckByFlashlight.Add(raycastHit.collider.gameObject.transform.parent.gameObject.GetHashCode());
-                    //Debug.Log("Shines directly on" + raycastHit.collider.gameObject.transform.parent.gameObject.name + 
-                    //    ", with hash: " + raycastHit.collider.gameObject.transform.parent.gameObject.GetHashCode());
                 }
             }
         }
@@ -164,11 +162,6 @@ public class EnemyUtilities : MonoBehaviour
             {
                 Debug.DrawRay(flashlight.transform.position, hitPoint - flashlight.transform.position, Color.white);
             }
-            //for (int i = 0; i < 7; ++i)
-            //{
-            //    Vector3 dir = Vector3.Normalize(pointsOnCircle[i] - flashlight.transform.position);
-            //    Debug.DrawRay(flashlight.transform.position, dir * flashlight.range, Color.white);
-            //}
         }
 
 

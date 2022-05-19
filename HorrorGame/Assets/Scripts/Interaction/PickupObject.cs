@@ -65,13 +65,27 @@ public class PickupObject : MonoBehaviour
         }
 
         bool colided = false;
-        if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+        if(isHoldingObject)
         {
-            if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Hinge"))
+            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance*2.0f))
             {
-                colided = true;
+                if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Hinge"))
+                {
+                    colided = true;
+                }
             }
         }
+        else
+        {
+            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out raycastHit, maxGrabDistance))
+            {
+                if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Moveable") || raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Hinge"))
+                {
+                    colided = true;
+                }
+            }
+        }
+
         if (!isHoldingObject)
         {
             if (colided)
@@ -97,7 +111,15 @@ public class PickupObject : MonoBehaviour
         if (isHoldingObject)
         {
             if(holdingObject.layer == LayerMask.NameToLayer("Moveable") && (raycastHit.collider == null || raycastHit.collider.gameObject != holdingObject))
-            {;
+            {
+                if (raycastHit.collider == null)
+                {
+                    Debug.Log("dropping coz raycast not hit");
+                }
+                else
+                {
+                    Debug.Log("Dropping coz raycast hit different object");
+                }
                 dropObject();
                 return;
             }
@@ -168,6 +190,7 @@ public class PickupObject : MonoBehaviour
             currentGrabDistance = Vector3.Distance(holdingObject.transform.position, holder.transform.position);
             if(currentGrabDistance > 0.9f)
             {
+                Debug.Log("dropping coz dist small");
                 dropObject();
                 return;
             }

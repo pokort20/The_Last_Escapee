@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7472112995567190267}
   - component: {fileID: 7472112995567190268}
   - component: {fileID: 7472112995567190269}
+  - component: {fileID: 54208211289064403}
+  - component: {fileID: 5136574439635660774}
   m_Layer: 0
   m_Name: Wall3_str5m_door
   m_TagString: Untagged
@@ -123,3 +125,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.003, y: 0.010763534, z: 0.007762568}
   m_Center: {x: 0, y: 0.000016561447, z: 0.024118809}
+--- !u!65 &54208211289064403
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7742583860660141480}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.003, y: 0.020372948, z: 0.028000003}
+  m_Center: {x: 0, y: 0.014813547, z: 0.014000006}
+--- !u!65 &5136574439635660774
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7742583860660141480}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.003, y: 0.020372948, z: 0.028000003}
+  m_Center: {x: 0, y: -0.01481355, z: 0.014000006}

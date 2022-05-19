@@ -10,11 +10,15 @@ public class MainMenuVM : MonoBehaviour
     public GameObject mainMenu;
     public GameObject levelsMenu;
     public GameObject controlsMenu;
+    public GameObject settingsMenu;
+
+    public Scrollbar brightnessBar;
+    public Scrollbar volumeBar;
 
     void Start()
     {
         Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         Time.timeScale = 1.0f;
         try
@@ -46,12 +50,14 @@ public class MainMenuVM : MonoBehaviour
         {
             levelsMenu.SetActive(false);
             controlsMenu.SetActive(false);
+            settingsMenu.SetActive(false);
             mainMenu.SetActive(true);
         }
     }
     public void OnPlayButtonUse()
     {
         Debug.Log("Clicked PLAY!");
+        GameManager.instance.saveSettingsData();
         AudioManager.instance.playAudio("menu_click");
         SceneManager.LoadScene("Level1", LoadSceneMode.Single);
     }
@@ -69,6 +75,15 @@ public class MainMenuVM : MonoBehaviour
         mainMenu.SetActive(false);
         controlsMenu.SetActive(true);
     }
+    public void OnSettingsButtonUse()
+    {
+        Debug.Log("Clicked SETTINGS");
+        AudioManager.instance.playAudio("menu_click");
+        mainMenu.SetActive(false);
+        brightnessBar.value = PostProcessing.instance.brightness;
+        volumeBar.value = AudioManager.instance.generalVolume;
+        settingsMenu.SetActive(true);
+    }
     public void OnExitButtonUse()
     {
         Debug.Log("Clicked EXIT!");
@@ -85,25 +100,42 @@ public class MainMenuVM : MonoBehaviour
         AudioManager.instance.playAudio("menu_click");
         levelsMenu.SetActive(false);
         controlsMenu.SetActive(false);
+        settingsMenu.SetActive(false);
         mainMenu.SetActive(true);
     }
     public void OnLevel1ButtonUse()
     {
         Debug.Log("Clicked LEVEL1!");
+        GameManager.instance.saveSettingsData();
         AudioManager.instance.playAudio("menu_click");
         SceneManager.LoadScene("Level1", LoadSceneMode.Single);
     }
     public void OnLevel2ButtonUse()
     {
         Debug.Log("Clicked LEVEL2!");
+        GameManager.instance.saveSettingsData();
         AudioManager.instance.playAudio("menu_click");
         SceneManager.LoadScene("Level2", LoadSceneMode.Single);
     }
     public void OnLevel3ButtonUse()
     {
         Debug.Log("Clicked LEVEL3!");
+        GameManager.instance.saveSettingsData();
         AudioManager.instance.playAudio("menu_click");
         SceneManager.LoadScene("Level3", LoadSceneMode.Single);
-        //SceneManager.LoadScene("Level3", LoadSceneMode.Single);
+    }
+    public void OnBrightnessValueChanged()
+    {
+        if(PostProcessing.instance != null)
+        {
+            PostProcessing.instance.brightness = brightnessBar.value;
+        }
+    }
+    public void OnVolumeValueChanged()
+    {
+        if(AudioManager.instance != null)
+        {
+            AudioManager.instance.generalVolume = volumeBar.value;
+        }
     }
 }

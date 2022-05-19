@@ -42,7 +42,7 @@ public class AudioManager : MonoBehaviour
         set
         {
             masterVolume = value;
-            if(gameManager != null && gameManager.isPaused)
+            if(gameManager != null && (gameManager.isPaused || MainMenuScene))
             {
                 ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * masterVolume;
             }
@@ -189,6 +189,10 @@ public class AudioManager : MonoBehaviour
     }
     public void playAudio(string name, AudioSource source)
     {
+        if(gameManager.isPaused)
+        {
+            return;
+        }
         if(!source.isActiveAndEnabled)
         {
             Debug.Log("Can not play sound, because this audio source is not enabled/active");

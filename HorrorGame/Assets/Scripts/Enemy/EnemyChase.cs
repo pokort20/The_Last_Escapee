@@ -334,6 +334,10 @@ public class EnemyChase : MonoBehaviour
             RaycastHit raycastHit;
             //Debug.DrawRay(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), Color.green);
             Physics.Raycast(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), maxDistance: 5.0f, hitInfo: out raycastHit);
+            if(raycastHit.collider != null)
+            {
+                Debug.DrawRay(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), raycastHit.point - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), Color.red);
+            }
             if(raycastHit.collider != null && raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 attackCooldown = 1.0f;

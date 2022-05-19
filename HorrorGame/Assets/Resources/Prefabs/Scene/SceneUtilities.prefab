@@ -74,7 +74,7 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: 071f2116b587a2b4cb403f06fe6203af, type: 3}
     name: flicker
-    volume: 0.2
+    volume: 0.1
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 6da0cb1932b857444922e4c02bdfc978, type: 3}
@@ -372,7 +372,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 988fb4e714d0a014aaf3985a8a3a1bdd, type: 2}
+  sharedProfile: {fileID: 11400000, guid: dcba2d3e15e630847a27f7f735cf0e02, type: 2}
 --- !u!1 &4880549228835444642
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,6 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a48493ccb0fefe468740b2be227c06e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenu: 0
   globalVolume: {fileID: 4880549228061161517}
   maxLensDistortion: -0.5
   maxMotionBlur: 4

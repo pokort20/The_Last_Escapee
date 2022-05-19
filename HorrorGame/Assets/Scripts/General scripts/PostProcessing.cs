@@ -10,6 +10,7 @@ public class PostProcessing : MonoBehaviour
     public static PostProcessing instance;
 
     //public variables
+    public bool mainMenu;
     public Volume globalVolume;
     public float maxLensDistortion;
     public float maxMotionBlur;
@@ -37,6 +38,7 @@ public class PostProcessing : MonoBehaviour
         set
         {
             _brightness = value;
+            Debug.Log("settings brightness to: " + _brightness);
             handleGradientSky();
         }
     }
@@ -49,6 +51,8 @@ public class PostProcessing : MonoBehaviour
             return;
         }
         instance = this;
+
+        previousGradientSkyValue = 0.5f;
     }
     void Start()
     {
@@ -61,14 +65,16 @@ public class PostProcessing : MonoBehaviour
         lensDistortionEnabled = false;
         depthOfFieldEnabled = false;
         motionBlurEnabled = false;
-        previousGradientSkyValue = 0.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        handleLensDistortion();
-        handleMotionBlur();
+        if(!mainMenu)
+        {
+            handleLensDistortion();
+            handleMotionBlur();
+        }
         //handleDepthOfField();
         //handleBloom();
     }
@@ -164,10 +170,16 @@ public class PostProcessing : MonoBehaviour
     {
         if(gradientSky == null)
         {
-            return;
+            if(!globalVolume.profile.TryGet(out gradientSky))
+            {
+                Debug.LogError("Gradient sky is null");
+                return;
+            }
         }
+        
         float delta = brightness - previousGradientSkyValue;
-        delta *= 0.05f;
+        delta *= 0.025f;
+        Debug.Log("changing gradient sky, delta: " + delta +  ", brightness: " + brightness + ", previousGradientSkyValue: " + previousGradientSkyValue);
 
         Color topColor = gradientSky.top.value;
         Color midColor = gradientSky.middle.value;

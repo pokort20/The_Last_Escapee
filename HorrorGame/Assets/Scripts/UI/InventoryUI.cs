@@ -227,7 +227,7 @@ public class InventoryUI : MonoBehaviour
         updateInventoryUI();
         Time.timeScale = 0.25f;
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
         if(tutorial != null)
         {
             tutorial.hideHelp("inventory");
@@ -317,7 +317,7 @@ public class InventoryUI : MonoBehaviour
 
         centerCursor();
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
     }
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)
     {
@@ -328,7 +328,7 @@ public class InventoryUI : MonoBehaviour
     private void centerCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
     }
     //Pause Game Menu functions
     public void pauseGame()
@@ -338,7 +338,7 @@ public class InventoryUI : MonoBehaviour
         isPaused = true;
         centerCursor();
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
         uiElements.SetActive(false);
         tutorialUI.SetActive(false);
         pauseMenuUI.SetActive(true);
