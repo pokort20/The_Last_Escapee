@@ -20,11 +20,26 @@ public class PostProcessing : MonoBehaviour
     private Bloom bloom;
     private DepthOfField depthOfField;
     private MotionBlur motionBlur;
+    private GradientSky gradientSky;
 
+    private float _brightness;
     //other variables
     public bool lensDistortionEnabled { get; set; }
     public bool depthOfFieldEnabled { get; set; }
     public bool motionBlurEnabled { get; set; }
+    public float previousGradientSkyValue { get; set; }
+    public float brightness
+    {
+        get
+        {
+            return _brightness;
+        }
+        set
+        {
+            _brightness = value;
+            handleGradientSky();
+        }
+    }
     void Awake()
     {
         Debug.Log("Started PostProcessing");
@@ -41,10 +56,12 @@ public class PostProcessing : MonoBehaviour
         globalVolume.profile.TryGet(out lensDistortion);
         globalVolume.profile.TryGet(out depthOfField);
         globalVolume.profile.TryGet(out motionBlur);
+        globalVolume.profile.TryGet(out gradientSky);
         //globalVolume.profile.TryGet(out bloom);
         lensDistortionEnabled = false;
         depthOfFieldEnabled = false;
         motionBlurEnabled = false;
+        previousGradientSkyValue = 0.5f;
     }
 
     // Update is called once per frame
@@ -142,6 +159,37 @@ public class PostProcessing : MonoBehaviour
         {
             bloom.active = false;
         }
+    }
+    public void handleGradientSky()
+    {
+        if(gradientSky == null)
+        {
+            return;
+        }
+        float delta = brightness - previousGradientSkyValue;
+        delta *= 0.05f;
+
+        Color topColor = gradientSky.top.value;
+        Color midColor = gradientSky.middle.value;
+        Color botColor = gradientSky.bottom.value;
+
+        float h;
+        float s;
+        float v;
+        Color.RGBToHSV(topColor, out h, out s, out v);
+        topColor = Color.HSVToRGB(h, s, v + delta);
+
+        Color.RGBToHSV(midColor, out h, out s, out v);
+        midColor = Color.HSVToRGB(h, s, v + delta);
+
+        Color.RGBToHSV(botColor, out h, out s, out v);
+        botColor = Color.HSVToRGB(h, s, v + delta);
+
+        gradientSky.top.value = topColor;
+        gradientSky.middle.value = midColor;
+        gradientSky.bottom.value = botColor;
+
+        previousGradientSkyValue = brightness;
     }
 
     private float remap(float iMin, float iMax, float oMin, float oMax, float value)

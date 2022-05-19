@@ -14,6 +14,11 @@ public class InventoryUI : MonoBehaviour
     public GameObject controlsUI;
     public GameObject deathScreen;
     public GameObject tutorialUI;
+    public GameObject settingsUI;
+
+    public Scrollbar brightnessBar;
+    public Scrollbar volumeBar;
+
 
     public Transform itemSlotsParent;
     public Image flashlightImage;
@@ -73,6 +78,7 @@ public class InventoryUI : MonoBehaviour
         controlsUI.SetActive(false);
         inventoryUI.SetActive(false);
         pauseMenuUI.SetActive(false);
+        settingsUI.SetActive(false);
         deathScreen.SetActive(false);
         uiElements.SetActive(true);
     }
@@ -93,6 +99,11 @@ public class InventoryUI : MonoBehaviour
                 if(controlsUI.activeInHierarchy)
                 {
                     controlsUI.SetActive(false);
+                    pauseMenuUI.SetActive(true);
+                }
+                else if(settingsUI.activeInHierarchy)
+                {
+                    settingsUI.SetActive(false);
                     pauseMenuUI.SetActive(true);
                 }
                 else
@@ -125,6 +136,17 @@ public class InventoryUI : MonoBehaviour
     {
         int textureSize = 48;
         Cursor.SetCursor(cursorTexture, new Vector2(textureSize / 2, textureSize / 2), CursorMode.ForceSoftware);
+    }
+    private void setBarPositions()
+    {
+        if(brightnessBar != null && PostProcessing.instance != null)
+        {
+            brightnessBar.value = PostProcessing.instance.brightness;
+        }
+        if(volumeBar != null && AudioManager.instance != null)
+        {
+            volumeBar.value = AudioManager.instance.generalVolume;
+        }
     }
     public void updateInventoryUI()
     {
@@ -350,9 +372,29 @@ public class InventoryUI : MonoBehaviour
         pauseMenuUI.SetActive(false);
         controlsUI.SetActive(true);
     }
+    public void OnSettingsButtonUse()
+    {
+        Debug.Log("Opened settings");
+        setBarPositions();
+        gameManager.setTimeScale(1.0f);
+        AudioManager.instance.playAudio("menu_click");
+        gameManager.setTimeScale(0.0f);
+        pauseMenuUI.SetActive(false);
+        settingsUI.SetActive(true);
+    }
+    public void OnBrightnessValueChanged()
+    {
+        PostProcessing.instance.brightness = brightnessBar.value;
+    }
+    public void OnVolumeValueChanged()
+    {
+        AudioManager.instance.generalVolume = volumeBar.value;
+    }
     public void OnQuitButtonUse()
     {
         Debug.Log("Returning to main menu!");
+        gameManager.saveSettingsData();
+
         gameManager.setTimeScale(1.0f);
         AudioManager.instance.playAudio("menu_click");
         gameManager.setTimeScale(0.0f);
@@ -370,11 +412,14 @@ public class InventoryUI : MonoBehaviour
         AudioManager.instance.playAudio("menu_click");
         gameManager.setTimeScale(0.0f);
         controlsUI.SetActive(false);
+        settingsUI.SetActive(false);
         pauseMenuUI.SetActive(true);
     }
     public void OnRetryButtonUse()
     {
         Debug.Log("Retrying");
+        gameManager.saveSettingsData();
+
         gameManager.setTimeScale(1.0f);
         AudioManager.instance.playAudio("menu_click");
         gameManager.setTimeScale(0.0f);

@@ -124,4 +124,55 @@ public static class SaveLoadSystem
 
         return sceneData;
     }
+
+    public static bool SaveSettings(float volume, float brightness)
+    {
+        bool success;
+        try
+        {
+            SettingsData settingsData = new SettingsData(volume, brightness);
+            BinaryFormatter bf = new BinaryFormatter();
+            Directory.CreateDirectory(Application.dataPath + "/Saves/");
+            string path = Application.dataPath + "/Saves/settings.set";
+            FileStream fs = new FileStream(path, FileMode.Create);
+            bf.Serialize(fs, settingsData);
+            fs.Close();
+            success = true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Saving the game FAILED! " + e.Message);
+            success = false;
+        }
+        return success;
+    }
+    public static SettingsData LoadSettings()
+    {
+        SettingsData settingsData;
+        //try loading save file
+        try
+        {
+
+            string path = Application.dataPath + "/Saves/settings.set";
+            if (File.Exists(path))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream fs = new FileStream(path, FileMode.Open);
+                settingsData = bf.Deserialize(fs) as SettingsData;
+                fs.Close();
+            }
+            else
+            {
+                Debug.LogWarning("Loading the settings FAILED, settings file not found!");
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Loading the settings FAILED! " + e.Message);
+            return null;
+        }
+
+        return settingsData;
+    }
 }

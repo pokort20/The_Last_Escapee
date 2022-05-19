@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         printGameVariables();
+        loadSettingsData();
         loadSceneData();
         setTimeScale(1.0f);
     }
@@ -137,6 +138,31 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogWarning("Can not find scene transition nor load game, starting with default stats and items");
+        }
+    }
+    private void loadSettingsData()
+    {
+        SettingsData settingsData = SaveLoadSystem.LoadSettings();
+        if(settingsData == null)
+        {
+            Debug.LogWarning("No settings file found, creating a default one");
+            SaveLoadSystem.SaveSettings(0.5f, 0.5f);
+            return;
+        }
+        if(AudioManager.instance != null)
+        {
+            AudioManager.instance.generalVolume = settingsData.volume;
+        }
+        if(PostProcessing.instance != null)
+        {
+            PostProcessing.instance.brightness = settingsData.brightness;
+        }
+    }
+    public void saveSettingsData()
+    {
+        if(!SaveLoadSystem.SaveSettings(AudioManager.instance.generalVolume, PostProcessing.instance.brightness))
+        {
+            Debug.LogWarning("Failed to save settings data");
         }
     }
     public void printGameVariables()

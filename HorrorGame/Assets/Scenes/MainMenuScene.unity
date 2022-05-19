@@ -3817,7 +3817,7 @@ MonoBehaviour:
   playerBreathingAudioSource: {fileID: 9483899}
   ambientMenuAudioSource: {fileID: 60916095}
   player: {fileID: 1728322550}
-  generalVolume: 0.5
+  masterVolume: 0.5
   ambientVolume: 1
   effectsVolume: 1
   audios:

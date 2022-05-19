@@ -48,7 +48,7 @@ MonoBehaviour:
   playerBreathingAudioSource: {fileID: 0}
   ambientMenuAudioSource: {fileID: 0}
   player: {fileID: 0}
-  generalVolume: 0.5
+  masterVolume: 0.5
   ambientVolume: 0.5
   effectsVolume: 1
   audios:
@@ -147,11 +147,6 @@ MonoBehaviour:
     volume: 0.2
     pitch: 1
     loop: 0
-  - audioClip: {fileID: 8300000, guid: 6845e92d5bab6d34dbff9b6ded4f5637, type: 3}
-    name: item_use
-    volume: 0.5
-    pitch: 1
-    loop: 0
   - audioClip: {fileID: 8300000, guid: de506c2a8c4b803418abcd3f0d2e2543, type: 3}
     name: zombie1
     volume: 0.2
@@ -241,12 +236,12 @@ MonoBehaviour:
   thudEffectAudios:
   - audioClip: {fileID: 8300000, guid: 1d7ba6be7ce9c0940a06ad4aa75dc99d, type: 3}
     name: thud1
-    volume: 0.1
+    volume: 0.075
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: a0223f670cefe2d4b9dfccc7ee7931dd, type: 3}
     name: thud2
-    volume: 0.1
+    volume: 0.075
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: 2217dfbcce2f3324381fcbdca3eff182, type: 3}
@@ -256,7 +251,7 @@ MonoBehaviour:
     loop: 0
   - audioClip: {fileID: 8300000, guid: 46e01083573612e459e5009f3171444f, type: 3}
     name: thud4
-    volume: 0.5
+    volume: 0.075
     pitch: 1
     loop: 0
   - audioClip: {fileID: 8300000, guid: aa6ca93206d88534095656f7619ade68, type: 3}

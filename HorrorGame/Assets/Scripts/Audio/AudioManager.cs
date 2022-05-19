@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource ambientMenuAudioSource;
     public Transform player;
     [Range(0.0f, 1.0f)]
-    public float generalVolume;
+    public float masterVolume;
     [Range(0.0f, 1.0f)]
     public float ambientVolume;
     [Range(0.0f, 1.0f)]
@@ -33,6 +33,21 @@ public class AudioManager : MonoBehaviour
     //properties
     public Vector3 movementVec { get; set; }
     public bool isGrounded { get; set; }
+    public float generalVolume
+    {
+        get
+        {
+            return masterVolume;
+        }
+        set
+        {
+            masterVolume = value;
+            if(gameManager != null && gameManager.isPaused)
+            {
+                ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * masterVolume;
+            }
+        }
+    }
     void Awake()
     {
         Debug.Log("Started audio manager!");
@@ -61,8 +76,9 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * generalVolume;
+            ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * masterVolume;
         }
+        generalVolume = masterVolume;
     }
     void Update()
     {
@@ -138,7 +154,7 @@ public class AudioManager : MonoBehaviour
             playerMovementAudioSource.Pause();
             return;
         }
-        playerMovementAudioSource.volume = remap(1.0f, 6.0f, 0.0f, 0.2f, movementVec.magnitude) * effectsVolume * generalVolume;
+        playerMovementAudioSource.volume = remap(1.0f, 6.0f, 0.0f, 0.2f, movementVec.magnitude) * effectsVolume * masterVolume;
         playerMovementAudioSource.pitch = remap(0.0f, 6.0f, 0.7f, 2.0f, movementVec.magnitude);
         if(!playerMovementAudioSource.isPlaying && !gameManager.isPaused && !gameManager.isPlayerDead)
         {
@@ -152,7 +168,7 @@ public class AudioManager : MonoBehaviour
         //    playerBreathingAudioSource.Pause();
         //    return;
         //}
-        playerBreathingAudioSource.volume = (remap(0.0f, 6.0f, 0.01f, 0.015f, movementVec.magnitude) + remap(0.0f, gameManager._maxStamina, 0.00f, 0.1f, gameManager._maxStamina - gameManager.stamina)) * effectsVolume * generalVolume;
+        playerBreathingAudioSource.volume = (remap(0.0f, 6.0f, 0.01f, 0.015f, movementVec.magnitude) + remap(0.0f, gameManager._maxStamina, 0.00f, 0.1f, gameManager._maxStamina - gameManager.stamina)) * effectsVolume * masterVolume;
         playerBreathingAudioSource.pitch = remap(0.0f, gameManager._maxStamina, 0.7f, 1.3f, gameManager._maxStamina - gameManager.stamina);
         if(!playerBreathingAudioSource.isPlaying && !gameManager.isPaused && !gameManager.isPlayerDead)
         {
@@ -165,7 +181,7 @@ public class AudioManager : MonoBehaviour
         {
             if (audio.name == name)
             {
-                AudioSource.PlayClipAtPoint(audio.audioClip, player.position, audio.volume * effectsVolume * generalVolume);
+                AudioSource.PlayClipAtPoint(audio.audioClip, player.position, audio.volume * effectsVolume * masterVolume);
                 return;
             }
         }
@@ -184,7 +200,7 @@ public class AudioManager : MonoBehaviour
             {
                 source.clip = audio.audioClip;
                 source.loop = audio.loop;
-                source.volume = audio.volume * effectsVolume * generalVolume;
+                source.volume = audio.volume * effectsVolume * masterVolume;
                 source.pitch = audio.pitch;
                 source.Play();
 
@@ -199,7 +215,7 @@ public class AudioManager : MonoBehaviour
         {
             if (audio.name == name)
             {
-                AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * generalVolume);
+                AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * masterVolume);
                 return;
             }
         }
@@ -209,7 +225,7 @@ public class AudioManager : MonoBehaviour
     {
         int index = Random.Range(0, thudEffectAudios.Count);
         Audio audio = thudEffectAudios[index];
-        AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * generalVolume);
+        AudioSource.PlayClipAtPoint(audio.audioClip, position, audio.volume * effectsVolume * masterVolume);
     }
     
     public void addEnemy(EnemyAudio ea)
@@ -270,7 +286,7 @@ public class AudioManager : MonoBehaviour
         {
             Debug.Log("Playing: " + audio.name);
             Vector3 pos = new Vector3(Random.Range(-2.0f, 2.0f), player.position.y + 0.5f, Random.Range(-2.0f, 2.0f));
-            AudioSource.PlayClipAtPoint(audio.audioClip, pos, audio.volume * ambientVolume * generalVolume);
+            AudioSource.PlayClipAtPoint(audio.audioClip, pos, audio.volume * ambientVolume * masterVolume);
         }
 
         float nextTime = Random.Range(10, 22);
@@ -298,8 +314,9 @@ public class AudioManager : MonoBehaviour
                 sceneAudioSources.Add(new Tuple<AudioSource, bool>(source, source.isPlaying));
                 source.Pause();
             }
+            
+            ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * masterVolume;
             ambientMenuAudioSource.UnPause();
-            ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * generalVolume;
             Debug.Log("Audio sources paused!");
             if(!ambientMenuAudioSource.isPlaying)
             {
