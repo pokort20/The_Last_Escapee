@@ -1,5 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+/// UI hover text class
+/**
+    This class serves as a template for other hover 
+    text classes.
+*/
 using UnityEngine;
 using UnityEngine.EventSystems;
 

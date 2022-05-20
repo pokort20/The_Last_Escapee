@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Save data class
+/**
+    This class serves as a structure, encapsuling
+    all the variables required to make a game save.
+*/
 using System.Linq;
-using UnityEngine;
 
 [System.Serializable]
 public class SaveData

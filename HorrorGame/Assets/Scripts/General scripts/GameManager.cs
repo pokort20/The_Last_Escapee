@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Game manager class
+/**
+    This class handles the basic game logic. It also
+    holds the most important game variables, which other
+    scripts access.
+*/
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    //Variables
+    //Public variables defined in Unity inspector
     public static GameManager instance;
     public float _movementSpeed;
     public float _maxHealth;
@@ -14,6 +18,7 @@ public class GameManager : MonoBehaviour
     public float _maxStamina;
     public bool _flashlightEnabled;
 
+    //Other variables
     private float _health;
     private bool _isPaused;
     private bool _isPlayerDead;
@@ -142,7 +147,6 @@ public class GameManager : MonoBehaviour
     }
     private void loadSettingsData()
     {
-        Debug.Log("Loading settings data");
         SettingsData settingsData = SaveLoadSystem.LoadSettings();
         if(settingsData == null)
         {

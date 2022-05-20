@@ -1,17 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Class that handles flashlight
+/**
+    This class handles the flashlight mechanic as 
+    well as the battery consumption. When the batteries
+    are low, the flashlight starts flickering.
+*/
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 public class Flashlight : MonoBehaviour
 {
+    //Public variables defined in Unity inspector.
     public Light flashlight;
     public HDAdditionalLightData lightData;
-    Inventory inventory;
-    float intensityRangeMin;
-    float intensityRangeMax;
-    float decayThreshold;
-    float flashlightSwitchCooldown;
+
+    //Other variables
+    private Inventory inventory;
+    private float intensityRangeMin;
+    private float intensityRangeMax;
+    private float decayThreshold;
+    private float flashlightSwitchCooldown;
+
+    //Init
     private void Start()
     {
         flashlight.enabled = GameManager.instance.flashlightEnabled;
@@ -22,7 +31,8 @@ public class Flashlight : MonoBehaviour
         flashlightSwitchCooldown = 0.0f;
         lightData = flashlight.GetComponent<HDAdditionalLightData>();
     }
-    // Update is called once per frame
+
+    //Update
     void Update()
     {
         flashlightSwitchCooldown -= Time.deltaTime;
@@ -45,18 +55,17 @@ public class Flashlight : MonoBehaviour
             GameManager.instance.batteryLevel -= 0.5f * Time.deltaTime;
             updateLightIntensity();
         }
-        //Debug.Log("Battery level: " + GameManager.instance.batteryLevel);
     }
+
+    //Other functions
     private void switchFlaslight()
     {
         if(GameManager.instance.flashlightEnabled)
         {
-            Debug.Log("Disabled flashlight");
             AudioManager.instance.playAudio("flashlight_ON");
         }
         else
         {
-            Debug.Log("Eisabled flashlight");
             if (Tutorial.instance != null)
             {
                 Tutorial.instance.hideAllHelps();

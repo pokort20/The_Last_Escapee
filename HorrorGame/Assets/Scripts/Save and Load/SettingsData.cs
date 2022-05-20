@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/// Settings data class
+/**
+    This class serves as a structure, encapsuling 
+    the variables required for the game settings.
+*/
 
 [System.Serializable]
 public class SettingsData

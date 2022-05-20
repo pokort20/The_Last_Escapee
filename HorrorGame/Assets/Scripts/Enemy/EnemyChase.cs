@@ -1,4 +1,10 @@
-using System.Collections;
+/// Main enemy class
+/**
+    This class handles the enemy states and movement. It uses
+    the NavMesh agent, to which it passes the destination where
+    to go. This destination is computed based on enemy's hearing,
+    vision or flashlight's light.
+*/
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,7 +12,7 @@ using UnityEngine.AI;
 
 public class EnemyChase : MonoBehaviour
 {
-
+    //Public variables defined in Unity inspector
     public NavMeshAgent agent;
     public Transform player;
     public GameObject patrolPoints;
@@ -16,6 +22,7 @@ public class EnemyChase : MonoBehaviour
     public AudioSource loopAudioSource;
     public AudioSource effectAudioSource;
 
+    //Other variables
     private Vector3 flashlightVisiblePoint;
     private bool isPrevDestFromFlashlight;
     private float attackCooldown;
@@ -23,15 +30,17 @@ public class EnemyChase : MonoBehaviour
     private Tutorial tutorial;
     private Animator animator;
     float attackDistance;
+    
+    //States
     private enum enemyStates : int
     {
         PATROL = 0,
         CHASING = 1,
         EXPLORE_AREA = 2
     }
-
     private enemyStates enemyState;
-    // Start is called before the first frame update
+
+    //Init
     void Start()
     {
         postProcessing = PostProcessing.instance;
@@ -47,29 +56,30 @@ public class EnemyChase : MonoBehaviour
         Invoke("playRandomSound", Random.Range(5, 15));
     }
 
+    //Update
     void Update()
     {
         switch (enemyState)
         {
             case enemyStates.PATROL:
-                //Debug.Log("PATROL");
                 patrol();
                 break;
             case enemyStates.CHASING:
-                //Debug.Log("CHASE");
                 chase();
                 break;
             case enemyStates.EXPLORE_AREA:
-                //Debug.Log("EXPLORE_AREA");
                 explore();
                 break;
             default:
-                //Debug.Log("Enemy state unknown!");
+                Debug.LogError("Enemy state unknown!");
                 break;
         }
         AudioManager.instance.updateEnemy(GetHashCode(), agent.transform.position, agent.velocity);
         isPlayerAttacked();
     }
+
+    //Other funcitons
+    //Patrol function
     private void patrol()
     {
         animator.SetFloat("speed", 0.0f, 0.15f, Time.deltaTime);
@@ -93,10 +103,10 @@ public class EnemyChase : MonoBehaviour
         {
             //find new patrol point
             Transform selectedPatrolPoint = patrolPoints.transform.GetChild(Random.Range(0, patrolPoints.transform.childCount));
-            //Debug.Log("Selected patrol point: " + selectedPatrolPoint.name);
             agent.SetDestination(selectedPatrolPoint.position);
         }
     }
+    //Chase function
     private void chase()
     {
         animator.SetFloat("speed", 1.0f, 0.15f, Time.deltaTime);
@@ -105,12 +115,6 @@ public class EnemyChase : MonoBehaviour
             //Still can see or hear player
             isPrevDestFromFlashlight = false;
             agent.SetDestination(player.position);
-
-            //Vector3 direction = player.position - agent.transform.position;
-            //direction.y = 0;
-            //Quaternion rotation = Quaternion.LookRotation(direction);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 100.0f * Time.deltaTime);
-            //agent.transform.rotation = rotation;
         }
         else if(isFlashlightHitPointVisible(agent.transform.position, player.position) && isPrevDestFromFlashlight)
         {
@@ -134,6 +138,7 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("Switching to EXPLORE_AREA!");
         }
     }
+    //Explore function
     private void explore()
     {
         animator.SetFloat("speed", 0.8f, 0.15f, Time.deltaTime);
@@ -185,26 +190,19 @@ public class EnemyChase : MonoBehaviour
     }
     private bool isPlayerVisible(Vector3 agentPos, Vector3 playerPos)
     {
-        //Debug.Log("GO.layer: " + player.gameObject.layer + ", LM.NameToLayer: " + LayerMask.NameToLayer("Player") + ", LM.GetMask: " + LayerMask.GetMask("Player"));
         RaycastHit raycastHit;
         float playerVisibility = FindObjectOfType<EnemyUtilities>().playerVisibility;
-        float visibilityDistance = remap(0.0f, 70.0f, 2.0f, 15.0f, playerVisibility);
+        float visibilityDistance = remap(0.0f, 70.0f, 2.0f, 18.0f, playerVisibility);
         //Debug.Log("visibility distance: " + visibilityDistance);
         
         Vector3 eyePos = agentPos;
         eyePos.y += 1.2f;
         Vector3 dirToPlayer = playerPos - eyePos;
         float angle = Vector3.Angle(dirToPlayer, agent.transform.forward);
-        //Debug.Log("angle: " + angle + ", DirToPlayer: " + dirToPlayer + ", agent fw: " + agent.transform.forward);
         if (Physics.Raycast(eyePos, playerPos - eyePos, out raycastHit, visibilityDistance))
         {
-            //Debug.Log("IsPlayerVisible RaycastHit: " + raycastHit.collider.gameObject.name);
-            //Debug.Log("AgentPos: " + eyePos + ", PlayerPos: " + playerPos);
-            //Debug.Log("Distance: " + Vector3.Distance(eyePos, raycastHit.collider.gameObject.transform.position));
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player") && angle < enemyFOV * 0.5f)
             {
-                //Debug.Log("Enemy sees player!");
-                //enemyState = enemyStates.CHASING;
                 return true;
             }
         }
@@ -215,30 +213,22 @@ public class EnemyChase : MonoBehaviour
         float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
         float noiseRange = moveVecMag * 0.5f;
         noiseRange = Mathf.Pow(noiseRange, 3.0f);
-        //Debug.Log("Noise range: " + noiseRange);
         float dist = Vector3.Distance(agentPos, playerPos);
         RaycastHit raycastHit;
         Vector3 earPos = agentPos;
         earPos.y += 1.2f;
         int layerMask = LayerMask.GetMask("Walls");
 
-        //Debug.Log("Distance " + (Vector3.Distance(agentPos, playerPos) - hearingRange - noiseRange));
         if (dist < hearingRange + noiseRange)
         {
-            //Debug.DrawRay(earPos, playerPos - earPos, Color.red);
             if (Physics.Raycast(earPos, playerPos - earPos, out raycastHit, hearingRange + noiseRange, layerMask: layerMask))
             {
-                //Debug.Log("Raycast hit: " + raycastHit.collider.gameObject.name);
-                //Debug.Log("Wall between enemy and player in hearing range");
                 if(3*dist < hearingRange + noiseRange)
                 {
-                    //Debug.Log("Hears through wall");
                     return true;
                 }
-                //Debug.Log("Hears, but behind wall");
                 return false;
             }
-            //Debug.Log("Enemy hears player!");
             return true;
         }
         return false;
@@ -253,7 +243,7 @@ public class EnemyChase : MonoBehaviour
         List<Vector3> flashlightHitPoints = FindObjectOfType<EnemyUtilities>().flashlightHitPoints;
         if(flashlightHitPoints == null)
         {
-            //Debug.Log("There are no flashlight hit points!");
+            //No flashlight hit points, either disabled or not coliding with anything.
             return false;
         }
 
@@ -266,7 +256,6 @@ public class EnemyChase : MonoBehaviour
             }
             if(!Physics.Raycast(origin: eyePos, direction: flashlightHitPoint - eyePos, hitInfo: out raycastHit, maxDistance: Vector3.Distance(eyePos, flashlightHitPoint) - 0.05f))
             {
-                //Debug.Log("Enemy sees flashlight hit point " + flashlightHitPoint.ToString());
                 Debug.DrawRay(eyePos, flashlightHitPoint - eyePos, Color.blue);
                 if(!isFlashlightHPVisible)
                 {
@@ -297,14 +286,9 @@ public class EnemyChase : MonoBehaviour
         {
             if(i == gameObject.GetHashCode())
             {
-                //Debug.Log("Flashlight shines on me");
+                //Flashlight shines on enemy
                 return true;
             }
-            //else
-            //{
-            //    Debug.Log("My name: " + name);
-            //    Debug.Log("My hash code: " + gameObject.GetHashCode() + ", struck enemy hash code: " + i);
-            //}
         }
         return false;
     }
@@ -314,6 +298,7 @@ public class EnemyChase : MonoBehaviour
         val = Mathf.InverseLerp(iMin, iMax, value);
         return Mathf.Lerp(oMin, oMax, val);
     }
+    //Attack functions
     private void isPlayerAttacked()
     {
         if (attackCooldown > 0.0f) 
@@ -325,7 +310,6 @@ public class EnemyChase : MonoBehaviour
         if (attackDistance < 1.9f)
         {
             RaycastHit raycastHit;
-            //Debug.DrawRay(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), Color.green);
             Physics.Raycast(agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f), player.transform.position - (agent.transform.position + new Vector3(0.0f, 1.0f, 0.0f)), maxDistance: 5.0f, hitInfo: out raycastHit);
             if(raycastHit.collider != null)
             {
@@ -355,6 +339,7 @@ public class EnemyChase : MonoBehaviour
         }
         
     }
+    //Audio handlers
     private void playRandomSound()
     { 
         if(Vector3.Distance(player.transform.position, agent.transform.position) < 10.0f && !effectAudioSource.isPlaying)

@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Disable directional light class
+/**
+    This class is used for development only. It disables
+    directional lights used in scene during the game's
+    development.
+*/
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 
 public class DisableDirectionalLight : MonoBehaviour
 {
-    // Start is called before the first frame update
+    //Init
     void Start()
     {
         foreach(Light light in FindObjectsOfType<Light>())
@@ -16,12 +19,5 @@ public class DisableDirectionalLight : MonoBehaviour
                 Debug.Log("Disabled directional light " + light.name);
             }
         }
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

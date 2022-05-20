@@ -1,26 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Collision sound class
+/**
+    This class handles the collision sound of all 
+    moveable objects in the scene.
+*/
 using UnityEngine;
 
 public class CollisionSound : MonoBehaviour
 {
+    //Public variables defined in Unity inspector;
     public bool isHinge;
 
+    //Other variables
     private float startTime;
     private float lastPlayed;
-    // Start is called before the first frame update
+
+    //Init
     void Start()
     {
         startTime = Time.time;
         lastPlayed = Time.time;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Functions
     private void OnCollisionEnter(Collision collision)
     {
         if(startTime + 2.0f > Time.time)

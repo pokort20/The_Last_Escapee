@@ -1,10 +1,17 @@
+/// Hover buttong highlight class
+/**
+    This class handles the button highlight
+    in main and pause menu.
+*/
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    //Public variables defined in Unity inspector
     public Transform buttonTransform;
 
+    //Functions
     void OnDisable()
     {
         OnPointerExit(null);
@@ -27,6 +34,5 @@ public class HoverButtonHighlight : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerExit(PointerEventData eventData)
     {
         buttonTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        //throw new System.NotImplementedException();
     }
 }

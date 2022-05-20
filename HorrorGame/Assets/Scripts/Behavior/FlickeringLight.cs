@@ -1,21 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Flickering light class
+/**
+    This class handles the flickering light. It is
+    applied as a component to flickering lights
+    in the scene.
+*/
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 public class FlickeringLight : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public Light flickeringLight;
     public GameObject emissivePart;
     public bool isFlickeringEnabled;
     public AudioSource audioSource;
 
+    //Other variables
     private HDAdditionalLightData lightData;
     private float ranNum;
     private float defaultIntensity;
     private Material mat;
     private Color emissiveColor;
-    // Start is called before the first frame update
+
+    //Init
     void Start()
     {
         ranNum = 0.0f;
@@ -39,7 +46,7 @@ public class FlickeringLight : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Update
     void FixedUpdate()
     {
         if(isFlickeringEnabled)
@@ -47,8 +54,7 @@ public class FlickeringLight : MonoBehaviour
             if (flickeringLight.enabled)
             {
                 ranNum = Random.value;
-                //Debug.Log("ranNum: " + ranNum);
-                if (ranNum >= 0.995f)
+                if (ranNum >= 0.997f)
                 {
                     AudioManager.instance.playAudio("flicker", audioSource);
                     lightData.intensity = 0.2f * defaultIntensity;

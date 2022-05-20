@@ -1,5 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Post processing class
+/**
+    This class handles the game's post processing.
+    Other scripts access this class' functions in 
+    order to apply the desired post porcessing
+    effect.
+*/
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -9,7 +14,7 @@ public class PostProcessing : MonoBehaviour
     //Singleton
     public static PostProcessing instance;
 
-    //public variables
+    //public variables defined in Unity inspector
     public bool mainMenu;
     public Volume globalVolume;
     public float maxLensDistortion;
@@ -22,9 +27,9 @@ public class PostProcessing : MonoBehaviour
     private DepthOfField depthOfField;
     private MotionBlur motionBlur;
     private GradientSky gradientSky;
-
     private float _brightness;
-    //other variables
+
+    //Properties
     public bool lensDistortionEnabled { get; set; }
     public bool depthOfFieldEnabled { get; set; }
     public bool motionBlurEnabled { get; set; }
@@ -38,7 +43,6 @@ public class PostProcessing : MonoBehaviour
         set
         {
             _brightness = value;
-            Debug.Log("settings brightness to: " + _brightness);
             handleGradientSky();
         }
     }
@@ -58,10 +62,8 @@ public class PostProcessing : MonoBehaviour
     {
         gameManager = GameManager.instance;
         globalVolume.profile.TryGet(out lensDistortion);
-        globalVolume.profile.TryGet(out depthOfField);
         globalVolume.profile.TryGet(out motionBlur);
         globalVolume.profile.TryGet(out gradientSky);
-        //globalVolume.profile.TryGet(out bloom);
         lensDistortionEnabled = false;
         depthOfFieldEnabled = false;
         motionBlurEnabled = false;
@@ -75,8 +77,6 @@ public class PostProcessing : MonoBehaviour
             handleLensDistortion();
             handleMotionBlur();
         }
-        //handleDepthOfField();
-        //handleBloom();
     }
     private void handleLensDistortion()
     {
@@ -103,31 +103,31 @@ public class PostProcessing : MonoBehaviour
 
         }
     }
-    private void handleDepthOfField()
-    {
-        if (depthOfField == null)
-        {
-            Debug.LogError("PostProcessing volume has no depthOfField override!!!");
-            return;
-        }
+    //private void handleDepthOfField()
+    //{
+    //    if (depthOfField == null)
+    //    {
+    //        Debug.LogError("PostProcessing volume has no depthOfField override!!!");
+    //        return;
+    //    }
 
-        if(depthOfFieldEnabled)
-        {
-            depthOfFieldEnabled = false;
-            depthOfField.active = true;
-            depthOfField.focusDistance.value = 1.0f;
-            //depthOfField.focusMode.value = DepthOfFieldMode.UsePhysicalCamera;
-        }
-        if(depthOfField.active)
-        {
-            depthOfField.focusDistance.value -= 0.1f * Time.deltaTime;
-            if (depthOfField.focusDistance.value <= 0.1f)
-            {
-                depthOfField.focusDistance.value = 0.1f;
-                depthOfField.active = false;
-            }
-        }
-    }
+    //    if(depthOfFieldEnabled)
+    //    {
+    //        depthOfFieldEnabled = false;
+    //        depthOfField.active = true;
+    //        depthOfField.focusDistance.value = 1.0f;
+    //        //depthOfField.focusMode.value = DepthOfFieldMode.UsePhysicalCamera;
+    //    }
+    //    if(depthOfField.active)
+    //    {
+    //        depthOfField.focusDistance.value -= 0.1f * Time.deltaTime;
+    //        if (depthOfField.focusDistance.value <= 0.1f)
+    //        {
+    //            depthOfField.focusDistance.value = 0.1f;
+    //            depthOfField.active = false;
+    //        }
+    //    }
+    //}
     private void handleMotionBlur()
     {
         if (motionBlur == null)
@@ -152,20 +152,19 @@ public class PostProcessing : MonoBehaviour
             }
         }
     }
-    public void handleBloom()
-    {
-        if(gameManager.health < gameManager._maxHealth * 0.5f)
-        {
-            bloom.active = true;
-            bloom.tint.value = Color.HSVToRGB(0.0f, (gameManager._maxHealth - 10.0f - gameManager.health) * 0.01f, 0.4f);
-            bloom.intensity.value = 0.6f - remap(0.0f, 50.0f, 0.0f, 0.2f, gameManager.health);
-            //Debug.Log("intensity: " + vignette.intensity.value + ", smoothness: " + vignette.smoothness.value + ", roundness: " + vignette.roundness.value);
-        }
-        else
-        {
-            bloom.active = false;
-        }
-    }
+    //public void handleBloom()
+    //{
+    //    if(gameManager.health < gameManager._maxHealth * 0.5f)
+    //    {
+    //        bloom.active = true;
+    //        bloom.tint.value = Color.HSVToRGB(0.0f, (gameManager._maxHealth - 10.0f - gameManager.health) * 0.01f, 0.4f);
+    //        bloom.intensity.value = 0.6f - remap(0.0f, 50.0f, 0.0f, 0.2f, gameManager.health);
+    //    }
+    //    else
+    //    {
+    //        bloom.active = false;
+    //    }
+    //}
     public void handleGradientSky()
     {
         if(gradientSky == null)
@@ -203,11 +202,10 @@ public class PostProcessing : MonoBehaviour
 
         previousGradientSkyValue = brightness;
     }
-
-    private float remap(float iMin, float iMax, float oMin, float oMax, float value)
-    {
-        float val;
-        val = Mathf.InverseLerp(iMin, iMax, value);
-        return Mathf.Lerp(oMin, oMax, val);
-    }
+    //private float remap(float iMin, float iMax, float oMin, float oMax, float value)
+    //{
+    //    float val;
+    //    val = Mathf.InverseLerp(iMin, iMax, value);
+    //    return Mathf.Lerp(oMin, oMax, val);
+    //}
 }

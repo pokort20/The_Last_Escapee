@@ -1,5 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Inventory UI class
+/**
+    This class serves as the main UI and HUD class
+    for the game. It handles the inventory UI as well
+    as other UI elements in the game.
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -50,6 +54,8 @@ public class InventoryUI : MonoBehaviour
     private float alphaDelta;
 
     InventorySlot[] itemSlots;
+
+    //Init
     private void Start()
     {
         isPaused = false;
@@ -82,6 +88,8 @@ public class InventoryUI : MonoBehaviour
         deathScreen.SetActive(false);
         uiElements.SetActive(true);
     }
+
+    //Update
     private void Update()
     {
         if(gameManager.isPlayerDead)
@@ -93,7 +101,6 @@ public class InventoryUI : MonoBehaviour
         updateCursorCrosshair();
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            //Debug.LogWarning("Pressed ESC");
             if(isPaused)
             {
                 if(controlsUI.activeInHierarchy)
@@ -132,6 +139,8 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+
+    //Functions
     private void setCursorIcon()
     {
         int textureSize = 48;
@@ -150,7 +159,6 @@ public class InventoryUI : MonoBehaviour
     }
     public void updateInventoryUI()
     {
-        Debug.Log("Updating inventory UI!");
         float fillAmount = GameManager.instance.health / GameManager.instance._maxHealth;
         healthFillImage.fillAmount = fillAmount;
         if(inventory.hasItem(typeof(FlashlightItem)) > 0)
@@ -247,7 +255,6 @@ public class InventoryUI : MonoBehaviour
     }
     public void updateLowHealthIndicator()
     {
-
         if(gameManager.health <= gameManager._maxHealth * 0.5f)
         {
             alphaBase = 0.11f - remap(0.0f, gameManager._maxHealth * 0.5f, 0.0f, 0.10f, gameManager.health);
@@ -264,7 +271,6 @@ public class InventoryUI : MonoBehaviour
             {
                 alphaDelta = -alphaDelta;
             }
-            //Debug.Log("Indicator alpha: " + indicatorAlpha);
             lowHealthIndicatorColor.a = indicatorAlpha;
             lowHealthIndicator.color = lowHealthIndicatorColor;
             lowHealthIndicator.enabled = true;

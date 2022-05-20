@@ -1,3 +1,10 @@
+/// Pickup object class
+/**
+    This class handles the movement of moveable objects
+    in the scene. The object is selected by Raycast.It 
+    uses an empty parent object to which it parents the 
+    selected moveable object.
+*/
 using UnityEngine;
 
 public class PickupObject : MonoBehaviour

@@ -1,3 +1,9 @@
+/// Main menu VM class
+/**
+    This class handles the main menu UI and the
+    logic behind.
+*/
+
 using System;
 using System.IO;
 using UnityEngine;
@@ -6,6 +12,7 @@ using UnityEngine.UI;
 
 public class MainMenuVM : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public Texture2D cursorTexture;
     public GameObject mainMenu;
     public GameObject levelsMenu;
@@ -15,6 +22,7 @@ public class MainMenuVM : MonoBehaviour
     public Scrollbar brightnessBar;
     public Scrollbar volumeBar;
 
+    //Init
     void Start()
     {
         Cursor.SetCursor(cursorTexture, new Vector2(24.0f, 24.0f), CursorMode.ForceSoftware);
@@ -44,6 +52,8 @@ public class MainMenuVM : MonoBehaviour
         controlsMenu.SetActive(false);
         mainMenu.SetActive(true);
     }
+
+    //Update
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -54,6 +64,8 @@ public class MainMenuVM : MonoBehaviour
             mainMenu.SetActive(true);
         }
     }
+
+    //Button functions
     public void OnPlayButtonUse()
     {
         Debug.Log("Clicked PLAY!");

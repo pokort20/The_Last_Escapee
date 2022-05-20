@@ -1,18 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Audio;
+/// Door audio class
+/**
+    This class handles the door squaking audio. When a
+    door is moved, it produces a squaking sound based 
+    on its angular speed.
+*/
 using UnityEngine;
 
 public class DoorAudio : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public AudioSource audioSource;
     public GameObject door;
 
+    //Other variables
     private Rigidbody rb;
     private float volumeDecay;
     private bool isSqueaking;
     private float volumeLevel;
-    // Start is called before the first frame update
+
+    //Init
     void Start()
     {
         if(audioSource == null)
@@ -31,7 +37,7 @@ public class DoorAudio : MonoBehaviour
         isSqueaking = false;
     }
 
-    // Update is called once per frame
+    //Update
     void Update()
     {
         if(rb.angularVelocity.magnitude < 0.5)
@@ -61,11 +67,5 @@ public class DoorAudio : MonoBehaviour
                 volumeDecay = 0.0f;
             }
         }
-    }
-    private float remap(float iMin, float iMax, float oMin, float oMax, float value)
-    {
-        float val;
-        val = Mathf.InverseLerp(iMin, iMax, value);
-        return Mathf.Lerp(oMin, oMax, val);
     }
 }

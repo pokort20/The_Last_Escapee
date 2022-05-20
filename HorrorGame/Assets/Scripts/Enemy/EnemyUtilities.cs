@@ -1,19 +1,28 @@
-using System.Collections;
+/// Enemy utilities class
+/**
+    This class serves as a helper class for enemies. It computes
+    the flashlight hitpoints as well as player's visibility. Every
+    enemy then accesses this class to retrieve these values.
+*/
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 public class EnemyUtilities : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public Transform player;
+
+    //Properties
     public float playerVisibility { get; set; }
     public List<Vector3> flashlightHitPoints { get; set; }
     public List<int> enemiesStruckByFlashlight { get; set; }
 
+    //Other variables
     private float bodyArea = 2.0f;
     private HDAdditionalLightData flashlight;
 
-    // Start is called before the first frame update
+    //Init
     void Start()
     {
         flashlight = player.GetComponentInChildren<HDAdditionalLightData>();
@@ -23,7 +32,7 @@ public class EnemyUtilities : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Physics update
     void FixedUpdate()
     {
         if(player != null)
@@ -46,29 +55,26 @@ public class EnemyUtilities : MonoBehaviour
         }
 
     }
+
+    //Other functions
     private float getPlayerVisibility(Vector3 playerPos)
     {
         bool debugRays = true;
         float playerIlluminationIntensity = 0.0f;
         if (GameManager.instance.flashlightEnabled) playerIlluminationIntensity += 40.0f;
         RaycastHit raycastHit;
-        //Debug.Log("----------------------------LIGHTS---------------------------");
         foreach (Light light in Resources.FindObjectsOfTypeAll(typeof(Light)))
         {
-            //Debug.Log("-------------------------------");
-            //Debug.Log("Light: " + light.name);
             float intensity;
             HDAdditionalLightData lightData = light.GetComponent<HDAdditionalLightData>();
             if (lightData == null)
             {
-                //Debug.Log("This light does not have HDAdditionaLightData component!");
+                //Not a HDRP light, ignored
                 continue;
             }
 
             if (light.isActiveAndEnabled && Vector3.Distance(light.transform.position, playerPos) < light.range)
             {
-                //Debug.Log("HD intensity: " + lightData.intensity);
-
                 if (lightData.type == HDLightType.Point)
                 {
                     if (Physics.Raycast(lightData.transform.position, playerPos - lightData.transform.position, out raycastHit, lightData.range))
@@ -88,12 +94,10 @@ public class EnemyUtilities : MonoBehaviour
                 {
                     if (lightData.gameObject.name == "FlashLight") continue;
                     Debug.DrawRay(light.transform.position, light.transform.forward, Color.cyan);
-                    //Debug.Log("forward: " + light.transform.forward + ", playerDir: " + (playerPos - light.transform.position) + ", angle: " + Vector3.Angle(light.transform.forward, playerPos - light.transform.position) + ", light angle: " + light.spotAngle);
                     if (Vector3.Angle(light.transform.forward, playerPos - light.transform.position) < light.spotAngle * 0.5f)
                     {
                         if (Physics.Raycast(light.transform.position, playerPos - light.transform.position, out raycastHit, lightData.range))
                         {
-                            //Debug.Log("Hit: " + raycastHit.collider.name);
                             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                             {
                                 //Spot light shines on player
@@ -119,7 +123,7 @@ public class EnemyUtilities : MonoBehaviour
     {
         //general variables
         List<Vector3> flashlightHitPoints = new List<Vector3>();
-        bool debugFlashlightRays = true;
+        //bool debugFlashlightRays = false;
         RaycastHit raycastHit;
         //helper variables for defining the points on the circle at the end of the spot light's cone
         float angleCenterToSide = 40.0f * 0.5f;
@@ -156,15 +160,13 @@ public class EnemyUtilities : MonoBehaviour
         }
 
         //Drawing rays for debug purposes
-        if (debugFlashlightRays && GameManager.instance.flashlightEnabled)
-        {
-            foreach(Vector3 hitPoint in flashlightHitPoints)
-            {
-                Debug.DrawRay(flashlight.transform.position, hitPoint - flashlight.transform.position, Color.white);
-            }
-        }
-
-
+        //if (debugFlashlightRays && GameManager.instance.flashlightEnabled)
+        //{
+        //    foreach(Vector3 hitPoint in flashlightHitPoints)
+        //    {
+        //        Debug.DrawRay(flashlight.transform.position, hitPoint - flashlight.transform.position, Color.white);
+        //    }
+        //}
         return flashlightHitPoints;
     }
 }

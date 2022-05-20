@@ -1,3 +1,4 @@
+/// Get interactable class - not used in the final project, merged with FindInteraction
 using UnityEngine;
 
 public class GetInteractable : MonoBehaviour

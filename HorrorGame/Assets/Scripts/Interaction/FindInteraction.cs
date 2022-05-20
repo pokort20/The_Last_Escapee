@@ -1,12 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Find interaction class
+/**
+    This class finds the possible interaction with
+    interactalbes or the possibility to pick up 
+    items in the scene.
+*/
 using UnityEngine;
 
 public class FindInteraction : MonoBehaviour
 {
+    //Public variables defined in Unity inspetor
     public Camera FirstPersonCamera;
     public float maxPickupDistance;
 
+    //Other variables
     RaycastHit raycastHit;
     GameObject itemObject;
     GameObject interactingObject;
@@ -15,6 +21,8 @@ public class FindInteraction : MonoBehaviour
     private LayerMask ignoreMask;
     private bool isInteracting = false;
     private Tutorial tutorial;
+
+    //Init
     void Start()
     {
         inventory = Inventory.instance;
@@ -22,6 +30,8 @@ public class FindInteraction : MonoBehaviour
         ignoreMask = LayerMask.GetMask("Player");
         tutorial = Tutorial.instance;
     }
+
+    //Update
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))
@@ -33,15 +43,13 @@ public class FindInteraction : MonoBehaviour
             pressedKey = false;
         }
     }
-    // Update is called once per frame
+
+    //Physics update
     void FixedUpdate()
     {
         Debug.DrawRay(FirstPersonCamera.transform.position, Vector3.Normalize(FirstPersonCamera.transform.forward)*maxPickupDistance, Color.blue, 0.0f);
         if (Physics.Raycast(origin: FirstPersonCamera.transform.position, direction: FirstPersonCamera.transform.forward, hitInfo: out raycastHit, maxDistance: maxPickupDistance, layerMask: ~ignoreMask))
         {
-            //Debug.Log("Collided with: " + raycastHit.collider.gameObject.name);
-            //Debug.Log("        layer: " + LayerMask.LayerToName(raycastHit.collider.gameObject.layer));
-
             //ITEMS
             if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
@@ -55,7 +63,7 @@ public class FindInteraction : MonoBehaviour
                 itemObject = raycastHit.collider.gameObject;
                 handleInteractionText("E   Pick up " + itemObject.GetComponent<Item>().itemName);
                 highlightItem(itemObject);
-                //Debug.Log("Coliding with item" + itemObject.name);
+
                 if (pressedKey)
                 {
                     if (inventory.addToInventory(itemObject.GetComponent<Item>()))
@@ -79,6 +87,7 @@ public class FindInteraction : MonoBehaviour
                     }
                 }
             }
+
             //INTERACTABLES
             else if (raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
@@ -87,8 +96,6 @@ public class FindInteraction : MonoBehaviour
                 if(interactable.canInteract)
                 {
                     handleInteractionText("E   " + interactable.InteractText());
-                    //highlightItem(interactingObject);
-                    //Debug.Log("Hit interactable object!" + raycastHit.collider.gameObject.ToString());
                     if (pressedKey)
                     {
                         interactable.Interact();
@@ -101,16 +108,15 @@ public class FindInteraction : MonoBehaviour
             {
                 handleInteractionText(null);
                 if (itemObject != null) removeItemHighlight(itemObject);
-                //if (interactingObject != null) removeItemHighlight(interactingObject);
             }
         }
         else
         {
             handleInteractionText(null);
             if (itemObject != null) removeItemHighlight(itemObject);
-            //if (interactingObject != null) removeItemHighlight(interactingObject);
         }
     }
+    //Functions to handle item highlight
     private void highlightItem(GameObject gameObject)
     {
         Renderer renderer = gameObject.GetComponent<Renderer>();

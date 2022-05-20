@@ -1,9 +1,14 @@
+/// Level transition class
+/**
+    This class handles the transition between levels.
+*/
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelTransition : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public string sceneName;
 
     private GameManager gameManager;
@@ -21,7 +26,6 @@ public class LevelTransition : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.LogWarning("Player switching level!");
             //destroy scene transition from previous level
             SceneTransitionData std = FindObjectOfType<SceneTransitionData>();
             if (std != null)

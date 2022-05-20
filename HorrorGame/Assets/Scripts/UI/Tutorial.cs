@@ -1,12 +1,20 @@
+/// Tutorial class
+/**
+    This class handles displaying the tutorial hints.
+    Other scripts can access this class in order to 
+    display desired help.
+*/
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour
 {
+    //Singleton
     public static Tutorial instance;
 
+    //Public variables defined in Unity inspector
     public bool tutorialEnabled;
     public GameObject movementHelp;
     public GameObject inventoryHelp;
@@ -17,12 +25,13 @@ public class Tutorial : MonoBehaviour
     public GameObject moveObjectHelp;
     public GameObject lightHelp;
 
-
     public float helpDurationTime;
 
-    //private List<GameObject> helps;
+    //Other variables
     private Dictionary<string, Tuple<GameObject, bool>> helps;
     private float helpDuration;
+
+    //Init
     void Awake()
     {
         if(tutorialEnabled)
@@ -41,7 +50,6 @@ public class Tutorial : MonoBehaviour
         }
         helps = new Dictionary<string, Tuple<GameObject, bool>>();
     }
-    // Start is called before the first frame update
     void Start()
     {
         helps.Add("movement", new Tuple<GameObject, bool>(movementHelp, false));
@@ -56,7 +64,7 @@ public class Tutorial : MonoBehaviour
         hideAllHelps();
     }
 
-    // Update is called once per frame
+    //Update
     void Update()
     {
         if (!tutorialEnabled) return;
@@ -66,6 +74,8 @@ public class Tutorial : MonoBehaviour
             hideAllHelps();
         }
     }
+
+    //Functions
     public void hideAllHelps()
     {
         if (!tutorialEnabled) return;

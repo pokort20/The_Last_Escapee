@@ -1,5 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Inventory slot class
+/**
+    This class handles the inventory slot logic
+    as well as its UI.
+*/
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,20 +10,21 @@ using TMPro;
 
 public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    //Public variables defined in Unity inspector
     public Image image;
     public Item item;
     public Button useButton;
     public TMP_Text textObject;
 
+    //Other variables
     private Inventory inventory;
 
+    //Functions
     public void FillInventorySlot(Item newItem)
     {
-        //Debug.Log("Filled inventory slot " + name + " with " + newItem.name);
         item = newItem;
         image.sprite = item.icon;
         image.enabled = true;
-        //useButton.interactable = true;
         textObject.text = item.itemName;
     }
     public void ClearInventorySlot()
@@ -33,7 +37,6 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     public void OnUseButton()
     {
-        Debug.Log("Clicked useButton");
         item.UseItem();
         if(item.isUseable)
         {
@@ -41,19 +44,20 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             inventory.itemInfoText = null;
         }
     }
+
+    //Init
     void Awake()
     {
         Debug.Log("Inventory slot " + ToString() + " started");
         useButton.interactable = false;
 
     }
-    // Start is called before the first frame update
     void Start()
     {
         inventory = Inventory.instance;
     }
 
-    // Update is called once per frame
+    //Update
     void Update()
     {
 
@@ -79,8 +83,6 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
             }
 
-
-
             if(item.isUseable)
             {
                 useButton.interactable = true;
@@ -91,7 +93,6 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
         }
     }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (item != null && item.itemInfo != null)

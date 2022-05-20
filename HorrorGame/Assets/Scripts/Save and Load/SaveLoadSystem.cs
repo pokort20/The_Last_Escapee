@@ -1,4 +1,8 @@
-using System.Collections;
+/// Save load system class
+/**
+    This class handles the saving and loading
+    of game saves as well as the game settings.
+*/
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -7,6 +11,7 @@ using System;
 
 public static class SaveLoadSystem
 {
+    //Functions
     public static bool SaveGame(SceneTransitionData sceneData, string saveName)
     {
         bool success;

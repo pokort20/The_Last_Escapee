@@ -1,16 +1,20 @@
-using System.Collections;
+/// Audio manager class
+/**
+    This class serves as the main audio handler class in the project.
+    All of the other classes can acces this calss' functions in order
+    to play audio clips for the player, using a given audio source or
+    at a given point.
+*/
 using System.Collections.Generic;
-using UnityEngine.Audio;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public bool MainMenuScene;
     public static AudioManager instance;
-    private GameManager gameManager;
-
     public AudioSource playerMovementAudioSource;
     public AudioSource playerBreathingAudioSource;
     public AudioSource ambientMenuAudioSource;
@@ -22,14 +26,16 @@ public class AudioManager : MonoBehaviour
     [Range(0.0f, 1.0f)]
     public float effectsVolume;
     public List<Audio> audios;
-
     public List<Audio> ambientEffectAudios;
     public List<Audio> thudEffectAudios;
 
+    //Other variables
+    private GameManager gameManager;
     private List<EnemyAudio> enemies;
     private Audio enemyLoopAudio;
     private Audio menuAudio;
     private List<Tuple<AudioSource, bool>> sceneAudioSources;
+
     //properties
     public Vector3 movementVec { get; set; }
     public bool isGrounded { get; set; }
@@ -48,6 +54,8 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+
+    //Init
     void Awake()
     {
         Debug.Log("Started audio manager!");
@@ -80,6 +88,8 @@ public class AudioManager : MonoBehaviour
         }
         generalVolume = masterVolume;
     }
+
+    //Update
     void Update()
     {
         if(!MainMenuScene)
@@ -89,6 +99,8 @@ public class AudioManager : MonoBehaviour
             handleEnemyAudios();
         }
     }
+
+    //Other functions
     private void initMenuAudio()
     {
         foreach(Audio audio in audios)
@@ -163,11 +175,6 @@ public class AudioManager : MonoBehaviour
     }
     private void handlePlayerBreathAudio()
     {
-        //if(movementVec.magnitude < 3.5f && gameManager.stamina >= 0.9f * gameManager._maxStamina)
-        //{
-        //    playerBreathingAudioSource.Pause();
-        //    return;
-        //}
         playerBreathingAudioSource.volume = (remap(0.0f, 6.0f, 0.01f, 0.015f, movementVec.magnitude) + remap(0.0f, gameManager._maxStamina, 0.00f, 0.1f, gameManager._maxStamina - gameManager.stamina)) * effectsVolume * masterVolume;
         playerBreathingAudioSource.pitch = remap(0.0f, gameManager._maxStamina, 0.7f, 1.3f, gameManager._maxStamina - gameManager.stamina);
         if(!playerBreathingAudioSource.isPlaying && !gameManager.isPaused && !gameManager.isPlayerDead)
@@ -234,7 +241,7 @@ public class AudioManager : MonoBehaviour
     
     public void addEnemy(EnemyAudio ea)
     {
-        enemies.Add(ea); //could be buggy, order of initialization - enemy / audio manager!
+        enemies.Add(ea);
     }
     public void updateEnemy(int hash, Vector3 enemyPos, Vector3 movementVec)
     {
@@ -299,7 +306,6 @@ public class AudioManager : MonoBehaviour
     }
     private void onGameOverAudio()
     {
-        Debug.Log("stopping all audio sources in the scene");
         foreach (AudioSource source in FindObjectsOfType<AudioSource>())
         {
             source.Stop();
@@ -322,10 +328,6 @@ public class AudioManager : MonoBehaviour
             ambientMenuAudioSource.volume = menuAudio.volume * ambientVolume * masterVolume;
             ambientMenuAudioSource.UnPause();
             Debug.Log("Audio sources paused!");
-            if(!ambientMenuAudioSource.isPlaying)
-            {
-                Debug.LogError("Ambient audio source is not playing!!!");
-            }
         }
         else
         {

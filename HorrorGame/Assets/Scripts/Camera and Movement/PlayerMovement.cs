@@ -1,12 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+/// Player movement class
+/**
+    This class handles the player movement. It uses the keyboard input
+    and player's facing direction to compute the resulting movement vector.
+    Based on the state the player is in, it scales the vector. This vector
+    is then passed to the character controller component.
+*/
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
+
 
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public CharacterController playerController;
     public float gravity;
     public float jumpHeight;
@@ -20,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
     public LayerMask uncrouchMask;
 
+    //Other variables
     private float movementSpeed;
     private bool isSprinting;
     private Vector3 moveVec;
@@ -27,9 +33,9 @@ public class PlayerMovement : MonoBehaviour
     private float uncrouchCollisionCheckSphereRadius;
     private float stepOffset;
 
-
     Vector3 velocity;
     bool isGrounded;
+    //States
     private enum playerStates : int
     {
         NORMAL = 0,
@@ -38,7 +44,8 @@ public class PlayerMovement : MonoBehaviour
         SPRINTING = 3
     }
     private playerStates playerState = playerStates.NORMAL;
-    // Start is called before the first frame update
+
+    //Init
     void Start()
     {
         movementSpeed = GameManager.instance.movementSpeed;
@@ -58,19 +65,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Update
     void Update()
     {
-        
         //Helper sphere to check if player is grounded
         isGrounded = Physics.CheckSphere(groundCollisionCheck.position, groundCollisionCheckSphereRadius, groundMask);
 
         if (isGrounded && velocity.y < 0.0f)
         {
-            //Debug.Log("reseting gravity force");
             velocity.y = -2.2f;
             playerController.stepOffset = stepOffset;
-            //velocity = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
         //compute movement direction
@@ -94,11 +98,10 @@ public class PlayerMovement : MonoBehaviour
 
             if (Physics.CheckSphere(uncrouchCollisionCheck.position, radius: uncrouchCollisionCheckSphereRadius, uncrouchMask))
             {
-                Debug.Log("Can't uncrouch yet");
+                //Debug.Log("Can't uncrouch yet");
             }
             else
             {
-                Debug.Log("Uncrouching");
                 playerState = playerStates.NORMAL;
             }
         }
@@ -150,7 +153,6 @@ public class PlayerMovement : MonoBehaviour
         //add jump force if player jumps
         if (Input.GetButtonDown("Jump") && isGrounded && playerState != playerStates.CROUCHING)
         {
-            Debug.Log("JUMP");
             stepOffset = playerController.stepOffset;
             playerController.stepOffset = 0.0f;
             velocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
@@ -158,9 +160,11 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         playerController.Move(velocity * Time.deltaTime);
 
-
+        //update stamina
         updateStamina();
     }
+
+    //Other functions
     private void FindPlayerState()
     {
         if (Input.GetKey(KeyCode.LeftControl))
@@ -226,9 +230,5 @@ public class PlayerMovement : MonoBehaviour
                 Tutorial.instance.showHelp("staminaShot");
             }
         }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collided!");
     }
 }

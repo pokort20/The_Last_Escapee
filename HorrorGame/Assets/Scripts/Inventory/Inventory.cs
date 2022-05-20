@@ -1,21 +1,16 @@
+/// Inventory class
+/**
+    This class handles the logic behind inventory.
+*/
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    //Public variables defined in Unity inspector
     public static Inventory instance;
-    void Awake()
-    {
-        Debug.Log("Started Inventory");
-        if(instance != null)
-        {
-            Debug.LogError("Multiple instances of invenotory!!!");
-            return;
-        }
-        instance = this;
-    }
+
     //Variables
     public int inventorySize;
     private string interactTxt;
@@ -100,12 +95,19 @@ public class Inventory : MonoBehaviour
     public delegate void OnMouseInteraction();
     public OnMouseInteraction onMouseInteractionCallback;
 
-
-    // Start is called before the first frame update
+    //Init
+    void Awake()
+    {
+        Debug.Log("Started Inventory");
+        if (instance != null)
+        {
+            Debug.LogError("Multiple instances of invenotory!!!");
+            return;
+        }
+        instance = this;
+    }
     void Start()
     {
-        Debug.Log("STARTED INVENTORY");
-        
         if (items == null)
         {
             items = new List<Item>();
@@ -113,11 +115,7 @@ public class Inventory : MonoBehaviour
         mouseInteractd = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    //Other functions
     public bool addToInventory(Item item)
     {
         if(items.Count < inventorySize)
@@ -128,7 +126,7 @@ public class Inventory : MonoBehaviour
             {
                 onInventoryChangedCallback.Invoke();
             }
-            printInventoryItems();
+            //printInventoryItems();
             return true;
         }
         else
@@ -144,7 +142,7 @@ public class Inventory : MonoBehaviour
         {
             onInventoryChangedCallback.Invoke();
         }
-        printInventoryItems();
+        //printInventoryItems();
         return true;
     }
     public int hasItem(Type type)
@@ -171,19 +169,4 @@ public class Inventory : MonoBehaviour
             Debug.Log("           " + item.ToString());
         }
     }
-    //private Item createItemObject(string itemName)
-    //{
-    //    Item retItem;
-    //    switch(itemName)
-    //    {
-    //        case "Flashlight":
-    //            retItem = new FlashlightItem();
-    //            break;
-    //        default:
-    //            Debug.LogWarning("Crated default item!");
-    //            retItem = new Item();
-    //            break;
-    //    }
-    //    return retItem;
-    //}
 }
