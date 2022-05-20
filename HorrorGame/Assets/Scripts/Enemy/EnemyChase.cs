@@ -212,7 +212,7 @@ public class EnemyChase : MonoBehaviour
     {
         float moveVecMag = player.GetComponent<PlayerMovement>().getPlayerMoveVec().magnitude;
         float noiseRange = moveVecMag * 0.5f;
-        noiseRange = Mathf.Pow(noiseRange, 3.0f);
+        noiseRange = Mathf.Pow(noiseRange, 2.45f);
         float dist = Vector3.Distance(agentPos, playerPos);
         RaycastHit raycastHit;
         Vector3 earPos = agentPos;
@@ -223,7 +223,7 @@ public class EnemyChase : MonoBehaviour
         {
             if (Physics.Raycast(earPos, playerPos - earPos, out raycastHit, hearingRange + noiseRange, layerMask: layerMask))
             {
-                if(3*dist < hearingRange + noiseRange)
+                if(2*dist < hearingRange + noiseRange)
                 {
                     return true;
                 }

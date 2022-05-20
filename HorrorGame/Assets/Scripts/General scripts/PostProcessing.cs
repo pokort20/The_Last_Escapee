@@ -178,7 +178,6 @@ public class PostProcessing : MonoBehaviour
         
         float delta = brightness - previousGradientSkyValue;
         delta *= 0.025f;
-        Debug.Log("changing gradient sky, delta: " + delta +  ", brightness: " + brightness + ", previousGradientSkyValue: " + previousGradientSkyValue);
 
         Color topColor = gradientSky.top.value;
         Color midColor = gradientSky.middle.value;

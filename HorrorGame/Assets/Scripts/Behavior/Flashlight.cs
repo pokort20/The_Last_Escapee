@@ -52,7 +52,7 @@ public class Flashlight : MonoBehaviour
                 switchFlaslight();
                 return;
             }
-            GameManager.instance.batteryLevel -= 0.5f * Time.deltaTime;
+            GameManager.instance.batteryLevel -= 0.4f * Time.deltaTime;
             updateLightIntensity();
         }
     }

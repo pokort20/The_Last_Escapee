@@ -80,7 +80,7 @@ public class AudioManager : MonoBehaviour
             initPlayerMovementAudio();
             initPlayerBreathingAudio();
             initEnemyLoopAudio();
-            Invoke("playAmbientEffect", Random.Range(5, 15));
+            Invoke("playAmbientEffect", Random.Range(10, 20));
         }
         else
         {
@@ -300,7 +300,7 @@ public class AudioManager : MonoBehaviour
             AudioSource.PlayClipAtPoint(audio.audioClip, pos, audio.volume * ambientVolume * masterVolume);
         }
 
-        float nextTime = Random.Range(10, 22);
+        float nextTime = Random.Range(15, 35);
 
         Invoke("playAmbientEffect", nextTime);
     }

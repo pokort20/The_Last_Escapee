@@ -59,10 +59,8 @@ public class PlayerMovement : MonoBehaviour
         isSprinting = false;
         postProcessing = PostProcessing.instance;
         uncrouchCollisionCheckSphereRadius = 0.3f;
-        if(Tutorial.instance != null)
-        {
-            Tutorial.instance.showHelp("movement");
-        }
+
+        Invoke("displayMovementHelp", 1.5f);
     }
 
     //Update
@@ -229,6 +227,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 Tutorial.instance.showHelp("staminaShot");
             }
+        }
+    }
+    private void displayMovementHelp()
+    {
+        if (Tutorial.instance != null)
+        {
+            Tutorial.instance.showHelp("movement");
         }
     }
 }
